@@ -12,10 +12,19 @@ Phương án A (Mục 8.2 URD): client-side thuần, React + TypeScript + Vite, 
 npm install
 npm run dev        # http://localhost:5173
 npm run build       # build production vào dist/
+npm run build:offline # build 1 file HTML duy nhất vào dist-offline/ (xem bên dưới)
 npm run test         # unit test (Vitest)
 npm run e2e           # e2e test (Playwright)
 npm run lint           # oxlint
 ```
+
+## Bản offline (1 file HTML)
+
+`npm run build:offline` đóng gói toàn bộ ứng dụng (JS + CSS + nội dung) vào **một file `dist-offline/index.html` duy nhất** (~470KB), mở trực tiếp bằng trình duyệt qua `file://` mà không cần máy chủ hay Internet — dùng `vite-plugin-singlefile`.
+
+Khác biệt kỹ thuật so với bản hosted: dùng `HashRouter` (URL dạng `#/luyen-tap`) thay vì `BrowserRouter`, vì mở qua `file://` không có máy chủ xử lý đường dẫn — xem [`src/app/router.tsx`](./src/app/router.tsx). Chỉ áp dụng khi build với `--mode offline`; bản hosted (`npm run build`) không đổi.
+
+**Lưu ý:** tiến độ lưu trong `localStorage` của bản offline **tách biệt hoàn toàn** với bản hosted (khác origin: `file://` so với domain đã deploy) và cũng tách biệt giữa các bản sao file HTML khác nhau (ví dụ giữa máy tính và điện thoại). Dùng chức năng **Sao lưu & khôi phục** ở trang Hồ sơ (xuất/nhập file JSON) để chuyển tiến độ qua lại giữa các bản.
 
 ## Ghi chú môi trường
 

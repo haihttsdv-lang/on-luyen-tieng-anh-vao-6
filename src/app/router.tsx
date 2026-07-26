@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, createHashRouter, type RouteObject } from 'react-router-dom'
 import { Layout } from '../components/Layout'
 import { FlashcardsPage } from '../modules/lessons/FlashcardsPage'
 import { LessonDetailPage } from '../modules/lessons/LessonDetailPage'
@@ -17,7 +17,7 @@ import { WritingPromptDetailPage } from '../modules/practice/WritingPromptDetail
 import { WritingPromptListPage } from '../modules/practice/WritingPromptListPage'
 import { HomePage } from './HomePage'
 
-export const router = createBrowserRouter([
+const routes: RouteObject[] = [
   {
     path: '/',
     element: <Layout />,
@@ -40,4 +40,10 @@ export const router = createBrowserRouter([
       { path: 'ho-so/phu-huynh', element: <ParentOverviewPage /> },
     ],
   },
-])
+]
+
+// Bản "offline" (mở trực tiếp bằng file:// — xem `npm run build:offline`)
+// không có máy chủ để xử lý URL, nên phải dùng HashRouter (điều hướng qua
+// "#/...") thay vì BrowserRouter (dùng History API, cần máy chủ thật).
+export const router =
+  import.meta.env.MODE === 'offline' ? createHashRouter(routes) : createBrowserRouter(routes)
