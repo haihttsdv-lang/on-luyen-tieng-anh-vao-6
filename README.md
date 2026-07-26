@@ -21,6 +21,34 @@ npm run lint           # oxlint
 
 - `@playwright/test` và trình duyệt Chromium được ghim ở phiên bản 1.45.0 vì máy phát triển đang chạy macOS 12 (Monterey), không được Playwright bản mới hỗ trợ. Khi nâng cấp macOS, có thể `npm install -D @playwright/test@latest && npx playwright install` để dùng bản mới nhất.
 
+## Triển khai lên hosting thật
+
+Dự án đã có git repo cục bộ (commit đầu tiên đã tạo) và cấu hình SPA fallback sẵn cho 2 nền tảng phổ biến (`vercel.json`, `public/_redirects`). Vì việc tạo tài khoản/kết nối hosting cần đăng nhập trình duyệt của bạn, các bước dưới đây bạn tự thực hiện (miễn phí, ~5 phút):
+
+**1. Đẩy code lên GitHub**
+```bash
+# Tạo repo mới trên https://github.com/new (không tick "Initialize with README")
+git remote add origin https://github.com/<ten-tai-khoan>/<ten-repo>.git
+git branch -M main
+git push -u origin main
+```
+
+**2. Kết nối Vercel (khuyến nghị) hoặc Netlify**
+- Vercel: vào https://vercel.com/new → "Import Git Repository" → chọn repo vừa tạo. Vercel tự nhận diện Vite, không cần chỉnh gì (build command `npm run build`, output `dist`).
+- Netlify: vào https://app.netlify.com/start → chọn repo → build command `npm run build`, publish directory `dist`.
+
+Sau bước này, mỗi lần bạn nhờ tôi sửa code, chỉ cần:
+```bash
+git add -A && git commit -m "mô tả thay đổi" && git push
+```
+Vercel/Netlify sẽ tự động build và deploy lại — không cần làm lại bước kết nối.
+
+**Không muốn dùng GitHub?** Có thể deploy thủ công bằng CLI (không cần git, nhưng vẫn cần đăng nhập tài khoản):
+```bash
+npm run build
+npx vercel --prod       # hoặc: npx netlify deploy --prod --dir=dist
+```
+
 ## Cấu trúc thư mục
 
 Xem Mục 10 của URD. Trạng thái hiện tại — đã đổi thứ tự Mục 11 (Học lý thuyết trước Luyện tập, theo YC-01):
