@@ -10,7 +10,12 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist-offline
 *.local
+
+# Bản offline 1-file xuất ra thư mục gốc để tiện gửi/tải (build artifact,
+# tái tạo bằng `npm run build:offline`)
+on-luyen-tieng-anh-vao-6-offline.html
 
 # Playwright
 /playwright-report
