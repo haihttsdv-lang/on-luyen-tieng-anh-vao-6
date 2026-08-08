@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { contentStore, progressStore } from '../../data-access'
 import { shuffle } from '../practice/shuffle'
-import type { Question, Topic } from '../../types/domain'
+import type { Question, ReadingPassage, Topic } from '../../types/domain'
 
 const QUIZ_LENGTH = 5
 const PASS_RATIO = 0.8 // FR-L03: đạt từ 80% trở lên mới đánh dấu "Đã nắm"
@@ -11,19 +11,23 @@ export function LessonQuizPage() {
   const { topicId } = useParams<{ topicId: string }>()
   const [topic, setTopic] = useState<Topic | null | undefined>(undefined)
   const [quizQuestions, setQuizQuestions] = useState<Question[]>([])
+  const [passages, setPassages] = useState<ReadingPassage[]>([])
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [submitted, setSubmitted] = useState(false)
   const [passed, setPassed] = useState(false)
 
   useEffect(() => {
     if (!topicId) return
-    Promise.all([contentStore.getTopic(topicId), contentStore.getQuestions()]).then(
-      ([foundTopic, allQuestions]) => {
-        setTopic(foundTopic ?? null)
-        const pool = allQuestions.filter((q) => q.topicIds.includes(topicId))
-        setQuizQuestions(shuffle(pool).slice(0, QUIZ_LENGTH))
-      },
-    )
+    Promise.all([
+      contentStore.getTopic(topicId),
+      contentStore.getQuestions(),
+      contentStore.getReadingPassages(),
+    ]).then(([foundTopic, allQuestions, allPassages]) => {
+      setTopic(foundTopic ?? null)
+      const pool = allQuestions.filter((q) => q.topicIds.includes(topicId))
+      setQuizQuestions(shuffle(pool).slice(0, QUIZ_LENGTH))
+      setPassages(allPassages)
+    })
   }, [topicId])
 
   const correctCount = useMemo(
@@ -135,8 +139,25 @@ export function LessonQuizPage() {
       </h1>
 
       <ol className="mt-6 flex flex-col gap-6">
-        {quizQuestions.map((q, index) => (
+        {quizQuestions.map((q, index) => {
+          const passage = q.passageId
+            ? passages.find((p) => p.id === q.passageId)
+            : undefined
+          const isFirstOfPassage =
+            passage &&
+            quizQuestions.findIndex((x) => x.passageId === q.passageId) === index
+          return (
           <li key={q.id}>
+            {isFirstOfPassage && (
+              <div className="mb-3 rounded-xl border-2 border-sky-100 bg-sky-50 p-4 dark:border-sky-900 dark:bg-sky-500/10">
+                <p className="text-xs font-bold tracking-wide text-sky-600 uppercase dark:text-sky-400">
+                  📖 {passage.title}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                  {passage.text}
+                </p>
+              </div>
+            )}
             <p className="font-bold text-slate-900 dark:text-slate-100">
               Câu {index + 1}. {q.prompt}
             </p>
@@ -166,7 +187,8 @@ export function LessonQuizPage() {
               ))}
             </div>
           </li>
-        ))}
+          )
+        })}
       </ol>
 
       <button

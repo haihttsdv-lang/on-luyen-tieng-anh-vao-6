@@ -611,18 +611,20 @@ const kn02: Question[] = [
 ]
 
 // ---- KN-03: Đọc và điền từ / hoàn thành đoạn tóm tắt (8 câu, cùng 1 đoạn văn) ----
-// Đoạn gốc hoàn chỉnh (mỗi câu hỏi chỉ để trống đúng 1 từ đang kiểm tra):
-// "Last Sunday, Tom and his father went to the Space Museum. They learned many
-// interesting things about planets and rockets. Tom took a photo next to a real
-// spacesuit. After that, they watched a short movie about astronauts. Tom's
-// father bought him a toy rocket at the gift shop. On the way home, Tom said he
-// wanted to be an astronaut when he grew up. He was very happy and could not
-// stop talking about his trip."
+// Mỗi câu hỏi hiện TOÀN BỘ đoạn văn (chỉ để trống đúng 1 từ đang kiểm tra),
+// để tự đủ ngữ cảnh khi hiện riêng lẻ trong Luyện tập/Quiz nhanh/Thi thử —
+// không phụ thuộc học sinh đã thấy các câu trước đó trong cùng bộ hay chưa.
+// Đoạn gốc hoàn chỉnh: "Last Sunday, Tom and his father went to the Space
+// Museum. They learned many interesting things about planets and rockets.
+// Tom took a photo next to a real spacesuit. After that, they watched a
+// short movie about astronauts. Tom's father bought him a toy rocket at the
+// gift shop. On the way home, Tom said he wanted to be an astronaut when he
+// grew up. He was very happy and could not stop talking about his trip."
 const kn03: Question[] = [
   {
     id: 'KN03-01',
     prompt:
-      'Last Sunday, Tom and his father _____ to the Space Museum. They learned many interesting things about planets and rockets.',
+      "Last Sunday, Tom and his father _____ to the Space Museum. They learned many interesting things about planets and rockets. Tom took a photo next to a real spacesuit. After that, they watched a short movie about astronauts. Tom's father bought him a toy rocket at the gift shop. On the way home, Tom said he wanted to be an astronaut when he grew up. He was very happy and could not stop talking about his trip.",
     options: ['go', 'went', 'goes', 'going'],
     answerIndex: 1,
     explain: 'Chuyện xảy ra "last Sunday" (quá khứ) nên dùng quá khứ đơn "went".',
@@ -632,34 +634,37 @@ const kn03: Question[] = [
   {
     id: 'KN03-02',
     prompt:
-      'Tom and his father went to the Space Museum. They _____ many interesting things about planets and rockets.',
+      "Last Sunday, Tom and his father went to the Space Museum. They _____ many interesting things about planets and rockets. Tom took a photo next to a real spacesuit. After that, they watched a short movie about astronauts. Tom's father bought him a toy rocket at the gift shop. On the way home, Tom said he wanted to be an astronaut when he grew up. He was very happy and could not stop talking about his trip.",
     options: ['learn', 'learned', 'learning', 'learns'],
     answerIndex: 1,
-    explain: 'Cùng mốc thời gian quá khứ với câu trước nên dùng "learned".',
+    explain: 'Cùng mốc thời gian quá khứ "last Sunday" với câu trước nên dùng "learned".',
     topicIds: ['NP-13'],
     skillId: 'KN-03',
   },
   {
     id: 'KN03-03',
-    prompt: 'Tom _____ a photo next to a real spacesuit.',
+    prompt:
+      "Last Sunday, Tom and his father went to the Space Museum. They learned many interesting things about planets and rockets. Tom _____ a photo next to a real spacesuit. After that, they watched a short movie about astronauts. Tom's father bought him a toy rocket at the gift shop. On the way home, Tom said he wanted to be an astronaut when he grew up. He was very happy and could not stop talking about his trip.",
     options: ['take', 'took', 'taken', 'takes'],
     answerIndex: 1,
-    explain: '"Take" là động từ bất quy tắc, quá khứ đơn là "took".',
+    explain: 'Cả đoạn kể chuyện đã xảy ra "last Sunday"; "take" là động từ bất quy tắc, quá khứ đơn là "took".',
     topicIds: ['NP-13'],
     skillId: 'KN-03',
   },
   {
     id: 'KN03-04',
-    prompt: 'After that, they _____ a short movie about astronauts.',
+    prompt:
+      "Last Sunday, Tom and his father went to the Space Museum. They learned many interesting things about planets and rockets. Tom took a photo next to a real spacesuit. After that, they _____ a short movie about astronauts. Tom's father bought him a toy rocket at the gift shop. On the way home, Tom said he wanted to be an astronaut when he grew up. He was very happy and could not stop talking about his trip.",
     options: ['watch', 'watched', 'watching', 'watches'],
     answerIndex: 1,
-    explain: 'Tiếp tục mạch quá khứ đơn của cả đoạn văn.',
+    explain: 'Tiếp tục mạch quá khứ đơn của cả đoạn văn (chuyện xảy ra "last Sunday").',
     topicIds: ['NP-13'],
     skillId: 'KN-03',
   },
   {
     id: 'KN03-05',
-    prompt: "Tom's father bought him a toy rocket _____ the gift shop.",
+    prompt:
+      "Last Sunday, Tom and his father went to the Space Museum. They learned many interesting things about planets and rockets. Tom took a photo next to a real spacesuit. After that, they watched a short movie about astronauts. Tom's father bought him a toy rocket _____ the gift shop. On the way home, Tom said he wanted to be an astronaut when he grew up. He was very happy and could not stop talking about his trip.",
     options: ['in', 'at', 'on', 'to'],
     answerIndex: 1,
     explain: 'Dùng giới từ "at" với địa điểm cụ thể như cửa hàng.',
@@ -669,25 +674,27 @@ const kn03: Question[] = [
   {
     id: 'KN03-06',
     prompt:
-      'On the way home, Tom said he _____ to be an astronaut when he grew up.',
+      "Last Sunday, Tom and his father went to the Space Museum. They learned many interesting things about planets and rockets. Tom took a photo next to a real spacesuit. After that, they watched a short movie about astronauts. Tom's father bought him a toy rocket at the gift shop. On the way home, Tom said he _____ to be an astronaut when he grew up. He was very happy and could not stop talking about his trip.",
     options: ['want', 'wanted', 'wants', 'wanting'],
     answerIndex: 1,
-    explain: 'Câu tường thuật lùi thì: "wants" trong câu gốc lùi thành "wanted".',
+    explain: 'Câu tường thuật lùi thì: "wants" trong câu gốc lùi thành "wanted" vì "said" ở quá khứ.',
     topicIds: ['NP-22'],
     skillId: 'KN-03',
   },
   {
     id: 'KN03-07',
-    prompt: 'Tom said he wanted to be an astronaut when he _____ up.',
+    prompt:
+      "Last Sunday, Tom and his father went to the Space Museum. They learned many interesting things about planets and rockets. Tom took a photo next to a real spacesuit. After that, they watched a short movie about astronauts. Tom's father bought him a toy rocket at the gift shop. On the way home, Tom said he wanted to be an astronaut when he _____ up. He was very happy and could not stop talking about his trip.",
     options: ['grow', 'grew', 'grows', 'growing'],
     answerIndex: 1,
-    explain: 'Mệnh đề thời gian trong quá khứ dùng "grew" (quá khứ đơn).',
+    explain: 'Mệnh đề thời gian trong câu tường thuật quá khứ dùng "grew" (quá khứ đơn).',
     topicIds: ['NP-13'],
     skillId: 'KN-03',
   },
   {
     id: 'KN03-08',
-    prompt: 'He was very happy and could not stop talking _____ his trip.',
+    prompt:
+      "Last Sunday, Tom and his father went to the Space Museum. They learned many interesting things about planets and rockets. Tom took a photo next to a real spacesuit. After that, they watched a short movie about astronauts. Tom's father bought him a toy rocket at the gift shop. On the way home, Tom said he wanted to be an astronaut when he grew up. He was very happy and could not stop talking _____ his trip.",
     options: ['about', 'of', 'for', 'with'],
     answerIndex: 0,
     explain: 'Cụm động từ đúng là "talk about something".',

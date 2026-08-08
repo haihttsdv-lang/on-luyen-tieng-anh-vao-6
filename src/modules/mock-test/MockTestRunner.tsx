@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { SKILL_LABELS } from '../../content/skill-labels'
 import { getTopicLabel } from '../../content/topic-labels'
-import { progressStore } from '../../data-access'
-import type { Question, SkillId } from '../../types/domain'
+import { contentStore, progressStore } from '../../data-access'
+import type { Question, ReadingPassage, SkillId } from '../../types/domain'
 
 interface MockTestRunnerProps {
   questions: Question[]
@@ -27,6 +27,11 @@ export function MockTestRunner({
   const [submitted, setSubmitted] = useState(false)
   const [startedAt] = useState(() => Date.now())
   const savedRef = useRef(false)
+  const [passages, setPassages] = useState<ReadingPassage[]>([])
+
+  useEffect(() => {
+    contentStore.getReadingPassages().then(setPassages)
+  }, [])
 
   useEffect(() => {
     if (submitted) return
@@ -178,6 +183,11 @@ export function MockTestRunner({
           {questions.map((q, i) => {
             const selected = answers[q.id]
             const correct = selected === q.answerIndex
+            const passage = q.passageId
+              ? passages.find((p) => p.id === q.passageId)
+              : undefined
+            const isFirstOfPassage =
+              passage && questions.findIndex((x) => x.passageId === q.passageId) === i
             return (
               <li
                 key={q.id}
@@ -187,6 +197,16 @@ export function MockTestRunner({
                     : 'border-rose-200 bg-rose-50 dark:border-rose-800 dark:bg-rose-500/10'
                 }`}
               >
+                {isFirstOfPassage && (
+                  <div className="mb-3 rounded-lg border border-sky-100 bg-sky-50 p-3 dark:border-sky-900 dark:bg-sky-500/10">
+                    <p className="text-xs font-bold tracking-wide text-sky-600 uppercase dark:text-sky-400">
+                      📖 {passage.title}
+                    </p>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-600 dark:text-slate-400">
+                      {passage.text}
+                    </p>
+                  </div>
+                )}
                 <p className="font-medium whitespace-pre-line text-slate-900 dark:text-slate-100">
                   {correct ? '✅' : '❌'} Câu {i + 1}. {q.prompt}
                 </p>
@@ -215,6 +235,9 @@ export function MockTestRunner({
   }
 
   const current = questions[index]
+  const currentPassage = current.passageId
+    ? passages.find((p) => p.id === current.passageId)
+    : undefined
   const answeredCount = Object.keys(answers).length
 
   function handleSubmitClick() {
@@ -270,6 +293,18 @@ export function MockTestRunner({
       <p className="mt-6 text-sm font-bold text-slate-400">
         Câu {index + 1}/{questions.length} · {current.skillId}
       </p>
+
+      {currentPassage && (
+        <div className="mt-3 rounded-xl border-2 border-sky-100 bg-sky-50 p-4 dark:border-sky-900 dark:bg-sky-500/10">
+          <p className="text-xs font-bold tracking-wide text-sky-600 uppercase dark:text-sky-400">
+            📖 {currentPassage.title}
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            {currentPassage.text}
+          </p>
+        </div>
+      )}
+
       <p className="mt-1 font-bold whitespace-pre-line text-slate-900 dark:text-slate-100">
         {current.prompt}
       </p>

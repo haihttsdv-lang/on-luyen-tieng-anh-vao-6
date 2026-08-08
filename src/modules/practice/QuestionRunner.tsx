@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { progressStore } from '../../data-access'
-import type { Question } from '../../types/domain'
+import { contentStore, progressStore } from '../../data-access'
+import type { Question, ReadingPassage } from '../../types/domain'
 
 export type RunnerVariant = 'standard' | 'speed' | 'survival'
 
@@ -52,6 +52,11 @@ export function QuestionRunner({
     'completed' | 'time-up' | 'out-of-lives'
   >('completed')
   const coinsSaved = useRef(false)
+  const [passages, setPassages] = useState<ReadingPassage[]>([])
+
+  useEffect(() => {
+    contentStore.getReadingPassages().then(setPassages)
+  }, [])
 
   useEffect(() => {
     if (variant !== 'speed' || finished) return
@@ -72,6 +77,9 @@ export function QuestionRunner({
   }, [finished, variant, coins])
 
   const current = questions[index]
+  const currentPassage = current?.passageId
+    ? passages.find((p) => p.id === current.passageId)
+    : undefined
 
   function handleAnswer(optionIndex: number) {
     if (selected !== null || !current) return
@@ -215,6 +223,17 @@ export function QuestionRunner({
         Câu {index + 1}/{questions.length}
         {variant !== 'standard' && streak > 1 ? ` · 🔥 chuỗi ${streak}` : ''}
       </p>
+
+      {currentPassage && (
+        <div className="mt-4 rounded-xl border-2 border-sky-100 bg-sky-50 p-4 dark:border-sky-900 dark:bg-sky-500/10">
+          <p className="text-xs font-bold tracking-wide text-sky-600 uppercase dark:text-sky-400">
+            📖 {currentPassage.title}
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+            {currentPassage.text}
+          </p>
+        </div>
+      )}
 
       <p className="mt-4 font-bold whitespace-pre-line text-slate-900 dark:text-slate-100">
         {current.prompt}
