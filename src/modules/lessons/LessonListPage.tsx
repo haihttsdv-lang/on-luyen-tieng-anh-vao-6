@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getTopicLabel } from '../../content/topic-labels'
-import { GRAMMAR_GROUPS, groupLabelFor } from '../../content/topic-groups'
+import { THEMATIC_GROUPS, sequenceIndexFor } from '../../content/topic-groups'
 import { contentStore, progressStore } from '../../data-access'
 import type { Topic, TopicStatus, VocabCard } from '../../types/domain'
 
@@ -42,13 +42,12 @@ export function LessonListPage() {
     )
   }
 
-  const groupedTopics = new Map<string, Topic[]>()
-  for (const topic of topics) {
-    const label = groupLabelFor(topic.id)
-    ;(groupedTopics.get(label) ?? groupedTopics.set(label, []).get(label)!).push(
-      topic,
-    )
-  }
+  const sequencedTopics = [...topics].sort(
+    (a, b) => sequenceIndexFor(a.id) - sequenceIndexFor(b.id),
+  )
+  const masteredCount = sequencedTopics.filter(
+    (t) => statuses[t.id] === 'mastered',
+  ).length
 
   const vocabTopicIds = [...new Set(vocabCards.map((c) => c.topicId))].sort()
 
@@ -66,27 +65,61 @@ export function LessonListPage() {
         </Link>
       </div>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
-        Học từng bài, làm quiz nhanh để mở khóa "Đã nắm".
+        Học lần lượt từng bài theo đúng thứ tự để dễ theo dõi tiến độ, làm
+        quiz nhanh sau mỗi bài để mở khóa "Đã nắm".
       </p>
 
-      {GRAMMAR_GROUPS.map((group) => {
-        const groupTopics = groupedTopics.get(group.label)
-        if (!groupTopics || groupTopics.length === 0) return null
+      <div className="mt-4 flex items-center gap-3">
+        <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div
+            className="h-full rounded-full bg-linear-to-r from-emerald-500 to-lime-500 transition-all"
+            style={{
+              width: `${sequencedTopics.length > 0 ? (masteredCount / sequencedTopics.length) * 100 : 0}%`,
+            }}
+          />
+        </div>
+        <span className="shrink-0 text-xs font-bold text-slate-500 dark:text-slate-400">
+          {masteredCount}/{sequencedTopics.length} đã nắm
+        </span>
+      </div>
+
+      {THEMATIC_GROUPS.map((group) => {
+        const groupTopics = sequencedTopics.filter((t) =>
+          group.topicIds.includes(t.id),
+        )
+        if (groupTopics.length === 0) return null
+        const groupMastered = groupTopics.filter(
+          (t) => statuses[t.id] === 'mastered',
+        ).length
         return (
-          <div key={group.label} className="mt-6">
-            <h2 className="text-sm font-bold tracking-wide text-slate-500 uppercase">
-              {group.label}
-            </h2>
-            <ul className="mt-2 flex flex-col gap-3">
+          <div key={group.id} className="mt-8">
+            <div className="flex items-center justify-between gap-2">
+              <h2 className="text-sm font-bold tracking-wide text-slate-500 uppercase">
+                {group.icon} {group.label}
+              </h2>
+              <span className="shrink-0 text-xs font-bold text-slate-400">
+                {groupMastered}/{groupTopics.length}
+              </span>
+            </div>
+            <ol className="mt-2 flex flex-col gap-3">
               {groupTopics.map((topic) => {
                 const status = statuses[topic.id]
                 return (
                   <li key={topic.id}>
                     <Link
                       to={`/hoc-ly-thuyet/${topic.id}`}
-                      className="flex items-center justify-between gap-3 rounded-2xl border-2 border-slate-100 bg-white px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800 dark:bg-slate-900"
+                      className="flex items-center gap-3 rounded-2xl border-2 border-slate-100 bg-white px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800 dark:bg-slate-900"
                     >
-                      <span>
+                      <span
+                        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-extrabold ${
+                          status === 'mastered'
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400'
+                            : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+                        }`}
+                      >
+                        {sequenceIndexFor(topic.id) + 1}
+                      </span>
+                      <span className="min-w-0 flex-1">
                         <span className="block text-xs font-bold text-slate-400">
                           {topic.id}
                         </span>
@@ -105,7 +138,7 @@ export function LessonListPage() {
                   </li>
                 )
               })}
-            </ul>
+            </ol>
           </div>
         )
       })}

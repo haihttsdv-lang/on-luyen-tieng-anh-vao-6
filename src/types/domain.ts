@@ -14,7 +14,7 @@ export interface Topic {
   id: string // NP-xx hoặc TV-xx
   group: TopicGroup
   title: string
-  lesson: string
+  lesson: string[] // mảng gạch đầu dòng; hỗ trợ **in đậm** cho từ khóa quan trọng
   examples: TopicExample[]
   commonMistakes: string[] // FR-L02: lỗi thường gặp
 }
@@ -64,6 +64,8 @@ export type BoxLevel = 1 | 2 | 3 | 4 | 5
 export interface VocabCard {
   id: string
   word: string
+  partOfSpeech: string // loại từ viết tắt: n. (danh từ), v. (động từ), adj., adv., phr.v. (cụm động từ), idiom...
+  phonetic: string // phiên âm IPA theo giọng Anh-Mỹ (General American)
   meaning: string
   example: string
   topicId: string // TV-xx

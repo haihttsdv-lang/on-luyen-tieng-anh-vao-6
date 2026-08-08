@@ -11,6 +11,17 @@ interface QueueItem {
   box: BoxLevel
 }
 
+// Phát âm giọng Anh-Mỹ bằng Web Speech API của trình duyệt — không cần file
+// âm thanh hay mạng, phù hợp cả với bản offline đóng gói 1 file HTML.
+function speakWord(word: string) {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
+  window.speechSynthesis.cancel()
+  const utterance = new SpeechSynthesisUtterance(word)
+  utterance.lang = 'en-US'
+  utterance.rate = 0.9
+  window.speechSynthesis.speak(utterance)
+}
+
 export function FlashcardsPage() {
   const { topicId } = useParams<{ topicId: string }>()
   const [queue, setQueue] = useState<QueueItem[] | null>(null)
@@ -115,29 +126,50 @@ export function FlashcardsPage() {
         🗂️ {getTopicLabel(topicId)}
       </h1>
 
-      <button
-        type="button"
-        onClick={() => setFlipped((f) => !f)}
-        className="mt-6 flex min-h-52 w-full flex-col items-center justify-center gap-2 rounded-3xl border-2 border-slate-100 bg-white p-8 shadow-sm transition-colors hover:border-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800 dark:bg-slate-900"
-      >
-        {!flipped ? (
-          <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">
-            {card.word}
+      <div className="relative mt-6">
+        <button
+          type="button"
+          onClick={() => setFlipped((f) => !f)}
+          className="flex min-h-52 w-full flex-col items-center justify-center gap-2 rounded-3xl border-2 border-slate-100 bg-white p-8 shadow-sm transition-colors hover:border-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800 dark:bg-slate-900"
+        >
+          {!flipped ? (
+            <>
+              <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">
+                {card.word}
+              </span>
+              <span className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                <span className="rounded-full bg-slate-100 px-2 py-0.5 font-bold italic dark:bg-slate-800">
+                  {card.partOfSpeech}
+                </span>
+                <span>{card.phonetic}</span>
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
+                {card.meaning}
+              </span>
+              <span className="mt-2 text-slate-600 italic dark:text-slate-400">
+                {card.example}
+              </span>
+            </>
+          )}
+          <span className="mt-4 text-xs font-bold text-slate-400">
+            {flipped ? '(Bấm để xem lại mặt trước)' : '(Bấm để lật thẻ)'}
           </span>
-        ) : (
-          <>
-            <span className="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400">
-              {card.meaning}
-            </span>
-            <span className="mt-2 text-slate-600 italic dark:text-slate-400">
-              {card.example}
-            </span>
-          </>
-        )}
-        <span className="mt-4 text-xs font-bold text-slate-400">
-          {flipped ? '(Bấm để xem lại mặt trước)' : '(Bấm để lật thẻ)'}
-        </span>
-      </button>
+        </button>
+        <button
+          type="button"
+          aria-label={`Phát âm từ ${card.word} giọng Anh-Mỹ`}
+          onClick={(e) => {
+            e.stopPropagation()
+            speakWord(card.word)
+          }}
+          className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-lg text-emerald-700 transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:bg-emerald-500/10 dark:text-emerald-400"
+        >
+          🔊
+        </button>
+      </div>
 
       {flipped && (
         <div className="mt-6 flex justify-center gap-3">

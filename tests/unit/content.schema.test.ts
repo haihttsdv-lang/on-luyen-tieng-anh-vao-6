@@ -103,6 +103,9 @@ describe('Bài học lý thuyết (Topic)', () => {
     }
     for (const topic of topics) {
       expect(topic.lesson.length).toBeGreaterThan(0)
+      for (const point of topic.lesson) {
+        expect(point.length).toBeGreaterThan(0)
+      }
       expect(topic.examples.length).toBeGreaterThanOrEqual(3)
       expect(topic.examples.length).toBeLessThanOrEqual(5)
       for (const example of topic.examples) {
@@ -125,15 +128,17 @@ describe('Bài học lý thuyết (Topic)', () => {
 })
 
 describe('Flashcard từ vựng (VocabCard)', () => {
-  it('có đủ 196 flashcard trải đều 14/14 chủ đề (Mục 4.2, 14 thẻ/chủ đề), mỗi thẻ đủ từ, nghĩa, và câu ví dụ', () => {
-    expect(vocabCards).toHaveLength(196)
+  it('có đủ 280 flashcard trải đều 14/14 chủ đề (20 thẻ/chủ đề), mỗi thẻ đủ từ, loại từ, phiên âm, nghĩa, và câu ví dụ', () => {
+    expect(vocabCards).toHaveLength(280)
     for (const topicId of VOCAB_TOPIC_IDS) {
       const cards = vocabCards.filter((c) => c.topicId === topicId)
-      expect(cards).toHaveLength(14)
+      expect(cards).toHaveLength(20)
     }
     for (const card of vocabCards) {
       expect(VOCAB_TOPIC_IDS).toContain(card.topicId)
       expect(card.word.length).toBeGreaterThan(0)
+      expect(card.partOfSpeech.length).toBeGreaterThan(0)
+      expect(card.phonetic).toMatch(/^\/.+\/$/)
       expect(card.meaning.length).toBeGreaterThan(0)
       expect(card.example.length).toBeGreaterThan(0)
     }

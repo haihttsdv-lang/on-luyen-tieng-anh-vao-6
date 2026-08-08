@@ -41,5 +41,5 @@ test('flashcard: lật thẻ và đánh giá Đã thuộc/Chưa thuộc', async 
   await expect(page.getByText('bóng đá')).toBeVisible()
 
   await page.getByRole('button', { name: 'Đã thuộc' }).click()
-  await expect(page.getByText('Thẻ 2/14')).toBeVisible()
+  await expect(page.getByText('Thẻ 2/20')).toBeVisible()
 })

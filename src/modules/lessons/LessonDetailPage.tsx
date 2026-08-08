@@ -1,7 +1,22 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { contentStore, progressStore } from '../../data-access'
 import type { Topic } from '../../types/domain'
+
+// Parse cú pháp đơn giản **in đậm** trong nội dung bài học thành <strong>,
+// để làm nổi bật công thức/từ khóa quan trọng mà không cần thư viện markdown.
+function renderBold(text: string) {
+  const parts = text.split(/\*\*(.+?)\*\*/g)
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <strong key={i} className="font-extrabold text-emerald-700 dark:text-emerald-400">
+        {part}
+      </strong>
+    ) : (
+      <Fragment key={i}>{part}</Fragment>
+    ),
+  )
+}
 
 export function LessonDetailPage() {
   const { topicId } = useParams<{ topicId: string }>()
@@ -45,9 +60,19 @@ export function LessonDetailPage() {
       <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
         {topic.title}
       </h1>
-      <p className="mt-4 leading-relaxed text-slate-700 dark:text-slate-300">
-        {topic.lesson}
-      </p>
+      <h2 className="mt-6 text-lg font-bold text-slate-900 dark:text-slate-100">
+        📖 Nội dung bài học
+      </h2>
+      <ul className="mt-3 flex flex-col gap-2.5">
+        {topic.lesson.map((point, i) => (
+          <li
+            key={i}
+            className="rounded-xl border-2 border-emerald-100 bg-emerald-50/60 px-4 py-3 leading-relaxed text-slate-700 dark:border-emerald-900 dark:bg-emerald-500/5 dark:text-slate-300"
+          >
+            {renderBold(point)}
+          </li>
+        ))}
+      </ul>
 
       <h2 className="mt-8 text-lg font-bold text-slate-900 dark:text-slate-100">
         ✏️ Ví dụ
@@ -71,9 +96,14 @@ export function LessonDetailPage() {
       <h2 className="mt-8 text-lg font-bold text-slate-900 dark:text-slate-100">
         ⚠️ Lỗi thường gặp
       </h2>
-      <ul className="mt-3 flex list-disc flex-col gap-2 pl-5 text-slate-700 dark:text-slate-300">
+      <ul className="mt-3 flex flex-col gap-2.5">
         {topic.commonMistakes.map((mistake, i) => (
-          <li key={i}>{mistake}</li>
+          <li
+            key={i}
+            className="rounded-xl border-2 border-rose-100 bg-rose-50/60 px-4 py-3 text-slate-700 dark:border-rose-900 dark:bg-rose-500/5 dark:text-slate-300"
+          >
+            {mistake}
+          </li>
         ))}
       </ul>
 

@@ -3,13 +3,20 @@ import type { Topic } from '../../types/domain'
 // Dữ liệu bài học theo từng chủ điểm (NP-xx, TV-xx) — Mục 4.1, 4.2 URD.
 // Giai đoạn 3: biên soạn mẫu cho Nhóm B — Thì động từ (NP-11..16), để xác
 // thực mô hình trước khi mở rộng toàn bộ 31 chủ điểm ngữ pháp ở Giai đoạn 5.
+//
+// `lesson` là mảng gạch đầu dòng (không phải 1 đoạn văn dài) — mỗi phần tử
+// được LessonDetailPage đóng khung riêng; cú pháp `**...**` được parse thành
+// chữ in đậm để làm nổi bật công thức/từ khóa quan trọng.
 export const topics: Topic[] = [
   {
     id: 'NP-11',
     group: 'grammar',
     title: 'Hiện tại đơn (Present Simple)',
-    lesson:
-      'Thì hiện tại đơn diễn tả thói quen, sự thật hiển nhiên, hoặc lịch trình cố định. Công thức: Chủ ngữ + V(s/es) với ngôi thứ ba số ít (he/she/it), hoặc V nguyên thể với các ngôi còn lại. Thường đi cùng các trạng từ tần suất: always, usually, often, sometimes, never, every day...',
+    lesson: [
+      '**Cách dùng:** diễn tả thói quen, sự thật hiển nhiên, hoặc lịch trình cố định.',
+      '**Công thức:** Chủ ngữ + **V(s/es)** với ngôi thứ ba số ít (he/she/it), hoặc **V nguyên thể** với các ngôi còn lại.',
+      '**Dấu hiệu nhận biết:** always, usually, often, sometimes, never, every day...',
+    ],
     examples: [
       { en: 'I go to school by bike every day.', vi: 'Hằng ngày tôi đi học bằng xe đạp.' },
       { en: 'She brushes her teeth twice a day.', vi: 'Cô ấy đánh răng hai lần một ngày.' },
@@ -27,8 +34,11 @@ export const topics: Topic[] = [
     id: 'NP-12',
     group: 'grammar',
     title: 'Hiện tại tiếp diễn (Present Continuous)',
-    lesson:
-      'Thì hiện tại tiếp diễn diễn tả hành động đang xảy ra ngay tại thời điểm nói, hoặc một kế hoạch đã sắp xếp trong tương lai gần. Công thức: Chủ ngữ + am/is/are + V-ing. Thường đi cùng: now, right now, at the moment, Look!, Listen!...',
+    lesson: [
+      '**Cách dùng:** diễn tả hành động đang xảy ra ngay tại thời điểm nói, hoặc một kế hoạch đã sắp xếp trong tương lai gần.',
+      '**Công thức:** Chủ ngữ + **am/is/are + V-ing**.',
+      '**Dấu hiệu nhận biết:** now, right now, at the moment, Look!, Listen!...',
+    ],
     examples: [
       { en: 'I am doing my homework now.', vi: 'Bây giờ tôi đang làm bài tập về nhà.' },
       { en: 'Look! The dog is running after the cat.', vi: 'Nhìn kìa! Con chó đang đuổi theo con mèo.' },
@@ -46,8 +56,11 @@ export const topics: Topic[] = [
     id: 'NP-13',
     group: 'grammar',
     title: 'Quá khứ đơn (Past Simple)',
-    lesson:
-      'Thì quá khứ đơn diễn tả hành động đã xảy ra và kết thúc trong quá khứ, tại một thời điểm xác định. Công thức: Chủ ngữ + V2/-ed (động từ có quy tắc thêm -ed, động từ bất quy tắc học thuộc bảng riêng). Thường đi cùng: yesterday, last week/year, ago, in 2020...',
+    lesson: [
+      '**Cách dùng:** diễn tả hành động đã xảy ra và kết thúc trong quá khứ, tại một thời điểm xác định.',
+      '**Công thức:** Chủ ngữ + **V2/-ed** (động từ có quy tắc thêm -ed, động từ bất quy tắc học thuộc bảng riêng).',
+      '**Dấu hiệu nhận biết:** yesterday, last week/year, ago, in 2020...',
+    ],
     examples: [
       { en: 'I visited my grandparents last Sunday.', vi: 'Tôi đã thăm ông bà vào Chủ nhật tuần trước.' },
       { en: "She didn't finish her homework last night.", vi: 'Tối qua cô ấy đã không làm xong bài tập.' },
@@ -65,8 +78,11 @@ export const topics: Topic[] = [
     id: 'NP-14',
     group: 'grammar',
     title: 'Quá khứ tiếp diễn (kết hợp với quá khứ đơn)',
-    lesson:
-      "Thì quá khứ tiếp diễn diễn tả một hành động đang xảy ra tại một thời điểm trong quá khứ, thường bị một hành động khác (ở quá khứ đơn) xen vào. Công thức: Chủ ngữ + was/were + V-ing. Cấu trúc thường gặp: 'While + quá khứ tiếp diễn, quá khứ đơn' hoặc 'Quá khứ đơn + when + quá khứ tiếp diễn'.",
+    lesson: [
+      '**Cách dùng:** diễn tả một hành động đang xảy ra tại một thời điểm trong quá khứ, thường bị một hành động khác (ở quá khứ đơn) xen vào.',
+      '**Công thức:** Chủ ngữ + **was/were + V-ing**.',
+      "**Cấu trúc thường gặp:** 'While + quá khứ tiếp diễn, quá khứ đơn' hoặc 'Quá khứ đơn + when + quá khứ tiếp diễn'.",
+    ],
     examples: [
       { en: 'I was watching TV when he called me.', vi: 'Tôi đang xem TV thì anh ấy gọi cho tôi.' },
       { en: 'While she was cooking, the phone rang.', vi: 'Trong khi cô ấy đang nấu ăn thì điện thoại reo.' },
@@ -84,8 +100,11 @@ export const topics: Topic[] = [
     id: 'NP-15',
     group: 'grammar',
     title: 'Hiện tại hoàn thành (ever/never, since/for)',
-    lesson:
-      'Thì hiện tại hoàn thành diễn tả hành động đã xảy ra trong quá khứ nhưng không nói rõ thời điểm cụ thể, hoặc hành động bắt đầu trong quá khứ và còn tiếp diễn/liên quan đến hiện tại. Công thức: Chủ ngữ + have/has + V3/-ed. Thường đi cùng: ever, never, already, just, yet, since, for...',
+    lesson: [
+      '**Cách dùng:** diễn tả hành động đã xảy ra trong quá khứ nhưng không nói rõ thời điểm cụ thể, hoặc hành động bắt đầu trong quá khứ và còn tiếp diễn/liên quan đến hiện tại.',
+      '**Công thức:** Chủ ngữ + **have/has + V3/-ed**.',
+      '**Dấu hiệu nhận biết:** ever, never, already, just, yet, since, for...',
+    ],
     examples: [
       { en: 'I have never been to Da Lat.', vi: 'Tôi chưa từng đến Đà Lạt.' },
       { en: 'She has lived in Ha Noi for five years.', vi: 'Cô ấy đã sống ở Hà Nội được năm năm.' },
@@ -103,8 +122,10 @@ export const topics: Topic[] = [
     id: 'NP-16',
     group: 'grammar',
     title: 'Tương lai đơn (will) & used to',
-    lesson:
-      "Thì tương lai đơn dùng 'will' để diễn tả dự đoán, quyết định tức thời, hoặc lời hứa. Công thức: Chủ ngữ + will + V nguyên thể. Cấu trúc 'used to + V nguyên thể' diễn tả thói quen hoặc trạng thái đã từng xảy ra trong quá khứ nhưng nay không còn nữa.",
+    lesson: [
+      "**Tương lai đơn (will):** dùng để diễn tả dự đoán, quyết định tức thời, hoặc lời hứa. Công thức: Chủ ngữ + **will + V nguyên thể**.",
+      "**'Used to + V nguyên thể':** diễn tả thói quen hoặc trạng thái đã từng xảy ra trong quá khứ nhưng nay không còn nữa.",
+    ],
     examples: [
       { en: 'I think it will rain tomorrow.', vi: 'Tôi nghĩ ngày mai trời sẽ mưa.' },
       { en: 'I promise I will help you with your homework.', vi: 'Tôi hứa sẽ giúp bạn làm bài tập.' },
@@ -126,8 +147,10 @@ export const topics: Topic[] = [
     id: 'NP-01',
     group: 'grammar',
     title: 'Danh từ số ít/số nhiều, đếm được/không đếm được',
-    lesson:
-      'Danh từ đếm được có dạng số ít và số nhiều (thêm -s/-es, hoặc bất quy tắc: man → men, child → children...). Danh từ không đếm được (nước, gạo, thông tin...) không có dạng số nhiều, không dùng a/an, và động từ luôn chia số ít.',
+    lesson: [
+      '**Danh từ đếm được** có dạng số ít và số nhiều (thêm -s/-es, hoặc bất quy tắc: man → men, child → children...).',
+      '**Danh từ không đếm được** (nước, gạo, thông tin...) không có dạng số nhiều, không dùng a/an, và động từ luôn chia số ít.',
+    ],
     examples: [
       { en: 'I have two brothers and one sister.', vi: 'Tôi có hai anh trai và một chị gái.' },
       { en: 'There are many children in the park.', vi: 'Có nhiều trẻ em trong công viên.' },
@@ -145,8 +168,11 @@ export const topics: Topic[] = [
     id: 'NP-03',
     group: 'grammar',
     title: 'Đại từ nhân xưng, tính từ & đại từ sở hữu',
-    lesson:
-      'Đại từ nhân xưng làm chủ ngữ (I, you, he, she, it, we, they) hoặc tân ngữ (me, you, him, her, it, us, them). Tính từ sở hữu đứng trước danh từ (my, your, his, her, its, our, their). Đại từ sở hữu thay cho cả "tính từ sở hữu + danh từ" (mine, yours, his, hers, its, ours, theirs).',
+    lesson: [
+      '**Đại từ nhân xưng** làm chủ ngữ (I, you, he, she, it, we, they) hoặc tân ngữ (me, you, him, her, it, us, them).',
+      '**Tính từ sở hữu** đứng trước danh từ (my, your, his, her, its, our, their).',
+      "**Đại từ sở hữu** thay cho cả \"tính từ sở hữu + danh từ\" (mine, yours, his, hers, its, ours, theirs).",
+    ],
     examples: [
       { en: 'She gave him her book.', vi: 'Cô ấy đưa cho anh ấy cuốn sách của cô ấy.' },
       { en: 'This pencil is mine, not yours.', vi: 'Cây bút chì này là của tôi, không phải của bạn.' },
@@ -164,8 +190,13 @@ export const topics: Topic[] = [
     id: 'NP-06',
     group: 'grammar',
     title: 'So sánh tính từ/trạng từ',
-    lesson:
-      'So sánh hơn: tính từ ngắn + "-er" hoặc "more" + tính từ dài, theo sau là "than". So sánh nhất: "the" + tính từ + "-est" hoặc "the most" + tính từ dài. So sánh bằng: "as...as". So sánh kép (càng...càng): "the + so sánh hơn..., the + so sánh hơn...". Gấp nhiều lần: "twice/three times as...as".',
+    lesson: [
+      "**So sánh hơn:** tính từ ngắn + \"-er\" hoặc \"more\" + tính từ dài, theo sau là \"than\".",
+      '**So sánh nhất:** "the" + tính từ + "-est" hoặc "the most" + tính từ dài.',
+      '**So sánh bằng:** "as...as".',
+      '**So sánh kép (càng...càng):** "the + so sánh hơn..., the + so sánh hơn...".',
+      '**Gấp nhiều lần:** "twice/three times as...as".',
+    ],
     examples: [
       { en: 'Minh is taller than Nam.', vi: 'Minh cao hơn Nam.' },
       { en: 'This is the most interesting book I have read.', vi: 'Đây là cuốn sách thú vị nhất tôi từng đọc.' },
@@ -183,8 +214,10 @@ export const topics: Topic[] = [
     id: 'NP-07',
     group: 'grammar',
     title: 'Trạng từ chỉ tần suất, cách thức',
-    lesson:
-      'Trạng từ chỉ tần suất (always, usually, often, sometimes, rarely, never) thường đứng trước động từ thường nhưng sau động từ "to be". Trạng từ chỉ cách thức thường được thành lập bằng cách thêm "-ly" vào tính từ (quick → quickly), diễn tả hành động được thực hiện như thế nào, thường đứng cuối câu.',
+    lesson: [
+      "**Trạng từ chỉ tần suất** (always, usually, often, sometimes, rarely, never) thường đứng trước động từ thường nhưng sau động từ \"to be\".",
+      "**Trạng từ chỉ cách thức** thường được thành lập bằng cách thêm \"-ly\" vào tính từ (quick → quickly), diễn tả hành động được thực hiện như thế nào, thường đứng cuối câu.",
+    ],
     examples: [
       { en: 'I always brush my teeth before bed.', vi: 'Tôi luôn đánh răng trước khi ngủ.' },
       { en: 'She is never late for school.', vi: 'Cô ấy không bao giờ đến trường muộn.' },
@@ -202,8 +235,10 @@ export const topics: Topic[] = [
     id: 'NP-08',
     group: 'grammar',
     title: 'Giới từ chỉ thời gian, nơi chốn',
-    lesson:
-      'Giới từ thời gian: "at" (giờ cụ thể: at 7 o\'clock), "on" (ngày, thứ: on Monday), "in" (tháng, năm, mùa: in July). Giới từ nơi chốn: "at" (địa điểm cụ thể: at the bus stop), "on" (bề mặt: on the table), "in" (không gian kín/khu vực lớn: in the box, in Ha Noi).',
+    lesson: [
+      "**Giới từ thời gian:** \"at\" (giờ cụ thể: at 7 o'clock), \"on\" (ngày, thứ: on Monday), \"in\" (tháng, năm, mùa: in July).",
+      '**Giới từ nơi chốn:** "at" (địa điểm cụ thể: at the bus stop), "on" (bề mặt: on the table), "in" (không gian kín/khu vực lớn: in the box, in Ha Noi).',
+    ],
     examples: [
       { en: 'We have an English test at 8 a.m. on Monday.', vi: 'Chúng tôi có bài kiểm tra tiếng Anh lúc 8 giờ sáng thứ Hai.' },
       { en: 'My birthday is in October.', vi: 'Sinh nhật của tôi vào tháng Mười.' },
@@ -221,8 +256,10 @@ export const topics: Topic[] = [
     id: 'NP-20',
     group: 'grammar',
     title: 'Câu điều kiện loại 0 và loại 1',
-    lesson:
-      'Câu điều kiện loại 0 diễn tả sự thật hiển nhiên, quy luật tự nhiên: "If + hiện tại đơn, hiện tại đơn". Câu điều kiện loại 1 diễn tả tình huống có thể xảy ra ở hiện tại/tương lai: "If + hiện tại đơn, will + V nguyên thể".',
+    lesson: [
+      '**Loại 0** diễn tả sự thật hiển nhiên, quy luật tự nhiên: "If + hiện tại đơn, hiện tại đơn".',
+      '**Loại 1** diễn tả tình huống có thể xảy ra ở hiện tại/tương lai: "If + hiện tại đơn, will + V nguyên thể".',
+    ],
     examples: [
       { en: 'If you heat ice, it melts.', vi: 'Nếu bạn làm nóng đá, nó tan chảy.' },
       { en: 'If it rains tomorrow, we will stay at home.', vi: 'Nếu ngày mai trời mưa, chúng tôi sẽ ở nhà.' },
@@ -240,8 +277,10 @@ export const topics: Topic[] = [
     id: 'NP-21',
     group: 'grammar',
     title: 'Câu bị động (hiện tại đơn, quá khứ đơn)',
-    lesson:
-      'Câu bị động dùng khi muốn nhấn mạnh vào đối tượng chịu tác động thay vì người/vật thực hiện hành động. Công thức: "be (chia theo thì) + V3/-ed". Hiện tại đơn: am/is/are + V3. Quá khứ đơn: was/were + V3.',
+    lesson: [
+      '**Cách dùng:** nhấn mạnh vào đối tượng chịu tác động thay vì người/vật thực hiện hành động.',
+      '**Công thức:** "be (chia theo thì) + V3/-ed". Hiện tại đơn: **am/is/are + V3**. Quá khứ đơn: **was/were + V3**.',
+    ],
     examples: [
       { en: 'Rice is grown in Vietnam.', vi: 'Gạo được trồng ở Việt Nam.' },
       { en: 'This book was written by a famous author.', vi: 'Cuốn sách này được viết bởi một tác giả nổi tiếng.' },
@@ -259,8 +298,11 @@ export const topics: Topic[] = [
     id: 'NP-22',
     group: 'grammar',
     title: 'Câu tường thuật/gián tiếp',
-    lesson:
-      'Câu tường thuật (gián tiếp) thuật lại lời nói của người khác mà không cần trích dẫn nguyên văn. Khi động từ tường thuật ("said", "told") ở quá khứ, thì của câu trực tiếp thường lùi lại một bậc (hiện tại đơn → quá khứ đơn, hiện tại tiếp diễn → quá khứ tiếp diễn...). Câu hỏi gián tiếp giữ trật tự từ như câu kể, không đảo ngữ.',
+    lesson: [
+      '**Cách dùng:** thuật lại lời nói của người khác mà không cần trích dẫn nguyên văn.',
+      '**Lùi thì:** khi động từ tường thuật ("said", "told") ở quá khứ, thì của câu trực tiếp thường lùi lại một bậc (hiện tại đơn → quá khứ đơn, hiện tại tiếp diễn → quá khứ tiếp diễn...).',
+      '**Câu hỏi gián tiếp** giữ trật tự từ như câu kể, không đảo ngữ.',
+    ],
     examples: [
       { en: '"I am tired," she said. → She said (that) she was tired.', vi: '"Tôi mệt," cô ấy nói. → Cô ấy nói rằng cô ấy mệt.' },
       { en: 'He said, "I will call you." → He said he would call me.', vi: 'Anh ấy nói: "Tôi sẽ gọi cho bạn." → Anh ấy nói anh ấy sẽ gọi cho tôi.' },
@@ -278,8 +320,11 @@ export const topics: Topic[] = [
     id: 'NP-23',
     group: 'grammar',
     title: 'Động từ khuyết thiếu',
-    lesson:
-      'Động từ khuyết thiếu (modal verbs) theo sau là động từ nguyên thể không "to": can/could (khả năng, xin phép), must (bắt buộc, suy luận chắc chắn), have to (bắt buộc do hoàn cảnh), should (lời khuyên), need to (sự cần thiết).',
+    lesson: [
+      '**Động từ khuyết thiếu** (modal verbs) theo sau là động từ nguyên thể không "to":',
+      '**can/could** — khả năng, xin phép. **must** — bắt buộc, suy luận chắc chắn.',
+      '**have to** — bắt buộc do hoàn cảnh. **should** — lời khuyên. **need to** — sự cần thiết.',
+    ],
     examples: [
       { en: 'You must wear a helmet when riding a motorbike.', vi: 'Bạn phải đội mũ bảo hiểm khi đi xe máy.' },
       { en: 'Can I borrow your pen, please?', vi: 'Mình mượn bút của bạn được không?' },
@@ -297,8 +342,10 @@ export const topics: Topic[] = [
     id: 'NP-25',
     group: 'grammar',
     title: 'Cấu trúc với V-ing/to-V khác',
-    lesson:
-      'Một số cụm từ/động từ luôn theo sau bởi V-ing: "look forward to", "be interested in", "be good at". Một số cấu trúc dùng "to V" để diễn tả mục đích ("to V" = "để làm gì").',
+    lesson: [
+      '**Luôn theo sau bởi V-ing:** "look forward to", "be interested in", "be good at".',
+      '**Diễn tả mục đích:** cấu trúc "to V" ("để làm gì").',
+    ],
     examples: [
       { en: 'I look forward to seeing you soon.', vi: 'Tôi mong sớm được gặp bạn.' },
       { en: 'She is interested in learning new languages.', vi: 'Cô ấy thích thú với việc học ngôn ngữ mới.' },
@@ -316,8 +363,10 @@ export const topics: Topic[] = [
     id: 'NP-26',
     group: 'grammar',
     title: 'so...that / such...that',
-    lesson:
-      '"So + tính từ/trạng từ + that" và "such + (a/an) + tính từ + danh từ + that" đều diễn tả kết quả của một mức độ rất cao. Dùng "so" khi sau nó là tính từ/trạng từ một mình; dùng "such" khi sau nó là cụm danh từ.',
+    lesson: [
+      '**"So + tính từ/trạng từ + that"** và **"such + (a/an) + tính từ + danh từ + that"** đều diễn tả kết quả của một mức độ rất cao.',
+      'Dùng **"so"** khi sau nó là tính từ/trạng từ một mình; dùng **"such"** khi sau nó là cụm danh từ.',
+    ],
     examples: [
       { en: "The bag is so heavy that I can't carry it.", vi: 'Cái túi nặng đến nỗi tôi không thể xách được.' },
       { en: "It is such a heavy bag that I can't carry it.", vi: 'Đó là một cái túi nặng đến nỗi tôi không thể xách được.' },
@@ -335,8 +384,10 @@ export const topics: Topic[] = [
     id: 'NP-28',
     group: 'grammar',
     title: 'Would like, would rather',
-    lesson:
-      '"Would like" (muốn, lịch sự hơn "want") theo sau bởi "to V". "Would rather" (thích hơn) theo sau bởi V nguyên thể không "to".',
+    lesson: [
+      '**"Would like"** (muốn, lịch sự hơn "want") theo sau bởi **"to V"**.',
+      '**"Would rather"** (thích hơn) theo sau bởi **V nguyên thể không "to"**.',
+    ],
     examples: [
       { en: 'I would like to have some tea, please.', vi: 'Tôi muốn dùng một chút trà.' },
       { en: 'Would you like to join us for lunch?', vi: 'Bạn có muốn tham gia ăn trưa cùng chúng tôi không?' },
@@ -357,8 +408,11 @@ export const topics: Topic[] = [
     id: 'NP-02',
     group: 'grammar',
     title: 'Mạo từ a/an/the và trường hợp không dùng mạo từ',
-    lesson:
-      'Dùng "a" trước danh từ số ít bắt đầu bằng âm phụ âm, "an" trước âm nguyên âm, khi nhắc đến lần đầu hoặc không xác định. Dùng "the" khi cả người nói và người nghe đều biết đối tượng cụ thể, hoặc khi đã nhắc đến trước đó. Không dùng mạo từ trước danh từ số nhiều/không đếm được mang nghĩa chung, tên riêng, tên môn học, bữa ăn.',
+    lesson: [
+      "Dùng **'a'** trước danh từ số ít bắt đầu bằng âm phụ âm, **'an'** trước âm nguyên âm, khi nhắc đến lần đầu hoặc không xác định.",
+      "Dùng **'the'** khi cả người nói và người nghe đều biết đối tượng cụ thể, hoặc khi đã nhắc đến trước đó.",
+      '**Không dùng mạo từ** trước danh từ số nhiều/không đếm được mang nghĩa chung, tên riêng, tên môn học, bữa ăn.',
+    ],
     examples: [
       { en: 'I saw a cat and an elephant at the zoo.', vi: 'Tôi đã thấy một con mèo và một con voi ở sở thú.' },
       { en: 'The cat I saw yesterday was very cute.', vi: 'Con mèo tôi thấy hôm qua rất dễ thương.' },
@@ -376,8 +430,10 @@ export const topics: Topic[] = [
     id: 'NP-04',
     group: 'grammar',
     title: 'Đại từ bất định; đại từ/trạng từ quan hệ (giới thiệu cơ bản)',
-    lesson:
-      'Đại từ bất định (something, anyone, nobody, everything...) chỉ người/vật không xác định cụ thể. Đại từ quan hệ cơ bản: "who" (chỉ người), "which" (chỉ vật), "that" (chỉ người hoặc vật) dùng để nối mệnh đề bổ nghĩa cho danh từ đứng trước.',
+    lesson: [
+      '**Đại từ bất định** (something, anyone, nobody, everything...) chỉ người/vật không xác định cụ thể.',
+      '**Đại từ quan hệ cơ bản:** "who" (chỉ người), "which" (chỉ vật), "that" (chỉ người hoặc vật) dùng để nối mệnh đề bổ nghĩa cho danh từ đứng trước.',
+    ],
     examples: [
       { en: 'Is there anyone in the room?', vi: 'Có ai trong phòng không?' },
       { en: 'I have something important to tell you.', vi: 'Tôi có điều quan trọng muốn nói với bạn.' },
@@ -395,8 +451,10 @@ export const topics: Topic[] = [
     id: 'NP-05',
     group: 'grammar',
     title: 'Tính từ: thứ tự tính từ, đuôi -ed/-ing',
-    lesson:
-      'Khi nhiều tính từ đứng trước danh từ, thứ tự thường là: số lượng – ý kiến – kích thước – tuổi – hình dáng – màu sắc – nguồn gốc – chất liệu – danh từ. Tính từ đuôi "-ing" mô tả tính chất của sự vật/sự việc (gây ra cảm xúc), tính từ đuôi "-ed" mô tả cảm xúc của người (bị tác động).',
+    lesson: [
+      'Khi nhiều tính từ đứng trước danh từ, thứ tự thường là: **số lượng – ý kiến – kích thước – tuổi – hình dáng – màu sắc – nguồn gốc – chất liệu – danh từ**.',
+      "Tính từ đuôi **'-ing'** mô tả tính chất của sự vật/sự việc (gây ra cảm xúc), tính từ đuôi **'-ed'** mô tả cảm xúc của người (bị tác động).",
+    ],
     examples: [
       { en: 'She has a beautiful small white dog.', vi: 'Cô ấy có một chú chó trắng nhỏ xinh đẹp.' },
       { en: 'This is an interesting story.', vi: 'Đây là một câu chuyện thú vị.' },
@@ -414,8 +472,10 @@ export const topics: Topic[] = [
     id: 'NP-09',
     group: 'grammar',
     title: 'Liên từ kết hợp, phụ thuộc, nguyên nhân–kết quả–mục đích, tương phản',
-    lesson:
-      'Liên từ kết hợp (and, but, or, so) nối hai từ/cụm từ/mệnh đề ngang hàng. Liên từ phụ thuộc (because, although, if, when...) nối mệnh đề phụ với mệnh đề chính, diễn tả nguyên nhân, tương phản, điều kiện, thời gian.',
+    lesson: [
+      '**Liên từ kết hợp** (and, but, or, so) nối hai từ/cụm từ/mệnh đề ngang hàng.',
+      '**Liên từ phụ thuộc** (because, although, if, when...) nối mệnh đề phụ với mệnh đề chính, diễn tả nguyên nhân, tương phản, điều kiện, thời gian.',
+    ],
     examples: [
       { en: 'I like tea, but my brother likes coffee.', vi: 'Tôi thích trà, nhưng anh tôi thích cà phê.' },
       { en: 'She was tired because she had worked all day.', vi: 'Cô ấy mệt vì đã làm việc cả ngày.' },
@@ -433,8 +493,12 @@ export const topics: Topic[] = [
     id: 'NP-10',
     group: 'grammar',
     title: 'Từ định lượng: some/any, much/many, a lot of, a few/few, a little/little',
-    lesson:
-      '"Some" dùng trong câu khẳng định và lời đề nghị/mời, "any" dùng trong câu phủ định và câu hỏi. "Many" và "few/a few" đi với danh từ đếm được số nhiều; "much" và "little/a little" đi với danh từ không đếm được. "A lot of" dùng được cho cả hai loại. "A few/a little" mang nghĩa tích cực (có một ít, đủ dùng), còn "few/little" mang nghĩa tiêu cực (rất ít, gần như không có).',
+    lesson: [
+      '**"Some"** dùng trong câu khẳng định và lời đề nghị/mời, **"any"** dùng trong câu phủ định và câu hỏi.',
+      '**"Many"** và **"few/a few"** đi với danh từ đếm được số nhiều; **"much"** và **"little/a little"** đi với danh từ không đếm được.',
+      '**"A lot of"** dùng được cho cả hai loại.',
+      '**"A few/a little"** mang nghĩa tích cực (có một ít, đủ dùng), còn **"few/little"** mang nghĩa tiêu cực (rất ít, gần như không có).',
+    ],
     examples: [
       { en: 'There are some apples in the basket.', vi: 'Có vài quả táo trong giỏ.' },
       { en: 'Do you have any questions?', vi: 'Bạn có câu hỏi nào không?' },
@@ -452,8 +516,10 @@ export const topics: Topic[] = [
     id: 'NP-17',
     group: 'grammar',
     title: 'Câu hỏi Wh-/How, câu hỏi đuôi',
-    lesson:
-      'Câu hỏi Wh- (What, Where, When, Who, Why, Which) và How dùng để hỏi thông tin cụ thể, có trật tự: từ để hỏi + trợ động từ + chủ ngữ + động từ chính. Câu hỏi đuôi (tag question) thêm vào cuối câu kể để xác nhận thông tin: nếu câu kể khẳng định thì đuôi phủ định, và ngược lại.',
+    lesson: [
+      '**Câu hỏi Wh-** (What, Where, When, Who, Why, Which) và **How** dùng để hỏi thông tin cụ thể, có trật tự: từ để hỏi + trợ động từ + chủ ngữ + động từ chính.',
+      '**Câu hỏi đuôi** (tag question) thêm vào cuối câu kể để xác nhận thông tin: nếu câu kể khẳng định thì đuôi phủ định, và ngược lại.',
+    ],
     examples: [
       { en: 'Where do you live?', vi: 'Bạn sống ở đâu?' },
       { en: 'How often do you play football?', vi: 'Bạn chơi bóng đá bao lâu một lần?' },
@@ -471,8 +537,10 @@ export const topics: Topic[] = [
     id: 'NP-18',
     group: 'grammar',
     title: 'Mệnh đề quan hệ xác định & không xác định',
-    lesson:
-      'Mệnh đề quan hệ xác định cung cấp thông tin cần thiết để xác định danh từ, không dùng dấu phẩy. Mệnh đề quan hệ không xác định cung cấp thông tin bổ sung không bắt buộc, được ngăn cách bằng dấu phẩy, không dùng "that".',
+    lesson: [
+      '**Mệnh đề quan hệ xác định** cung cấp thông tin cần thiết để xác định danh từ, không dùng dấu phẩy.',
+      '**Mệnh đề quan hệ không xác định** cung cấp thông tin bổ sung không bắt buộc, được ngăn cách bằng dấu phẩy, không dùng "that".',
+    ],
     examples: [
       { en: 'The boy who is wearing a blue shirt is my friend.', vi: 'Cậu bé đang mặc áo xanh là bạn tôi.' },
       { en: 'My father, who is fifty years old, still plays football every week.', vi: 'Bố tôi, năm nay năm mươi tuổi, vẫn chơi bóng đá mỗi tuần.' },
@@ -490,8 +558,11 @@ export const topics: Topic[] = [
     id: 'NP-19',
     group: 'grammar',
     title: 'Mệnh đề trạng ngữ (thời gian, tương phản, nguyên nhân)',
-    lesson:
-      'Mệnh đề trạng ngữ chỉ thời gian bắt đầu bằng "when, while, before, after, as soon as". Mệnh đề trạng ngữ chỉ tương phản bắt đầu bằng "although, though, even though". Mệnh đề trạng ngữ chỉ nguyên nhân bắt đầu bằng "because, since, as".',
+    lesson: [
+      '**Chỉ thời gian:** bắt đầu bằng "when, while, before, after, as soon as".',
+      '**Chỉ tương phản:** bắt đầu bằng "although, though, even though".',
+      '**Chỉ nguyên nhân:** bắt đầu bằng "because, since, as".',
+    ],
     examples: [
       { en: 'When I got home, my mother was cooking dinner.', vi: 'Khi tôi về nhà, mẹ tôi đang nấu bữa tối.' },
       { en: 'As soon as the bell rang, the students ran outside.', vi: 'Ngay khi chuông reo, học sinh chạy ra ngoài.' },
@@ -509,8 +580,11 @@ export const topics: Topic[] = [
     id: 'NP-24',
     group: 'grammar',
     title: 'Danh động từ & động từ nguyên thể (V-ing / to-V) sau động từ thông dụng',
-    lesson:
-      'Một số động từ theo sau bởi V-ing (enjoy, finish, avoid, mind, suggest...), một số động từ theo sau bởi to-V (want, need, decide, hope, plan...). Một số động từ có thể theo cả hai (like, love, start, begin) mà nghĩa không đổi nhiều.',
+    lesson: [
+      '**Theo sau bởi V-ing:** enjoy, finish, avoid, mind, suggest...',
+      '**Theo sau bởi to-V:** want, need, decide, hope, plan...',
+      'Một số động từ có thể theo cả hai (like, love, start, begin) mà nghĩa không đổi nhiều.',
+    ],
     examples: [
       { en: 'I enjoy reading comic books.', vi: 'Tôi thích đọc truyện tranh.' },
       { en: 'She finished doing her homework before dinner.', vi: 'Cô ấy làm xong bài tập trước bữa tối.' },
@@ -528,8 +602,10 @@ export const topics: Topic[] = [
     id: 'NP-27',
     group: 'grammar',
     title: 'Đồng tình: so, too, either, neither',
-    lesson:
-      'Dùng "so + trợ động từ + chủ ngữ" hoặc "chủ ngữ + too" để đồng tình với câu khẳng định. Dùng "neither + trợ động từ + chủ ngữ" hoặc "chủ ngữ + not... either" để đồng tình với câu phủ định.',
+    lesson: [
+      '**"So + trợ động từ + chủ ngữ"** hoặc **"chủ ngữ + too"** — đồng tình với câu khẳng định.',
+      '**"Neither + trợ động từ + chủ ngữ"** hoặc **"chủ ngữ + not... either"** — đồng tình với câu phủ định.',
+    ],
     examples: [
       { en: 'I like football. — So do I.', vi: 'Tôi thích bóng đá. — Tôi cũng vậy.' },
       { en: 'She can swim well. — So can he.', vi: 'Cô ấy bơi giỏi. — Anh ấy cũng vậy.' },
@@ -547,8 +623,10 @@ export const topics: Topic[] = [
     id: 'NP-29',
     group: 'grammar',
     title: 'Câu ước: wish, if only',
-    lesson:
-      '"Wish/If only" + quá khứ đơn diễn tả ước muốn trái với sự thật ở hiện tại. "Wish/If only" + "had + V3" diễn tả ước muốn trái với sự thật ở quá khứ (tiếc nuối về điều đã xảy ra).',
+    lesson: [
+      '**"Wish/If only" + quá khứ đơn** diễn tả ước muốn trái với sự thật ở hiện tại.',
+      '**"Wish/If only" + "had + V3"** diễn tả ước muốn trái với sự thật ở quá khứ (tiếc nuối về điều đã xảy ra).',
+    ],
     examples: [
       { en: 'I wish I had a bicycle.', vi: 'Tôi ước gì mình có một chiếc xe đạp.' },
       { en: 'If only I were taller.', vi: 'Giá mà tôi cao hơn.' },
@@ -566,8 +644,10 @@ export const topics: Topic[] = [
     id: 'NP-30',
     group: 'grammar',
     title: 'Hòa hợp chủ ngữ – động từ (each, every và các trường hợp đặc biệt)',
-    lesson:
-      'Chủ ngữ số ít đi với động từ số ít, chủ ngữ số nhiều đi với động từ số nhiều. Các từ "each, every, everyone, everybody, somebody, nobody" luôn được coi là số ít dù mang nghĩa nhiều người/vật.',
+    lesson: [
+      'Chủ ngữ số ít đi với động từ số ít, chủ ngữ số nhiều đi với động từ số nhiều.',
+      '**"Each, every, everyone, everybody, somebody, nobody"** luôn được coi là **số ít** dù mang nghĩa nhiều người/vật.',
+    ],
     examples: [
       { en: 'Each student has a textbook.', vi: 'Mỗi học sinh có một cuốn sách giáo khoa.' },
       { en: 'Every classroom has a blackboard.', vi: 'Mỗi lớp học đều có một cái bảng đen.' },
@@ -585,8 +665,11 @@ export const topics: Topic[] = [
     id: 'NP-31',
     group: 'grammar',
     title: 'Cặp từ dễ nhầm lẫn (commonly confused words)',
-    lesson:
-      'Một số cặp từ tiếng Anh dễ gây nhầm lẫn: "say" (nói gì, không cần tân ngữ chỉ người ngay sau) và "tell" (kể cho ai, cần tân ngữ chỉ người); "make" (tạo ra) và "do" (thực hiện việc gì); "borrow" (mượn của ai) và "lend" (cho ai mượn).',
+    lesson: [
+      '**"Say"** (nói gì, không cần tân ngữ chỉ người ngay sau) và **"tell"** (kể cho ai, cần tân ngữ chỉ người).',
+      '**"Make"** (tạo ra) và **"do"** (thực hiện việc gì).',
+      '**"Borrow"** (mượn của ai) và **"lend"** (cho ai mượn).',
+    ],
     examples: [
       { en: 'She said that she was tired.', vi: 'Cô ấy nói rằng cô ấy mệt.' },
       { en: 'He told me an interesting story.', vi: 'Anh ấy kể cho tôi một câu chuyện thú vị.' },
@@ -609,8 +692,11 @@ export const topics: Topic[] = [
     id: 'NP-32',
     group: 'grammar',
     title: 'Câu tồn tại: There is/There are',
-    lesson:
-      'Cấu trúc "There is/There are" dùng để nói về sự tồn tại của người/vật ở một nơi nào đó. "There is" + danh từ số ít/không đếm được. "There are" + danh từ số nhiều. Dạng phủ định thêm "not", dạng nghi vấn đảo "is/are" lên trước "there".',
+    lesson: [
+      '**"There is/There are"** dùng để nói về sự tồn tại của người/vật ở một nơi nào đó.',
+      '**"There is"** + danh từ số ít/không đếm được. **"There are"** + danh từ số nhiều.',
+      "Dạng phủ định thêm 'not', dạng nghi vấn đảo 'is/are' lên trước 'there'.",
+    ],
     examples: [
       { en: 'There is a cat under the table.', vi: 'Có một con mèo ở dưới gầm bàn.' },
       { en: 'There are twenty students in my class.', vi: 'Có hai mươi học sinh trong lớp tôi.' },
@@ -628,8 +714,11 @@ export const topics: Topic[] = [
     id: 'NP-33',
     group: 'grammar',
     title: 'too...to / adj + enough + to V',
-    lesson:
-      '"Too + tính từ/trạng từ + to V" diễn tả mức độ quá cao khiến không thể làm gì. "Tính từ/trạng từ + enough + to V" diễn tả mức độ đủ để làm gì. Cả hai cấu trúc đều có thể thêm "for + ai đó" trước "to V" để chỉ rõ ai thực hiện hành động.',
+    lesson: [
+      '**"Too + tính từ/trạng từ + to V"** diễn tả mức độ quá cao khiến không thể làm gì.',
+      '**"Tính từ/trạng từ + enough + to V"** diễn tả mức độ đủ để làm gì.',
+      'Cả hai cấu trúc đều có thể thêm **"for + ai đó"** trước "to V" để chỉ rõ ai thực hiện hành động.',
+    ],
     examples: [
       { en: 'This box is too heavy for me to lift.', vi: 'Cái hộp này quá nặng nên tôi không thể nhấc lên được.' },
       { en: 'She is tall enough to reach the shelf.', vi: 'Cô ấy đủ cao để với tới cái kệ.' },
@@ -647,8 +736,10 @@ export const topics: Topic[] = [
     id: 'NP-34',
     group: 'grammar',
     title: 'Biến đổi từ loại (word form)',
-    lesson:
-      'Nhiều từ tiếng Anh có thể biến đổi giữa các loại từ (danh từ, động từ, tính từ, trạng từ) bằng cách thêm tiền tố/hậu tố. Khi làm bài, cần xác định từ cần điền đóng vai trò gì trong câu (chủ ngữ/tân ngữ cần danh từ, bổ nghĩa cho danh từ cần tính từ, bổ nghĩa cho động từ cần trạng từ) để chọn đúng dạng.',
+    lesson: [
+      'Nhiều từ tiếng Anh có thể biến đổi giữa các loại từ (**danh từ, động từ, tính từ, trạng từ**) bằng cách thêm tiền tố/hậu tố.',
+      'Khi làm bài, cần xác định từ cần điền đóng vai trò gì trong câu: chủ ngữ/tân ngữ cần **danh từ**, bổ nghĩa cho danh từ cần **tính từ**, bổ nghĩa cho động từ cần **trạng từ**.',
+    ],
     examples: [
       { en: 'Her happiness made everyone smile.', vi: 'Niềm hạnh phúc của cô ấy khiến mọi người mỉm cười.' },
       { en: 'She looked very happy at the party.', vi: 'Cô ấy trông rất hạnh phúc ở bữa tiệc.' },
@@ -666,8 +757,11 @@ export const topics: Topic[] = [
     id: 'NP-35',
     group: 'grammar',
     title: 'Đại từ thay thế: one/ones, another/other(s)',
-    lesson:
-      '"One/ones" thay cho danh từ đã nhắc để tránh lặp lại (one cho số ít, ones cho số nhiều). "Another" nghĩa là "một cái khác" (trong số nhiều lựa chọn). "Other/others" nghĩa là "những cái khác" — "other" đứng trước danh từ, "others" đứng một mình.',
+    lesson: [
+      '**"One/ones"** thay cho danh từ đã nhắc để tránh lặp lại (one cho số ít, ones cho số nhiều).',
+      '**"Another"** nghĩa là "một cái khác" (trong số nhiều lựa chọn).',
+      '**"Other/others"** nghĩa là "những cái khác" — "other" đứng trước danh từ, "others" đứng một mình.',
+    ],
     examples: [
       { en: "I don't like this shirt. Can you show me another one?", vi: 'Tôi không thích cái áo này. Bạn có thể cho tôi xem cái khác không?' },
       { en: 'These shoes are too small. Do you have bigger ones?', vi: 'Đôi giày này quá nhỏ. Bạn có đôi to hơn không?' },
@@ -685,8 +779,12 @@ export const topics: Topic[] = [
     id: 'NP-36',
     group: 'grammar',
     title: 'Câu cầu khiến/sai khiến: make/let/have + O + V',
-    lesson:
-      '"Make somebody do something" (bắt buộc ai làm gì), "let somebody do something" (cho phép ai làm gì), "have somebody do something" (nhờ/sai ai làm gì) — cả ba đều theo sau bởi động từ nguyên thể không "to".',
+    lesson: [
+      '**"Make somebody do something"** — bắt buộc ai làm gì.',
+      '**"Let somebody do something"** — cho phép ai làm gì.',
+      '**"Have somebody do something"** — nhờ/sai ai làm gì.',
+      'Cả ba đều theo sau bởi **động từ nguyên thể không "to"**.',
+    ],
     examples: [
       { en: 'My mother makes me clean my room every weekend.', vi: 'Mẹ tôi bắt tôi dọn phòng mỗi cuối tuần.' },
       { en: 'Please let me help you with your bags.', vi: 'Hãy để tôi giúp bạn xách túi.' },
