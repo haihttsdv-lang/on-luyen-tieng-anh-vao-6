@@ -128,11 +128,11 @@ describe('Bài học lý thuyết (Topic)', () => {
 })
 
 describe('Flashcard từ vựng (VocabCard)', () => {
-  it('có đủ 280 flashcard trải đều 14/14 chủ đề (20 thẻ/chủ đề), mỗi thẻ đủ từ, loại từ, phiên âm, nghĩa, và câu ví dụ', () => {
-    expect(vocabCards).toHaveLength(280)
+  it('có đủ 420 flashcard trải đều 14/14 chủ đề (30 thẻ/chủ đề), mỗi thẻ đủ từ, loại từ, phiên âm, nghĩa, và câu ví dụ', () => {
+    expect(vocabCards).toHaveLength(420)
     for (const topicId of VOCAB_TOPIC_IDS) {
       const cards = vocabCards.filter((c) => c.topicId === topicId)
-      expect(cards).toHaveLength(20)
+      expect(cards).toHaveLength(30)
     }
     for (const card of vocabCards) {
       expect(VOCAB_TOPIC_IDS).toContain(card.topicId)

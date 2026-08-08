@@ -6,9 +6,12 @@ import type { VocabCard } from '../../types/domain'
 // đề thi thật (gia đình, trường học, thức ăn, động vật, giao thông).
 // Giai đoạn 9: bổ sung mỗi chủ đề 6 từ chất lượng cao hay gặp trong đề thi
 // (14 → 20 từ/chủ đề), và bổ sung loại từ + phiên âm IPA giọng Anh-Mỹ
-// (General American) cho toàn bộ 280 thẻ — FlashcardsPage phát âm bằng
-// Web Speech API (lang "en-US") dựa trên chính từ (`word`), phiên âm chỉ để
+// (General American) cho toàn bộ thẻ — FlashcardsPage phát âm bằng Web
+// Speech API (lang "en-US") dựa trên chính từ (`word`), phiên âm chỉ để
 // hiển thị tham khảo.
+// Giai đoạn 10: đối chiếu thêm giáo án các trung tâm luyện thi (Casalink,
+// MyPas, Up, Xưởng), bổ sung mỗi chủ đề 10 từ nữa (20 → 30 từ/chủ đề, tổng
+// 420 thẻ) để phủ đầy đủ vốn từ vựng cần cho đề thi chất lượng cao.
 export const vocabCards: VocabCard[] = [
   { id: 'TV07-01', word: 'football', partOfSpeech: 'n.', phonetic: '/ˈfʊt.bɔːl/', meaning: 'bóng đá', example: 'He plays football every weekend.', topicId: 'TV-07' },
   { id: 'TV07-02', word: 'basketball', partOfSpeech: 'n.', phonetic: '/ˈbæs.kɪt.bɔːl/', meaning: 'bóng rổ', example: 'She is good at basketball.', topicId: 'TV-07' },
@@ -30,6 +33,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV07-18', word: 'training', partOfSpeech: 'n.', phonetic: '/ˈtreɪ.nɪŋ/', meaning: 'sự huấn luyện, tập luyện', example: 'The team has training every afternoon.', topicId: 'TV-07' },
   { id: 'TV07-19', word: 'opponent', partOfSpeech: 'n.', phonetic: '/əˈpoʊ.nənt/', meaning: 'đối thủ', example: 'Our opponent played very well today.', topicId: 'TV-07' },
   { id: 'TV07-20', word: 'victory', partOfSpeech: 'n.', phonetic: '/ˈvɪk.tər.i/', meaning: 'chiến thắng', example: 'The whole class celebrated the victory.', topicId: 'TV-07' },
+  { id: 'TV07-21', word: 'athlete', partOfSpeech: 'n.', phonetic: '/ˈæθ.liːt/', meaning: 'vận động viên', example: 'She wants to become a professional athlete.', topicId: 'TV-07' },
+  { id: 'TV07-22', word: 'teammate', partOfSpeech: 'n.', phonetic: '/ˈtiːm.meɪt/', meaning: 'đồng đội', example: 'My teammates always support me.', topicId: 'TV-07' },
+  { id: 'TV07-23', word: 'stadium', partOfSpeech: 'n.', phonetic: '/ˈsteɪ.di.əm/', meaning: 'sân vận động', example: 'The stadium was full of fans.', topicId: 'TV-07' },
+  { id: 'TV07-24', word: 'tournament', partOfSpeech: 'n.', phonetic: '/ˈtʊr.nə.mənt/', meaning: 'giải đấu', example: 'Our school is holding a badminton tournament.', topicId: 'TV-07' },
+  { id: 'TV07-25', word: 'referee', partOfSpeech: 'n.', phonetic: '/ˌref.əˈriː/', meaning: 'trọng tài', example: 'The referee blew the whistle.', topicId: 'TV-07' },
+  { id: 'TV07-26', word: 'gymnastics', partOfSpeech: 'n.', phonetic: '/dʒɪmˈnæs.tɪks/', meaning: 'thể dục dụng cụ', example: 'She has practiced gymnastics since she was five.', topicId: 'TV-07' },
+  { id: 'TV07-27', word: 'cycling', partOfSpeech: 'n.', phonetic: '/ˈsaɪ.klɪŋ/', meaning: 'môn đi xe đạp', example: 'Cycling is good exercise for the whole family.', topicId: 'TV-07' },
+  { id: 'TV07-28', word: 'energetic', partOfSpeech: 'adj.', phonetic: '/ˌen.ɚˈdʒet.ɪk/', meaning: 'tràn đầy năng lượng', example: 'He feels energetic after morning exercise.', topicId: 'TV-07' },
+  { id: 'TV07-29', word: 'enthusiastic', partOfSpeech: 'adj.', phonetic: '/ɪnˌθuː.ziˈæs.tɪk/', meaning: 'nhiệt tình, hào hứng', example: 'The students are enthusiastic about the sports day.', topicId: 'TV-07' },
+  { id: 'TV07-30', word: 'take part in', partOfSpeech: 'v. phr.', phonetic: '/teɪk pɑːrt ɪn/', meaning: 'tham gia vào', example: 'I will take part in the swimming contest.', topicId: 'TV-07' },
 
   // TV-01: Gia đình & bản thân
   { id: 'TV01-01', word: 'father', partOfSpeech: 'n.', phonetic: '/ˈfɑː.ðɚ/', meaning: 'bố', example: 'My father works in a hospital.', topicId: 'TV-01' },
@@ -52,6 +65,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV01-18', word: 'generous', partOfSpeech: 'adj.', phonetic: '/ˈdʒen.ər.əs/', meaning: 'hào phóng', example: 'My uncle is very generous to us.', topicId: 'TV-01' },
   { id: 'TV01-19', word: 'polite', partOfSpeech: 'adj.', phonetic: '/pəˈlaɪt/', meaning: 'lịch sự', example: 'You should be polite to older people.', topicId: 'TV-01' },
   { id: 'TV01-20', word: 'only child', partOfSpeech: 'n. phr.', phonetic: '/ˈoʊn.li tʃaɪld/', meaning: 'con một', example: 'She is an only child in her family.', topicId: 'TV-01' },
+  { id: 'TV01-21', word: 'appearance', partOfSpeech: 'n.', phonetic: '/əˈpɪr.əns/', meaning: 'ngoại hình', example: 'My grandfather has a kind appearance.', topicId: 'TV-01' },
+  { id: 'TV01-22', word: 'personality', partOfSpeech: 'n.', phonetic: '/ˌpɝː.sənˈæl.ə.ti/', meaning: 'tính cách', example: 'She has a cheerful personality.', topicId: 'TV-01' },
+  { id: 'TV01-23', word: 'twin', partOfSpeech: 'n.', phonetic: '/twɪn/', meaning: 'sinh đôi', example: 'My twin brother looks just like me.', topicId: 'TV-01' },
+  { id: 'TV01-24', word: 'elder', partOfSpeech: 'adj.', phonetic: '/ˈel.dɚ/', meaning: 'lớn tuổi hơn (trong gia đình)', example: 'My elder sister helps me with homework.', topicId: 'TV-01' },
+  { id: 'TV01-25', word: 'single', partOfSpeech: 'adj.', phonetic: '/ˈsɪŋ.ɡəl/', meaning: 'độc thân', example: 'My aunt is still single.', topicId: 'TV-01' },
+  { id: 'TV01-26', word: 'married', partOfSpeech: 'adj.', phonetic: '/ˈmer.id/', meaning: 'đã kết hôn', example: 'My parents got married ten years ago.', topicId: 'TV-01' },
+  { id: 'TV01-27', word: 'get along with', partOfSpeech: 'phr.v.', phonetic: '/ɡet əˈlɔːŋ wɪð/', meaning: 'hòa hợp với', example: 'I get along with all my cousins.', topicId: 'TV-01' },
+  { id: 'TV01-28', word: 'proud of', partOfSpeech: 'adj. phr.', phonetic: '/praʊd əv/', meaning: 'tự hào về', example: 'My parents are proud of my results.', topicId: 'TV-01' },
+  { id: 'TV01-29', word: 'household', partOfSpeech: 'n.', phonetic: '/ˈhaʊs.hoʊld/', meaning: 'hộ gia đình', example: 'There are four people in my household.', topicId: 'TV-01' },
+  { id: 'TV01-30', word: 'take care of', partOfSpeech: 'v. phr.', phonetic: '/teɪk ker əv/', meaning: 'chăm sóc', example: 'I take care of my younger brother after school.', topicId: 'TV-01' },
 
   // TV-02: Trường học & môn học
   { id: 'TV02-01', word: 'classroom', partOfSpeech: 'n.', phonetic: '/ˈklæs.ruːm/', meaning: 'lớp học', example: 'Our classroom is on the second floor.', topicId: 'TV-02' },
@@ -74,6 +97,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV02-18', word: 'review', partOfSpeech: 'v.', phonetic: '/rɪˈvjuː/', meaning: 'ôn tập', example: 'We reviewed the whole unit before the test.', topicId: 'TV-02' },
   { id: 'TV02-19', word: 'achieve', partOfSpeech: 'v.', phonetic: '/əˈtʃiːv/', meaning: 'đạt được', example: 'She achieved a high score this term.', topicId: 'TV-02' },
   { id: 'TV02-20', word: 'classmate', partOfSpeech: 'n.', phonetic: '/ˈklæs.meɪt/', meaning: 'bạn cùng lớp', example: 'My classmates are very friendly.', topicId: 'TV-02' },
+  { id: 'TV02-21', word: 'schoolbag', partOfSpeech: 'n.', phonetic: '/ˈskuːl.bæɡ/', meaning: 'cặp sách', example: 'My schoolbag is full of books.', topicId: 'TV-02' },
+  { id: 'TV02-22', word: 'dictionary', partOfSpeech: 'n.', phonetic: '/ˈdɪk.ʃəˌner.i/', meaning: 'từ điển', example: 'I look up new words in a dictionary.', topicId: 'TV-02' },
+  { id: 'TV02-23', word: 'semester', partOfSpeech: 'n.', phonetic: '/səˈmes.tɚ/', meaning: 'học kỳ', example: 'The first semester ends in December.', topicId: 'TV-02' },
+  { id: 'TV02-24', word: 'grade', partOfSpeech: 'n.', phonetic: '/ɡreɪd/', meaning: 'lớp học/điểm số', example: 'I am in grade five this year.', topicId: 'TV-02' },
+  { id: 'TV02-25', word: 'schoolyard', partOfSpeech: 'n.', phonetic: '/ˈskuːl.jɑːrd/', meaning: 'sân trường', example: 'We play badminton in the schoolyard.', topicId: 'TV-02' },
+  { id: 'TV02-26', word: 'stationery', partOfSpeech: 'n.', phonetic: '/ˈsteɪ.ʃəˌner.i/', meaning: 'văn phòng phẩm', example: 'I bought some stationery for the new term.', topicId: 'TV-02' },
+  { id: 'TV02-27', word: 'concentrate', partOfSpeech: 'v.', phonetic: '/ˈkɑːn.sən.treɪt/', meaning: 'tập trung', example: 'Please concentrate on your work.', topicId: 'TV-02' },
+  { id: 'TV02-28', word: 'take notes', partOfSpeech: 'v. phr.', phonetic: '/teɪk noʊts/', meaning: 'ghi chép', example: 'Students take notes during the lesson.', topicId: 'TV-02' },
+  { id: 'TV02-29', word: 'extracurricular', partOfSpeech: 'adj.', phonetic: '/ˌek.strə.kəˈrɪk.jə.lɚ/', meaning: 'ngoại khóa', example: 'Our school offers many extracurricular activities.', topicId: 'TV-02' },
+  { id: 'TV02-30', word: 'curious', partOfSpeech: 'adj.', phonetic: '/ˈkjʊr.i.əs/', meaning: 'tò mò, ham học hỏi', example: 'She is curious about how plants grow.', topicId: 'TV-02' },
 
   // TV-04: Thức ăn & đồ uống
   { id: 'TV04-01', word: 'rice', partOfSpeech: 'n.', phonetic: '/raɪs/', meaning: 'cơm, gạo', example: 'We eat rice every day.', topicId: 'TV-04' },
@@ -96,6 +129,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV04-18', word: 'sour', partOfSpeech: 'adj.', phonetic: '/ˈsaʊ.ɚ/', meaning: 'chua', example: 'This lemon tastes very sour.', topicId: 'TV-04' },
   { id: 'TV04-19', word: 'thirsty', partOfSpeech: 'adj.', phonetic: '/ˈθɝː.sti/', meaning: 'khát', example: 'I feel thirsty after running.', topicId: 'TV-04' },
   { id: 'TV04-20', word: 'diet', partOfSpeech: 'n.', phonetic: '/ˈdaɪ.ət/', meaning: 'chế độ ăn', example: 'A healthy diet includes lots of vegetables.', topicId: 'TV-04' },
+  { id: 'TV04-21', word: 'dessert', partOfSpeech: 'n.', phonetic: '/dɪˈzɝːt/', meaning: 'món tráng miệng', example: 'We had fruit for dessert.', topicId: 'TV-04' },
+  { id: 'TV04-22', word: 'spicy', partOfSpeech: 'adj.', phonetic: '/ˈspaɪ.si/', meaning: 'cay', example: 'This soup is too spicy for me.', topicId: 'TV-04' },
+  { id: 'TV04-23', word: 'boil', partOfSpeech: 'v.', phonetic: '/bɔɪl/', meaning: 'luộc, đun sôi', example: 'My mother boils the eggs for ten minutes.', topicId: 'TV-04' },
+  { id: 'TV04-24', word: 'fry', partOfSpeech: 'v.', phonetic: '/fraɪ/', meaning: 'chiên, rán', example: 'She fries fish for dinner.', topicId: 'TV-04' },
+  { id: 'TV04-25', word: 'steam', partOfSpeech: 'v.', phonetic: '/stiːm/', meaning: 'hấp', example: 'We steam the vegetables to keep them healthy.', topicId: 'TV-04' },
+  { id: 'TV04-26', word: 'ingredient', partOfSpeech: 'n.', phonetic: '/ɪnˈɡriː.di.ənt/', meaning: 'nguyên liệu', example: 'Rice is the main ingredient of this dish.', topicId: 'TV-04' },
+  { id: 'TV04-27', word: 'portion', partOfSpeech: 'n.', phonetic: '/ˈpɔːr.ʃən/', meaning: 'khẩu phần', example: 'Each student gets a small portion of rice.', topicId: 'TV-04' },
+  { id: 'TV04-28', word: 'leftovers', partOfSpeech: 'n.', phonetic: '/ˈleftˌoʊ.vɚz/', meaning: 'đồ ăn thừa', example: 'We kept the leftovers in the fridge.', topicId: 'TV-04' },
+  { id: 'TV04-29', word: 'appetite', partOfSpeech: 'n.', phonetic: '/ˈæp.ə.taɪt/', meaning: 'sự thèm ăn', example: 'Playing sports gives me a big appetite.', topicId: 'TV-04' },
+  { id: 'TV04-30', word: 'balanced meal', partOfSpeech: 'n. phr.', phonetic: '/ˈbæl.ənst miːl/', meaning: 'bữa ăn cân bằng dinh dưỡng', example: 'A balanced meal has rice, meat, and vegetables.', topicId: 'TV-04' },
 
   // TV-05: Động vật & thiên nhiên
   { id: 'TV05-01', word: 'dog', partOfSpeech: 'n.', phonetic: '/dɔːɡ/', meaning: 'chó', example: 'My dog likes playing in the yard.', topicId: 'TV-05' },
@@ -118,6 +161,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV05-18', word: 'insect', partOfSpeech: 'n.', phonetic: '/ˈɪn.sekt/', meaning: 'côn trùng', example: 'Bees and ants are small insects.', topicId: 'TV-05' },
   { id: 'TV05-19', word: 'feather', partOfSpeech: 'n.', phonetic: '/ˈfeð.ɚ/', meaning: 'lông vũ', example: 'The peacock has beautiful feathers.', topicId: 'TV-05' },
   { id: 'TV05-20', word: 'paw', partOfSpeech: 'n.', phonetic: '/pɔː/', meaning: 'bàn chân (thú)', example: 'The dog hurt its paw.', topicId: 'TV-05' },
+  { id: 'TV05-21', word: 'rabbit', partOfSpeech: 'n.', phonetic: '/ˈræb.ɪt/', meaning: 'thỏ', example: 'The rabbit is eating a carrot.', topicId: 'TV-05' },
+  { id: 'TV05-22', word: 'snake', partOfSpeech: 'n.', phonetic: '/sneɪk/', meaning: 'rắn', example: 'Be careful, there is a snake in the grass.', topicId: 'TV-05' },
+  { id: 'TV05-23', word: 'bear', partOfSpeech: 'n.', phonetic: '/ber/', meaning: 'gấu', example: 'A bear can climb trees very well.', topicId: 'TV-05' },
+  { id: 'TV05-24', word: 'deer', partOfSpeech: 'n.', phonetic: '/dɪr/', meaning: 'hươu, nai', example: 'We saw a deer in the forest.', topicId: 'TV-05' },
+  { id: 'TV05-25', word: 'ocean', partOfSpeech: 'n.', phonetic: '/ˈoʊ.ʃən/', meaning: 'đại dương', example: 'The Pacific is the largest ocean.', topicId: 'TV-05' },
+  { id: 'TV05-26', word: 'desert', partOfSpeech: 'n.', phonetic: '/ˈdez.ɚt/', meaning: 'sa mạc', example: 'It rarely rains in the desert.', topicId: 'TV-05' },
+  { id: 'TV05-27', word: 'valley', partOfSpeech: 'n.', phonetic: '/ˈvæl.i/', meaning: 'thung lũng', example: 'The village lies in a green valley.', topicId: 'TV-05' },
+  { id: 'TV05-28', word: 'nest', partOfSpeech: 'n.', phonetic: '/nest/', meaning: 'tổ (chim)', example: 'The bird built a nest in the tree.', topicId: 'TV-05' },
+  { id: 'TV05-29', word: 'hunt', partOfSpeech: 'v.', phonetic: '/hʌnt/', meaning: 'săn bắt', example: 'Tigers hunt at night.', topicId: 'TV-05' },
+  { id: 'TV05-30', word: 'tame', partOfSpeech: 'adj.', phonetic: '/teɪm/', meaning: 'đã được thuần hóa', example: 'This elephant is very tame.', topicId: 'TV-05' },
 
   // TV-09: Thành phố, phương hướng & phương tiện giao thông
   { id: 'TV09-01', word: 'city', partOfSpeech: 'n.', phonetic: '/ˈsɪt.i/', meaning: 'thành phố', example: 'Ha Noi is a big city.', topicId: 'TV-09' },
@@ -140,6 +193,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV09-18', word: 'nearby', partOfSpeech: 'adj./adv.', phonetic: '/ˈnɪr.baɪ/', meaning: 'gần đó', example: 'There is a supermarket nearby.', topicId: 'TV-09' },
   { id: 'TV09-19', word: 'journey', partOfSpeech: 'n.', phonetic: '/ˈdʒɝː.ni/', meaning: 'chuyến đi', example: 'Our journey to Sa Pa took six hours.', topicId: 'TV-09' },
   { id: 'TV09-20', word: 'signpost', partOfSpeech: 'n.', phonetic: '/ˈsaɪn.poʊst/', meaning: 'biển chỉ đường', example: 'Follow the signpost to the museum.', topicId: 'TV-09' },
+  { id: 'TV09-21', word: 'motorbike', partOfSpeech: 'n.', phonetic: '/ˈmoʊ.tɚ.baɪk/', meaning: 'xe máy', example: 'My father rides a motorbike to work.', topicId: 'TV-09' },
+  { id: 'TV09-22', word: 'subway', partOfSpeech: 'n.', phonetic: '/ˈsʌb.weɪ/', meaning: 'tàu điện ngầm', example: 'The subway is a fast way to travel in a big city.', topicId: 'TV-09' },
+  { id: 'TV09-23', word: 'pedestrian', partOfSpeech: 'n.', phonetic: '/pəˈdes.tri.ən/', meaning: 'người đi bộ', example: 'Pedestrians should cross at the crosswalk.', topicId: 'TV-09' },
+  { id: 'TV09-24', word: 'roundabout', partOfSpeech: 'n.', phonetic: '/ˈraʊnd.ə.baʊt/', meaning: 'vòng xuyến', example: 'Turn right at the roundabout.', topicId: 'TV-09' },
+  { id: 'TV09-25', word: 'bridge', partOfSpeech: 'n.', phonetic: '/brɪdʒ/', meaning: 'cây cầu', example: 'We crossed the bridge to get to the town.', topicId: 'TV-09' },
+  { id: 'TV09-26', word: 'countryside', partOfSpeech: 'n.', phonetic: '/ˈkʌn.tri.saɪd/', meaning: 'vùng nông thôn', example: 'My grandparents live in the countryside.', topicId: 'TV-09' },
+  { id: 'TV09-27', word: 'suburb', partOfSpeech: 'n.', phonetic: '/ˈsʌb.ɝːb/', meaning: 'ngoại ô', example: 'They moved to a quiet suburb.', topicId: 'TV-09' },
+  { id: 'TV09-28', word: 'get lost', partOfSpeech: 'v. phr.', phonetic: '/ɡet lɔːst/', meaning: 'bị lạc đường', example: 'We got lost on the way to the museum.', topicId: 'TV-09' },
+  { id: 'TV09-29', word: 'traffic jam', partOfSpeech: 'n. phr.', phonetic: '/ˈtræf.ɪk dʒæm/', meaning: 'tắc đường', example: 'There was a traffic jam this morning.', topicId: 'TV-09' },
+  { id: 'TV09-30', word: 'fare', partOfSpeech: 'n.', phonetic: '/fer/', meaning: 'giá vé', example: 'The bus fare is very cheap.', topicId: 'TV-09' },
 
   // TV-03: Nhà cửa & đồ vật trong nhà
   { id: 'TV03-01', word: 'house', partOfSpeech: 'n.', phonetic: '/haʊs/', meaning: 'ngôi nhà', example: 'We live in a small house.', topicId: 'TV-03' },
@@ -162,6 +225,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV03-18', word: 'tidy', partOfSpeech: 'adj.', phonetic: '/ˈtaɪ.di/', meaning: 'gọn gàng', example: 'Please keep your room tidy.', topicId: 'TV-03' },
   { id: 'TV03-19', word: 'balcony', partOfSpeech: 'n.', phonetic: '/ˈbæl.kə.ni/', meaning: 'ban công', example: 'We grow flowers on the balcony.', topicId: 'TV-03' },
   { id: 'TV03-20', word: 'roof', partOfSpeech: 'n.', phonetic: '/ruːf/', meaning: 'mái nhà', example: 'There is a bird on the roof.', topicId: 'TV-03' },
+  { id: 'TV03-21', word: 'staircase', partOfSpeech: 'n.', phonetic: '/ˈster.keɪs/', meaning: 'cầu thang', example: 'She ran up the staircase.', topicId: 'TV-03' },
+  { id: 'TV03-22', word: 'ceiling', partOfSpeech: 'n.', phonetic: '/ˈsiː.lɪŋ/', meaning: 'trần nhà', example: 'There is a lamp on the ceiling.', topicId: 'TV-03' },
+  { id: 'TV03-23', word: 'floor', partOfSpeech: 'n.', phonetic: '/flɔːr/', meaning: 'sàn nhà, tầng', example: 'Our classroom is on the third floor.', topicId: 'TV-03' },
+  { id: 'TV03-24', word: 'curtain', partOfSpeech: 'n.', phonetic: '/ˈkɝː.tən/', meaning: 'rèm cửa', example: 'She closed the curtain before bed.', topicId: 'TV-03' },
+  { id: 'TV03-25', word: 'sofa', partOfSpeech: 'n.', phonetic: '/ˈsoʊ.fə/', meaning: 'ghế sofa', example: 'We sat on the sofa and watched TV.', topicId: 'TV-03' },
+  { id: 'TV03-26', word: 'yard', partOfSpeech: 'n.', phonetic: '/jɑːrd/', meaning: 'sân (nhà)', example: 'The dog plays in the yard.', topicId: 'TV-03' },
+  { id: 'TV03-27', word: 'fence', partOfSpeech: 'n.', phonetic: '/fens/', meaning: 'hàng rào', example: 'There is a wooden fence around the garden.', topicId: 'TV-03' },
+  { id: 'TV03-28', word: 'neighborhood', partOfSpeech: 'n.', phonetic: '/ˈneɪ.bɚ.hʊd/', meaning: 'khu phố', example: 'It is a quiet, friendly neighborhood.', topicId: 'TV-03' },
+  { id: 'TV03-29', word: 'move house', partOfSpeech: 'v. phr.', phonetic: '/muːv haʊs/', meaning: 'chuyển nhà', example: 'We moved house last summer.', topicId: 'TV-03' },
+  { id: 'TV03-30', word: 'cozy', partOfSpeech: 'adj.', phonetic: '/ˈkoʊ.zi/', meaning: 'ấm cúng', example: 'Their living room feels very cozy.', topicId: 'TV-03' },
 
   // TV-06: Thời tiết & các mùa
   { id: 'TV06-01', word: 'sunny', partOfSpeech: 'adj.', phonetic: '/ˈsʌn.i/', meaning: 'nắng', example: 'It is sunny today.', topicId: 'TV-06' },
@@ -184,6 +257,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV06-18', word: 'freezing', partOfSpeech: 'adj.', phonetic: '/ˈfriː.zɪŋ/', meaning: 'lạnh cóng', example: 'It is freezing outside; wear a coat.', topicId: 'TV-06' },
   { id: 'TV06-19', word: 'thunder', partOfSpeech: 'n.', phonetic: '/ˈθʌn.dɚ/', meaning: 'sấm', example: 'We heard thunder during the storm.', topicId: 'TV-06' },
   { id: 'TV06-20', word: 'degree', partOfSpeech: 'n.', phonetic: '/dɪˈɡriː/', meaning: 'độ (nhiệt độ)', example: 'It is thirty-five degrees today.', topicId: 'TV-06' },
+  { id: 'TV06-21', word: 'drought', partOfSpeech: 'n.', phonetic: '/draʊt/', meaning: 'hạn hán', example: 'The drought damaged many rice fields.', topicId: 'TV-06' },
+  { id: 'TV06-22', word: 'flood', partOfSpeech: 'n.', phonetic: '/flʌd/', meaning: 'lũ lụt', example: 'The flood destroyed several houses.', topicId: 'TV-06' },
+  { id: 'TV06-23', word: 'lightning', partOfSpeech: 'n.', phonetic: '/ˈlaɪt.nɪŋ/', meaning: 'tia chớp', example: 'We saw lightning during the storm.', topicId: 'TV-06' },
+  { id: 'TV06-24', word: 'breeze', partOfSpeech: 'n.', phonetic: '/briːz/', meaning: 'gió nhẹ', example: 'A cool breeze blew through the window.', topicId: 'TV-06' },
+  { id: 'TV06-25', word: 'shower', partOfSpeech: 'n.', phonetic: '/ˈʃaʊ.ɚ/', meaning: 'mưa rào', example: 'A sudden shower surprised us on the way home.', topicId: 'TV-06' },
+  { id: 'TV06-26', word: 'drizzle', partOfSpeech: 'n.', phonetic: '/ˈdrɪz.əl/', meaning: 'mưa phùn', example: 'It was just a light drizzle this morning.', topicId: 'TV-06' },
+  { id: 'TV06-27', word: 'season', partOfSpeech: 'n.', phonetic: '/ˈsiː.zən/', meaning: 'mùa', example: 'Vietnam has four seasons in the north.', topicId: 'TV-06' },
+  { id: 'TV06-28', word: 'changeable', partOfSpeech: 'adj.', phonetic: '/ˈtʃeɪn.dʒə.bəl/', meaning: 'hay thay đổi (thời tiết)', example: 'The weather here is very changeable.', topicId: 'TV-06' },
+  { id: 'TV06-29', word: 'mild', partOfSpeech: 'adj.', phonetic: '/maɪld/', meaning: 'ôn hòa', example: 'We had a mild winter this year.', topicId: 'TV-06' },
+  { id: 'TV06-30', word: 'severe', partOfSpeech: 'adj.', phonetic: '/səˈvɪr/', meaning: 'khắc nghiệt', example: 'The south often has severe storms.', topicId: 'TV-06' },
 
   // TV-08: Nghề nghiệp
   { id: 'TV08-01', word: 'doctor', partOfSpeech: 'n.', phonetic: '/ˈdɑːk.tɚ/', meaning: 'bác sĩ', example: 'The doctor works at the hospital.', topicId: 'TV-08' },
@@ -206,6 +289,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV08-18', word: 'journalist', partOfSpeech: 'n.', phonetic: '/ˈdʒɝː.nə.lɪst/', meaning: 'nhà báo', example: 'The journalist wrote about the festival.', topicId: 'TV-08' },
   { id: 'TV08-19', word: 'photographer', partOfSpeech: 'n.', phonetic: '/fəˈtɑː.ɡrə.fɚ/', meaning: 'nhiếp ảnh gia', example: 'The photographer took beautiful pictures.', topicId: 'TV-08' },
   { id: 'TV08-20', word: 'workplace', partOfSpeech: 'n.', phonetic: '/ˈwɝːk.pleɪs/', meaning: 'nơi làm việc', example: 'Her workplace is near the city center.', topicId: 'TV-08' },
+  { id: 'TV08-21', word: 'lawyer', partOfSpeech: 'n.', phonetic: '/ˈlɔː.jɚ/', meaning: 'luật sư', example: 'My aunt is a lawyer in Ha Noi.', topicId: 'TV-08' },
+  { id: 'TV08-22', word: 'architect', partOfSpeech: 'n.', phonetic: '/ˈɑːr.kə.tekt/', meaning: 'kiến trúc sư', example: 'The architect designed a beautiful house.', topicId: 'TV-08' },
+  { id: 'TV08-23', word: 'accountant', partOfSpeech: 'n.', phonetic: '/əˈkaʊn.tənt/', meaning: 'kế toán viên', example: 'He works as an accountant for a company.', topicId: 'TV-08' },
+  { id: 'TV08-24', word: 'shopkeeper', partOfSpeech: 'n.', phonetic: '/ˈʃɑːpˌkiː.pɚ/', meaning: 'chủ cửa hàng', example: 'The shopkeeper is very friendly.', topicId: 'TV-08' },
+  { id: 'TV08-25', word: 'tailor', partOfSpeech: 'n.', phonetic: '/ˈteɪ.lɚ/', meaning: 'thợ may', example: 'The tailor made a new shirt for me.', topicId: 'TV-08' },
+  { id: 'TV08-26', word: 'electrician', partOfSpeech: 'n.', phonetic: '/ɪˌlekˈtrɪʃ.ən/', meaning: 'thợ điện', example: 'We called an electrician to fix the light.', topicId: 'TV-08' },
+  { id: 'TV08-27', word: 'librarian', partOfSpeech: 'n.', phonetic: '/laɪˈbrer.i.ən/', meaning: 'thủ thư', example: 'The librarian helped me find the book.', topicId: 'TV-08' },
+  { id: 'TV08-28', word: 'vet', partOfSpeech: 'n.', phonetic: '/vet/', meaning: 'bác sĩ thú y', example: 'I took my dog to the vet.', topicId: 'TV-08' },
+  { id: 'TV08-29', word: 'responsible', partOfSpeech: 'adj.', phonetic: '/rɪˈspɑːn.sə.bəl/', meaning: 'có trách nhiệm', example: 'A good nurse is always responsible.', topicId: 'TV-08' },
+  { id: 'TV08-30', word: 'profession', partOfSpeech: 'n.', phonetic: '/prəˈfeʃ.ən/', meaning: 'nghề nghiệp', example: 'Teaching is a respected profession.', topicId: 'TV-08' },
 
   // TV-10: Sức khỏe & cơ thể người
   { id: 'TV10-01', word: 'head', partOfSpeech: 'n.', phonetic: '/hed/', meaning: 'đầu', example: 'My head hurts a little.', topicId: 'TV-10' },
@@ -228,6 +321,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV10-18', word: 'bandage', partOfSpeech: 'n.', phonetic: '/ˈbæn.dɪdʒ/', meaning: 'băng gạc', example: 'The nurse put a bandage on his hand.', topicId: 'TV-10' },
   { id: 'TV10-19', word: 'patient', partOfSpeech: 'n.', phonetic: '/ˈpeɪ.ʃənt/', meaning: 'bệnh nhân', example: 'The doctor is examining a patient.', topicId: 'TV-10' },
   { id: 'TV10-20', word: 'recover', partOfSpeech: 'v.', phonetic: '/rɪˈkʌv.ɚ/', meaning: 'hồi phục', example: 'She recovered quickly after the flu.', topicId: 'TV-10' },
+  { id: 'TV10-21', word: 'mouth', partOfSpeech: 'n.', phonetic: '/maʊθ/', meaning: 'miệng', example: 'Open your mouth, please.', topicId: 'TV-10' },
+  { id: 'TV10-22', word: 'nose', partOfSpeech: 'n.', phonetic: '/noʊz/', meaning: 'mũi', example: 'My nose is blocked because of my cold.', topicId: 'TV-10' },
+  { id: 'TV10-23', word: 'shoulder', partOfSpeech: 'n.', phonetic: '/ˈʃoʊl.dɚ/', meaning: 'vai', example: 'He carried the bag on his shoulder.', topicId: 'TV-10' },
+  { id: 'TV10-24', word: 'skin', partOfSpeech: 'n.', phonetic: '/skɪn/', meaning: 'da', example: 'Wear sunscreen to protect your skin.', topicId: 'TV-10' },
+  { id: 'TV10-25', word: 'bone', partOfSpeech: 'n.', phonetic: '/boʊn/', meaning: 'xương', example: 'Milk is good for your bones.', topicId: 'TV-10' },
+  { id: 'TV10-26', word: 'sneeze', partOfSpeech: 'v.', phonetic: '/sniːz/', meaning: 'hắt hơi', example: 'He sneezed several times this morning.', topicId: 'TV-10' },
+  { id: 'TV10-27', word: 'headache', partOfSpeech: 'n.', phonetic: '/ˈhed.eɪk/', meaning: 'đau đầu', example: 'I have a headache today.', topicId: 'TV-10' },
+  { id: 'TV10-28', word: 'allergy', partOfSpeech: 'n.', phonetic: '/ˈæl.ɚ.dʒi/', meaning: 'dị ứng', example: 'She has an allergy to peanuts.', topicId: 'TV-10' },
+  { id: 'TV10-29', word: 'checkup', partOfSpeech: 'n.', phonetic: '/ˈtʃek.ʌp/', meaning: 'khám sức khỏe định kỳ', example: 'I have a checkup at the hospital every year.', topicId: 'TV-10' },
+  { id: 'TV10-30', word: 'strength', partOfSpeech: 'n.', phonetic: '/streŋθ/', meaning: 'sức mạnh, thể lực', example: 'Regular exercise builds strength.', topicId: 'TV-10' },
 
   // TV-11: Ngày lễ, văn hóa Việt Nam & thế giới
   { id: 'TV11-01', word: 'Tet holiday', partOfSpeech: 'n. phr.', phonetic: '/tet ˈhɑː.lə.deɪ/', meaning: 'Tết Nguyên Đán', example: 'Tet holiday is the most important festival in Vietnam.', topicId: 'TV-11' },
@@ -250,6 +353,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV11-18', word: 'mooncake', partOfSpeech: 'n.', phonetic: '/ˈmuːn.keɪk/', meaning: 'bánh trung thu', example: 'We eat mooncakes during the Mid-Autumn Festival.', topicId: 'TV-11' },
   { id: 'TV11-19', word: 'guest', partOfSpeech: 'n.', phonetic: '/ɡest/', meaning: 'khách', example: 'We invited many guests to the party.', topicId: 'TV-11' },
   { id: 'TV11-20', word: 'peaceful', partOfSpeech: 'adj.', phonetic: '/ˈpiːs.fəl/', meaning: 'yên bình', example: 'The village looks peaceful during Tet.', topicId: 'TV-11' },
+  { id: 'TV11-21', word: 'Easter', partOfSpeech: 'n.', phonetic: '/ˈiː.stɚ/', meaning: 'lễ Phục sinh', example: 'Easter is celebrated in many countries.', topicId: 'TV-11' },
+  { id: 'TV11-22', word: 'Halloween', partOfSpeech: 'n.', phonetic: '/ˌhæl.oʊˈiːn/', meaning: 'lễ hội Halloween', example: 'Children wear costumes on Halloween.', topicId: 'TV-11' },
+  { id: 'TV11-23', word: 'anniversary', partOfSpeech: 'n.', phonetic: '/ˌæn.əˈvɝː.sə.ri/', meaning: 'ngày kỷ niệm', example: 'They celebrated their wedding anniversary.', topicId: 'TV-11' },
+  { id: 'TV11-24', word: 'altar', partOfSpeech: 'n.', phonetic: '/ˈɔːl.tɚ/', meaning: 'bàn thờ', example: 'The family placed flowers on the altar.', topicId: 'TV-11' },
+  { id: 'TV11-25', word: 'incense', partOfSpeech: 'n.', phonetic: '/ˈɪn.sens/', meaning: 'hương, nhang', example: 'They burn incense during the ceremony.', topicId: 'TV-11' },
+  { id: 'TV11-26', word: 'ceremony', partOfSpeech: 'n.', phonetic: '/ˈser.ə.moʊ.ni/', meaning: 'buổi lễ', example: 'The opening ceremony starts at 8 a.m.', topicId: 'TV-11' },
+  { id: 'TV11-27', word: 'greet', partOfSpeech: 'v.', phonetic: '/ɡriːt/', meaning: 'chào hỏi, chúc mừng', example: 'We greet our teachers politely.', topicId: 'TV-11' },
+  { id: 'TV11-28', word: 'wish someone well', partOfSpeech: 'v. phr.', phonetic: '/wɪʃ ˈsʌm.wʌn wel/', meaning: 'chúc ai đó điều tốt lành', example: 'We wish our teachers well on Teachers\' Day.', topicId: 'TV-11' },
+  { id: 'TV11-29', word: 'legend', partOfSpeech: 'n.', phonetic: '/ˈledʒ.ənd/', meaning: 'truyền thuyết', example: 'This is a famous legend in Vietnam.', topicId: 'TV-11' },
+  { id: 'TV11-30', word: 'heritage', partOfSpeech: 'n.', phonetic: '/ˈher.ə.tɪdʒ/', meaning: 'di sản', example: 'Ha Long Bay is a world heritage site.', topicId: 'TV-11' },
 
   // TV-12: Công nghệ & truyền thông
   { id: 'TV12-01', word: 'computer', partOfSpeech: 'n.', phonetic: '/kəmˈpjuː.tɚ/', meaning: 'máy tính', example: 'I use a computer to do my homework.', topicId: 'TV-12' },
@@ -272,6 +385,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV12-18', word: 'application', partOfSpeech: 'n.', phonetic: '/ˌæp.ləˈkeɪ.ʃən/', meaning: 'ứng dụng', example: 'This application helps me study English.', topicId: 'TV-12' },
   { id: 'TV12-19', word: 'connect', partOfSpeech: 'v.', phonetic: '/kəˈnekt/', meaning: 'kết nối', example: 'Please connect your laptop to the printer.', topicId: 'TV-12' },
   { id: 'TV12-20', word: 'social media', partOfSpeech: 'n. phr.', phonetic: '/ˈsoʊ.ʃəl ˈmiː.di.ə/', meaning: 'mạng xã hội', example: 'Many teenagers spend time on social media.', topicId: 'TV-12' },
+  { id: 'TV12-21', word: 'software', partOfSpeech: 'n.', phonetic: '/ˈsɔːft.wer/', meaning: 'phần mềm', example: 'This software helps students practice English.', topicId: 'TV-12' },
+  { id: 'TV12-22', word: 'hardware', partOfSpeech: 'n.', phonetic: '/ˈhɑːrd.wer/', meaning: 'phần cứng', example: 'The computer hardware is quite old.', topicId: 'TV-12' },
+  { id: 'TV12-23', word: 'file', partOfSpeech: 'n.', phonetic: '/faɪl/', meaning: 'tệp tin', example: 'I saved the file on my computer.', topicId: 'TV-12' },
+  { id: 'TV12-24', word: 'printer', partOfSpeech: 'n.', phonetic: '/ˈprɪn.tɚ/', meaning: 'máy in', example: 'The printer is out of paper.', topicId: 'TV-12' },
+  { id: 'TV12-25', word: 'wireless', partOfSpeech: 'adj.', phonetic: '/ˈwaɪr.ləs/', meaning: 'không dây', example: 'We use a wireless keyboard.', topicId: 'TV-12' },
+  { id: 'TV12-26', word: 'update', partOfSpeech: 'v.', phonetic: '/ʌpˈdeɪt/', meaning: 'cập nhật', example: 'Please update the application.', topicId: 'TV-12' },
+  { id: 'TV12-27', word: 'virtual', partOfSpeech: 'adj.', phonetic: '/ˈvɝː.tʃu.əl/', meaning: 'ảo (không gian mạng)', example: 'We joined a virtual English class.', topicId: 'TV-12' },
+  { id: 'TV12-28', word: 'online', partOfSpeech: 'adj./adv.', phonetic: '/ˈɑːn.laɪn/', meaning: 'trực tuyến', example: 'We study English online every Saturday.', topicId: 'TV-12' },
+  { id: 'TV12-29', word: 'artificial intelligence', partOfSpeech: 'n. phr.', phonetic: '/ˌɑːr.təˈfɪʃ.əl ɪnˈtel.ə.dʒəns/', meaning: 'trí tuệ nhân tạo', example: 'Artificial intelligence is changing our lives.', topicId: 'TV-12' },
+  { id: 'TV12-30', word: 'innovative', partOfSpeech: 'adj.', phonetic: '/ˈɪn.ə.veɪ.tɪv/', meaning: 'sáng tạo, đổi mới', example: 'This is an innovative way to learn vocabulary.', topicId: 'TV-12' },
 
   // TV-13: Môi trường & bảo vệ thiên nhiên
   { id: 'TV13-01', word: 'environment', partOfSpeech: 'n.', phonetic: '/ɪnˈvaɪ.rən.mənt/', meaning: 'môi trường', example: 'We should protect the environment.', topicId: 'TV-13' },
@@ -294,6 +417,16 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV13-18', word: 'litter', partOfSpeech: 'n./v.', phonetic: '/ˈlɪt.ɚ/', meaning: 'rác vứt bừa bãi', example: "Don't litter in the park.", topicId: 'TV-13' },
   { id: 'TV13-19', word: 'solar energy', partOfSpeech: 'n. phr.', phonetic: '/ˈsoʊ.lɚ ˈen.ɚ.dʒi/', meaning: 'năng lượng mặt trời', example: 'Solar energy is clean and renewable.', topicId: 'TV-13' },
   { id: 'TV13-20', word: 'deforestation', partOfSpeech: 'n.', phonetic: '/diːˌfɔːr.əˈsteɪ.ʃən/', meaning: 'phá rừng', example: 'Deforestation harms wild animals.', topicId: 'TV-13' },
+  { id: 'TV13-21', word: 'ecosystem', partOfSpeech: 'n.', phonetic: '/ˈiː.koʊˌsɪs.təm/', meaning: 'hệ sinh thái', example: 'The coral reef is a rich ecosystem.', topicId: 'TV-13' },
+  { id: 'TV13-22', word: 'extinct', partOfSpeech: 'adj.', phonetic: '/ɪkˈstɪŋkt/', meaning: 'tuyệt chủng', example: 'Dinosaurs became extinct millions of years ago.', topicId: 'TV-13' },
+  { id: 'TV13-23', word: 'conserve', partOfSpeech: 'v.', phonetic: '/kənˈsɝːv/', meaning: 'bảo tồn', example: 'We must conserve our forests.', topicId: 'TV-13' },
+  { id: 'TV13-24', word: 'sustainable', partOfSpeech: 'adj.', phonetic: '/səˈsteɪ.nə.bəl/', meaning: 'bền vững', example: 'We need sustainable energy sources.', topicId: 'TV-13' },
+  { id: 'TV13-25', word: 'contaminate', partOfSpeech: 'v.', phonetic: '/kənˈtæm.ə.neɪt/', meaning: 'làm ô nhiễm', example: 'Factory waste can contaminate rivers.', topicId: 'TV-13' },
+  { id: 'TV13-26', word: 'ozone layer', partOfSpeech: 'n. phr.', phonetic: '/ˈoʊ.zoʊn ˈleɪ.ɚ/', meaning: 'tầng ozone', example: 'The ozone layer protects the Earth.', topicId: 'TV-13' },
+  { id: 'TV13-27', word: 'greenhouse gas', partOfSpeech: 'n. phr.', phonetic: '/ˈɡriːn.haʊs ɡæs/', meaning: 'khí nhà kính', example: 'Cars produce a lot of greenhouse gas.', topicId: 'TV-13' },
+  { id: 'TV13-28', word: 'compost', partOfSpeech: 'n.', phonetic: '/ˈkɑːm.poʊst/', meaning: 'phân hữu cơ', example: 'We turn food waste into compost.', topicId: 'TV-13' },
+  { id: 'TV13-29', word: 'eco-friendly', partOfSpeech: 'adj.', phonetic: '/ˈiː.koʊ ˈfrend.li/', meaning: 'thân thiện với môi trường', example: 'We should use eco-friendly bags.', topicId: 'TV-13' },
+  { id: 'TV13-30', word: 'renewable', partOfSpeech: 'adj.', phonetic: '/rɪˈnuː.ə.bəl/', meaning: 'có thể tái tạo', example: 'Wind is a renewable source of energy.', topicId: 'TV-13' },
 
   // TV-14: Cụm động từ & thành ngữ thông dụng ở tiểu học
   { id: 'TV14-01', word: 'get up', partOfSpeech: 'phr.v.', phonetic: '/ɡet ʌp/', meaning: 'thức dậy', example: 'I get up at six every morning.', topicId: 'TV-14' },
@@ -316,4 +449,14 @@ export const vocabCards: VocabCard[] = [
   { id: 'TV14-18', word: 'run out of', partOfSpeech: 'phr.v.', phonetic: '/rʌn aʊt əv/', meaning: 'hết (cái gì)', example: 'We ran out of milk this morning.', topicId: 'TV-14' },
   { id: 'TV14-19', word: 'keep an eye on', partOfSpeech: 'idiom', phonetic: '/kiːp ən aɪ ɑːn/', meaning: 'trông chừng', example: 'Please keep an eye on my bag.', topicId: 'TV-14' },
   { id: 'TV14-20', word: 'as easy as pie', partOfSpeech: 'idiom', phonetic: '/æz ˈiː.zi æz paɪ/', meaning: 'dễ như trở bàn tay', example: 'Riding a bike is as easy as pie for him.', topicId: 'TV-14' },
+  { id: 'TV14-21', word: 'carry on', partOfSpeech: 'phr.v.', phonetic: '/ˈker.i ɑːn/', meaning: 'tiếp tục', example: 'Please carry on with your work.', topicId: 'TV-14' },
+  { id: 'TV14-22', word: 'work out', partOfSpeech: 'phr.v.', phonetic: '/wɝːk aʊt/', meaning: 'tập luyện thể dục / giải quyết được', example: 'I work out every morning before school.', topicId: 'TV-14' },
+  { id: 'TV14-23', word: 'break down', partOfSpeech: 'phr.v.', phonetic: '/breɪk daʊn/', meaning: 'bị hỏng (máy móc)', example: 'The bus broke down on the way to school.', topicId: 'TV-14' },
+  { id: 'TV14-24', word: 'call back', partOfSpeech: 'phr.v.', phonetic: '/kɔːl bæk/', meaning: 'gọi lại', example: "I'll call you back in ten minutes.", topicId: 'TV-14' },
+  { id: 'TV14-25', word: 'cheer up', partOfSpeech: 'phr.v.', phonetic: '/tʃɪr ʌp/', meaning: 'vui lên, cổ vũ', example: 'We tried to cheer her up after the match.', topicId: 'TV-14' },
+  { id: 'TV14-26', word: 'figure out', partOfSpeech: 'phr.v.', phonetic: '/ˈfɪɡ.jɚ aʊt/', meaning: 'tìm ra, hiểu ra', example: 'I finally figured out the answer.', topicId: 'TV-14' },
+  { id: 'TV14-27', word: 'hang out', partOfSpeech: 'phr.v.', phonetic: '/hæŋ aʊt/', meaning: 'đi chơi cùng bạn bè', example: 'We usually hang out at the park after school.', topicId: 'TV-14' },
+  { id: 'TV14-28', word: 'hold on', partOfSpeech: 'phr.v.', phonetic: '/hoʊld ɑːn/', meaning: 'chờ đã, giữ chặt', example: 'Hold on, I need to find my shoes.', topicId: 'TV-14' },
+  { id: 'TV14-29', word: 'hit the books', partOfSpeech: 'idiom', phonetic: '/hɪt ðə bʊks/', meaning: 'học hành chăm chỉ', example: 'I need to hit the books before the exam.', topicId: 'TV-14' },
+  { id: 'TV14-30', word: 'under the weather', partOfSpeech: 'idiom', phonetic: '/ˈʌn.dɚ ðə ˈweð.ɚ/', meaning: 'cảm thấy không khỏe', example: "I'm feeling a bit under the weather today.", topicId: 'TV-14' },
 ]
