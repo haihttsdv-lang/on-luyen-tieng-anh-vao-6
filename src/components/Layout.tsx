@@ -4,6 +4,7 @@ import { progressStore } from '../data-access'
 
 const NAV_ITEMS = [
   { to: '/', label: 'Trang chủ', icon: '🏠', end: true },
+  { to: '/lo-trinh-hoc', label: 'Lộ trình học', icon: '🗓️' },
   { to: '/hoc-ly-thuyet', label: 'Học lý thuyết', icon: '📘' },
   { to: '/luyen-tap', label: 'Luyện tập', icon: '🎯' },
   { to: '/thi-thu', label: 'Thi thử', icon: '⏱️' },
@@ -26,6 +27,17 @@ export function Layout() {
   useEffect(() => {
     progressStore.getCoins().then(setCoins)
   }, [location.pathname])
+
+  // Xu có thể đổi ngay trên cùng 1 trang (ví dụ chấm kết quả buổi học ở Lộ
+  // trình học) mà không đổi route — lắng nghe sự kiện để header cập nhật
+  // ngay, không phải đợi điều hướng sang trang khác.
+  useEffect(() => {
+    function handleCoinsChanged() {
+      progressStore.getCoins().then(setCoins)
+    }
+    window.addEventListener('ol6:coins-changed', handleCoinsChanged)
+    return () => window.removeEventListener('ol6:coins-changed', handleCoinsChanged)
+  }, [])
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">

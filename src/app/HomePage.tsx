@@ -6,6 +6,13 @@ import type { BoxLevel } from '../types/domain'
 
 const SECTIONS = [
   {
+    to: '/lo-trinh-hoc',
+    icon: '🗓️',
+    color: 'from-indigo-400 to-sky-500',
+    title: 'Lộ trình học',
+    description: '3 buổi/tuần, 90 phút/buổi — hoàn thành trước 31/12/2026.',
+  },
+  {
     to: '/hoc-ly-thuyet',
     icon: '📘',
     color: 'from-sky-400 to-blue-500',

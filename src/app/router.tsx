@@ -1,5 +1,6 @@
 import { createBrowserRouter, createHashRouter, type RouteObject } from 'react-router-dom'
 import { Layout } from '../components/Layout'
+import { CurriculumPage } from '../modules/curriculum/CurriculumPage'
 import { FlashcardsPage } from '../modules/lessons/FlashcardsPage'
 import { LessonDetailPage } from '../modules/lessons/LessonDetailPage'
 import { LessonListPage } from '../modules/lessons/LessonListPage'
@@ -25,6 +26,7 @@ const routes: RouteObject[] = [
     element: <Layout />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: 'lo-trinh-hoc', element: <CurriculumPage /> },
       { path: 'hoc-ly-thuyet', element: <LessonListPage /> },
       { path: 'hoc-ly-thuyet/so-do-tu-duy', element: <MindmapPage /> },
       { path: 'hoc-ly-thuyet/tu-vung/:topicId', element: <FlashcardsPage /> },
