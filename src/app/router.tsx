@@ -7,6 +7,7 @@ import { LessonQuizPage } from '../modules/lessons/LessonQuizPage'
 import { DiagnosticTestPage } from '../modules/mastery/DiagnosticTestPage'
 import { MasteryPage } from '../modules/mastery/MasteryPage'
 import { ParentOverviewPage } from '../modules/mastery/ParentOverviewPage'
+import { CustomMockTestPage } from '../modules/mock-test/CustomMockTestPage'
 import { MockTestPage } from '../modules/mock-test/MockTestPage'
 import { PracticeBySkillPage } from '../modules/practice/PracticeBySkillPage'
 import { PracticeByTopicPage } from '../modules/practice/PracticeByTopicPage'
@@ -35,6 +36,7 @@ const routes: RouteObject[] = [
       { path: 'luyen-tap/tro-choi/toc-do', element: <SpeedChallengePage /> },
       { path: 'luyen-tap/tro-choi/kho-bau', element: <TreasureHuntPage /> },
       { path: 'thi-thu', element: <MockTestPage /> },
+      { path: 'thi-thu/tu-tao-de', element: <CustomMockTestPage /> },
       { path: 'ho-so', element: <MasteryPage /> },
       { path: 'ho-so/kiem-tra-dau-vao', element: <DiagnosticTestPage /> },
       { path: 'ho-so/phu-huynh', element: <ParentOverviewPage /> },

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { contentStore } from '../../data-access'
 import type { Question } from '../../types/domain'
 import { MOCK_TEST_OPTIONS, scaleBlueprint } from './blueprint'
@@ -61,6 +62,19 @@ export function MockTestPage() {
           </li>
         ))}
       </ul>
+
+      <Link
+        to="/thi-thu/tu-tao-de"
+        className="mt-3 flex flex-col gap-1 rounded-2xl border-2 border-dashed border-emerald-300 bg-emerald-50 px-5 py-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-emerald-800 dark:bg-emerald-500/10"
+      >
+        <span className="font-bold text-emerald-800 dark:text-emerald-300">
+          🎯 Tự tạo đề (chọn chủ điểm)
+        </span>
+        <span className="text-sm text-emerald-700 dark:text-emerald-400">
+          Chọn chủ điểm muốn ôn hoặc để hệ thống chọn ngẫu nhiên — đề vẫn giữ
+          đúng cấu trúc 40 câu / 45 phút như đề thật Cầu Giấy.
+        </span>
+      </Link>
     </section>
   )
 }

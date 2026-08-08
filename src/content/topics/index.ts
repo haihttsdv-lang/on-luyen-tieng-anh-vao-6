@@ -350,4 +350,254 @@ export const topics: Topic[] = [
       "Nhầm 'would like' với 'like' (thì hiện tại đơn diễn tả sở thích chung, không dùng để đề nghị).",
     ],
   },
+
+  // Rà soát bổ sung: 13 chủ điểm ngữ pháp còn lại chưa có bài học, hoàn
+  // thiện đủ 31/31 chủ điểm Mục 4.1 URD.
+  {
+    id: 'NP-02',
+    group: 'grammar',
+    title: 'Mạo từ a/an/the và trường hợp không dùng mạo từ',
+    lesson:
+      'Dùng "a" trước danh từ số ít bắt đầu bằng âm phụ âm, "an" trước âm nguyên âm, khi nhắc đến lần đầu hoặc không xác định. Dùng "the" khi cả người nói và người nghe đều biết đối tượng cụ thể, hoặc khi đã nhắc đến trước đó. Không dùng mạo từ trước danh từ số nhiều/không đếm được mang nghĩa chung, tên riêng, tên môn học, bữa ăn.',
+    examples: [
+      { en: 'I saw a cat and an elephant at the zoo.', vi: 'Tôi đã thấy một con mèo và một con voi ở sở thú.' },
+      { en: 'The cat I saw yesterday was very cute.', vi: 'Con mèo tôi thấy hôm qua rất dễ thương.' },
+      { en: 'She is good at Math.', vi: 'Cô ấy giỏi môn Toán.' },
+      { en: 'Dogs are friendly animals.', vi: 'Loài chó là động vật thân thiện.' },
+      { en: 'We have breakfast at seven every day.', vi: 'Chúng tôi ăn sáng lúc bảy giờ mỗi ngày.' },
+    ],
+    commonMistakes: [
+      "Dùng 'a' trước âm nguyên âm (sai: 'a apple', đúng: 'an apple').",
+      'Thêm mạo từ trước tên môn học hoặc danh từ số nhiều mang nghĩa chung.',
+      "Quên dùng 'the' khi vật đã được nhắc tới hoặc đã xác định rõ.",
+    ],
+  },
+  {
+    id: 'NP-04',
+    group: 'grammar',
+    title: 'Đại từ bất định; đại từ/trạng từ quan hệ (giới thiệu cơ bản)',
+    lesson:
+      'Đại từ bất định (something, anyone, nobody, everything...) chỉ người/vật không xác định cụ thể. Đại từ quan hệ cơ bản: "who" (chỉ người), "which" (chỉ vật), "that" (chỉ người hoặc vật) dùng để nối mệnh đề bổ nghĩa cho danh từ đứng trước.',
+    examples: [
+      { en: 'Is there anyone in the room?', vi: 'Có ai trong phòng không?' },
+      { en: 'I have something important to tell you.', vi: 'Tôi có điều quan trọng muốn nói với bạn.' },
+      { en: 'Nobody knows the answer.', vi: 'Không ai biết câu trả lời.' },
+      { en: 'The girl who is standing there is my sister.', vi: 'Cô gái đang đứng ở đó là chị tôi.' },
+      { en: 'This is the book that I borrowed from the library.', vi: 'Đây là cuốn sách mà tôi mượn từ thư viện.' },
+    ],
+    commonMistakes: [
+      "Dùng 'something/anyone' sai ngữ cảnh khẳng định/phủ định/nghi vấn.",
+      "Dùng 'who' cho vật hoặc 'which' cho người.",
+      'Quên đại từ quan hệ khi mệnh đề bổ nghĩa cho danh từ đứng trước.',
+    ],
+  },
+  {
+    id: 'NP-05',
+    group: 'grammar',
+    title: 'Tính từ: thứ tự tính từ, đuôi -ed/-ing',
+    lesson:
+      'Khi nhiều tính từ đứng trước danh từ, thứ tự thường là: số lượng – ý kiến – kích thước – tuổi – hình dáng – màu sắc – nguồn gốc – chất liệu – danh từ. Tính từ đuôi "-ing" mô tả tính chất của sự vật/sự việc (gây ra cảm xúc), tính từ đuôi "-ed" mô tả cảm xúc của người (bị tác động).',
+    examples: [
+      { en: 'She has a beautiful small white dog.', vi: 'Cô ấy có một chú chó trắng nhỏ xinh đẹp.' },
+      { en: 'This is an interesting story.', vi: 'Đây là một câu chuyện thú vị.' },
+      { en: 'I am interested in this story.', vi: 'Tôi cảm thấy hứng thú với câu chuyện này.' },
+      { en: 'The movie was so boring that I fell asleep.', vi: 'Bộ phim nhàm chán đến nỗi tôi ngủ thiếp đi.' },
+      { en: 'I felt bored during the long lesson.', vi: 'Tôi cảm thấy chán trong suốt bài học dài.' },
+    ],
+    commonMistakes: [
+      "Sắp xếp sai thứ tự tính từ (sai: 'a white small dog', đúng: 'a small white dog').",
+      "Nhầm '-ing' và '-ed' (dùng 'I am boring' khi ý muốn nói 'I am bored').",
+      'Thêm dấu phẩy không cần thiết giữa các tính từ liền kề theo đúng thứ tự.',
+    ],
+  },
+  {
+    id: 'NP-09',
+    group: 'grammar',
+    title: 'Liên từ kết hợp, phụ thuộc, nguyên nhân–kết quả–mục đích, tương phản',
+    lesson:
+      'Liên từ kết hợp (and, but, or, so) nối hai từ/cụm từ/mệnh đề ngang hàng. Liên từ phụ thuộc (because, although, if, when...) nối mệnh đề phụ với mệnh đề chính, diễn tả nguyên nhân, tương phản, điều kiện, thời gian.',
+    examples: [
+      { en: 'I like tea, but my brother likes coffee.', vi: 'Tôi thích trà, nhưng anh tôi thích cà phê.' },
+      { en: 'She was tired because she had worked all day.', vi: 'Cô ấy mệt vì đã làm việc cả ngày.' },
+      { en: 'Although it was raining, we went out.', vi: 'Mặc dù trời mưa, chúng tôi vẫn ra ngoài.' },
+      { en: 'You should study hard so that you can pass the exam.', vi: 'Bạn nên học chăm chỉ để có thể vượt qua kỳ thi.' },
+      { en: 'We stayed at home because of the storm.', vi: 'Chúng tôi ở nhà vì cơn bão.' },
+    ],
+    commonMistakes: [
+      "Dùng cả 'although' và 'but' trong cùng một câu.",
+      "Nhầm 'because' (theo sau là mệnh đề) với 'because of' (theo sau là cụm danh từ).",
+      'Thiếu liên từ phù hợp khi nối hai mệnh đề có quan hệ nguyên nhân–kết quả.',
+    ],
+  },
+  {
+    id: 'NP-10',
+    group: 'grammar',
+    title: 'Từ định lượng: some/any, much/many, a lot of, a few/few, a little/little',
+    lesson:
+      '"Some" dùng trong câu khẳng định và lời đề nghị/mời, "any" dùng trong câu phủ định và câu hỏi. "Many" và "few/a few" đi với danh từ đếm được số nhiều; "much" và "little/a little" đi với danh từ không đếm được. "A lot of" dùng được cho cả hai loại. "A few/a little" mang nghĩa tích cực (có một ít, đủ dùng), còn "few/little" mang nghĩa tiêu cực (rất ít, gần như không có).',
+    examples: [
+      { en: 'There are some apples in the basket.', vi: 'Có vài quả táo trong giỏ.' },
+      { en: 'Do you have any questions?', vi: 'Bạn có câu hỏi nào không?' },
+      { en: "I don't have much time today.", vi: 'Hôm nay tôi không có nhiều thời gian.' },
+      { en: 'She has a few close friends.', vi: 'Cô ấy có một vài người bạn thân.' },
+      { en: 'There is little water left in the bottle.', vi: 'Còn rất ít nước trong chai.' },
+    ],
+    commonMistakes: [
+      "Dùng 'much' với danh từ đếm được số nhiều (sai: 'much books', đúng: 'many books').",
+      "Nhầm nghĩa 'a few' (một ít, đủ) và 'few' (rất ít, không đủ).",
+      "Dùng 'some' trong câu hỏi thông thường thay vì 'any' (trừ khi là lời mời/đề nghị).",
+    ],
+  },
+  {
+    id: 'NP-17',
+    group: 'grammar',
+    title: 'Câu hỏi Wh-/How, câu hỏi đuôi',
+    lesson:
+      'Câu hỏi Wh- (What, Where, When, Who, Why, Which) và How dùng để hỏi thông tin cụ thể, có trật tự: từ để hỏi + trợ động từ + chủ ngữ + động từ chính. Câu hỏi đuôi (tag question) thêm vào cuối câu kể để xác nhận thông tin: nếu câu kể khẳng định thì đuôi phủ định, và ngược lại.',
+    examples: [
+      { en: 'Where do you live?', vi: 'Bạn sống ở đâu?' },
+      { en: 'How often do you play football?', vi: 'Bạn chơi bóng đá bao lâu một lần?' },
+      { en: 'Why was she late for school?', vi: 'Tại sao cô ấy đến trường muộn?' },
+      { en: "You are a student, aren't you?", vi: 'Bạn là học sinh, phải không?' },
+      { en: "She doesn't like coffee, does she?", vi: 'Cô ấy không thích cà phê, phải không?' },
+    ],
+    commonMistakes: [
+      'Quên đảo trợ động từ lên trước chủ ngữ trong câu hỏi Wh-.',
+      'Dùng sai loại đuôi câu hỏi: câu kể khẳng định phải có đuôi phủ định.',
+      'Dùng sai trợ động từ trong câu hỏi đuôi (phải khớp với thì của câu kể).',
+    ],
+  },
+  {
+    id: 'NP-18',
+    group: 'grammar',
+    title: 'Mệnh đề quan hệ xác định & không xác định',
+    lesson:
+      'Mệnh đề quan hệ xác định cung cấp thông tin cần thiết để xác định danh từ, không dùng dấu phẩy. Mệnh đề quan hệ không xác định cung cấp thông tin bổ sung không bắt buộc, được ngăn cách bằng dấu phẩy, không dùng "that".',
+    examples: [
+      { en: 'The boy who is wearing a blue shirt is my friend.', vi: 'Cậu bé đang mặc áo xanh là bạn tôi.' },
+      { en: 'My father, who is fifty years old, still plays football every week.', vi: 'Bố tôi, năm nay năm mươi tuổi, vẫn chơi bóng đá mỗi tuần.' },
+      { en: 'This is the house where I was born.', vi: 'Đây là ngôi nhà nơi tôi được sinh ra.' },
+      { en: 'Ha Long Bay, which is in Quang Ninh, is very beautiful.', vi: 'Vịnh Hạ Long, ở Quảng Ninh, rất đẹp.' },
+      { en: 'The book that I bought yesterday is interesting.', vi: 'Cuốn sách tôi mua hôm qua rất thú vị.' },
+    ],
+    commonMistakes: [
+      "Dùng 'that' trong mệnh đề quan hệ không xác định (chỉ dùng who/which).",
+      'Quên dấu phẩy trước và sau mệnh đề quan hệ không xác định.',
+      'Lược bỏ đại từ quan hệ khi nó đóng vai trò chủ ngữ (không được lược bỏ trong trường hợp này).',
+    ],
+  },
+  {
+    id: 'NP-19',
+    group: 'grammar',
+    title: 'Mệnh đề trạng ngữ (thời gian, tương phản, nguyên nhân)',
+    lesson:
+      'Mệnh đề trạng ngữ chỉ thời gian bắt đầu bằng "when, while, before, after, as soon as". Mệnh đề trạng ngữ chỉ tương phản bắt đầu bằng "although, though, even though". Mệnh đề trạng ngữ chỉ nguyên nhân bắt đầu bằng "because, since, as".',
+    examples: [
+      { en: 'When I got home, my mother was cooking dinner.', vi: 'Khi tôi về nhà, mẹ tôi đang nấu bữa tối.' },
+      { en: 'As soon as the bell rang, the students ran outside.', vi: 'Ngay khi chuông reo, học sinh chạy ra ngoài.' },
+      { en: 'Although he was tired, he finished his homework.', vi: 'Mặc dù mệt, cậu ấy vẫn hoàn thành bài tập.' },
+      { en: 'Since it was raining, we stayed at home.', vi: 'Vì trời mưa, chúng tôi ở nhà.' },
+      { en: 'She passed the exam because she studied hard.', vi: 'Cô ấy đỗ kỳ thi vì đã học chăm chỉ.' },
+    ],
+    commonMistakes: [
+      "Nhầm 'because' (mệnh đề) với 'because of' (cụm danh từ).",
+      "Dùng sai liên từ tương phản ('although' + mệnh đề, nhưng 'despite/in spite of' + cụm danh từ/V-ing).",
+      'Thiếu dấu phẩy khi mệnh đề trạng ngữ đứng đầu câu.',
+    ],
+  },
+  {
+    id: 'NP-24',
+    group: 'grammar',
+    title: 'Danh động từ & động từ nguyên thể (V-ing / to-V) sau động từ thông dụng',
+    lesson:
+      'Một số động từ theo sau bởi V-ing (enjoy, finish, avoid, mind, suggest...), một số động từ theo sau bởi to-V (want, need, decide, hope, plan...). Một số động từ có thể theo cả hai (like, love, start, begin) mà nghĩa không đổi nhiều.',
+    examples: [
+      { en: 'I enjoy reading comic books.', vi: 'Tôi thích đọc truyện tranh.' },
+      { en: 'She finished doing her homework before dinner.', vi: 'Cô ấy làm xong bài tập trước bữa tối.' },
+      { en: 'We want to visit Ha Long Bay this summer.', vi: 'Chúng tôi muốn thăm Vịnh Hạ Long mùa hè này.' },
+      { en: 'He decided to join the football club.', vi: 'Cậu ấy quyết định tham gia câu lạc bộ bóng đá.' },
+      { en: 'I like playing badminton in the evening.', vi: 'Tôi thích chơi cầu lông vào buổi tối.' },
+    ],
+    commonMistakes: [
+      "Dùng to-V sau các động từ chỉ theo sau bởi V-ing (sai: 'enjoy to read', đúng: 'enjoy reading').",
+      "Dùng V-ing sau các động từ chỉ theo sau bởi to-V (sai: 'want going', đúng: 'want to go').",
+      'Quên rằng sau giới từ luôn dùng V-ing, không dùng to-V.',
+    ],
+  },
+  {
+    id: 'NP-27',
+    group: 'grammar',
+    title: 'Đồng tình: so, too, either, neither',
+    lesson:
+      'Dùng "so + trợ động từ + chủ ngữ" hoặc "chủ ngữ + too" để đồng tình với câu khẳng định. Dùng "neither + trợ động từ + chủ ngữ" hoặc "chủ ngữ + not... either" để đồng tình với câu phủ định.',
+    examples: [
+      { en: 'I like football. — So do I.', vi: 'Tôi thích bóng đá. — Tôi cũng vậy.' },
+      { en: 'She can swim well. — So can he.', vi: 'Cô ấy bơi giỏi. — Anh ấy cũng vậy.' },
+      { en: "I don't like coffee. — Neither do I.", vi: 'Tôi không thích cà phê. — Tôi cũng vậy.' },
+      { en: "He isn't hungry, and I'm not either.", vi: 'Cậu ấy không đói, và tôi cũng vậy.' },
+      { en: 'I have a pet. — I have a pet, too.', vi: 'Tôi có thú cưng. — Tôi cũng có thú cưng.' },
+    ],
+    commonMistakes: [
+      "Dùng 'so' để đồng tình với câu phủ định (phải dùng 'neither').",
+      "Quên đảo trợ động từ lên trước chủ ngữ sau 'so/neither'.",
+      "Dùng 'too' ở đầu câu thay vì cuối câu (too/either luôn đứng cuối câu).",
+    ],
+  },
+  {
+    id: 'NP-29',
+    group: 'grammar',
+    title: 'Câu ước: wish, if only',
+    lesson:
+      '"Wish/If only" + quá khứ đơn diễn tả ước muốn trái với sự thật ở hiện tại. "Wish/If only" + "had + V3" diễn tả ước muốn trái với sự thật ở quá khứ (tiếc nuối về điều đã xảy ra).',
+    examples: [
+      { en: 'I wish I had a bicycle.', vi: 'Tôi ước gì mình có một chiếc xe đạp.' },
+      { en: 'If only I were taller.', vi: 'Giá mà tôi cao hơn.' },
+      { en: 'She wishes she could speak English fluently.', vi: 'Cô ấy ước có thể nói tiếng Anh trôi chảy.' },
+      { en: 'I wish I had studied harder last year.', vi: 'Tôi ước mình đã học chăm chỉ hơn năm ngoái.' },
+      { en: "If only I hadn't lost my pencil case.", vi: 'Giá mà tôi đã không làm mất hộp bút.' },
+    ],
+    commonMistakes: [
+      "Dùng thì hiện tại sau 'wish' để nói về hiện tại (phải dùng quá khứ đơn).",
+      "Dùng 'was' thay vì 'were' trong câu ước trang trọng (nên dùng 'were' cho mọi ngôi).",
+      'Nhầm cấu trúc ước hiện tại (quá khứ đơn) với ước quá khứ (had + V3).',
+    ],
+  },
+  {
+    id: 'NP-30',
+    group: 'grammar',
+    title: 'Hòa hợp chủ ngữ – động từ (each, every và các trường hợp đặc biệt)',
+    lesson:
+      'Chủ ngữ số ít đi với động từ số ít, chủ ngữ số nhiều đi với động từ số nhiều. Các từ "each, every, everyone, everybody, somebody, nobody" luôn được coi là số ít dù mang nghĩa nhiều người/vật.',
+    examples: [
+      { en: 'Each student has a textbook.', vi: 'Mỗi học sinh có một cuốn sách giáo khoa.' },
+      { en: 'Every classroom has a blackboard.', vi: 'Mỗi lớp học đều có một cái bảng đen.' },
+      { en: 'Everybody likes the new teacher.', vi: 'Mọi người đều thích cô giáo mới.' },
+      { en: 'Nobody knows the answer to this question.', vi: 'Không ai biết câu trả lời cho câu hỏi này.' },
+      { en: 'Both of my parents work in a hospital.', vi: 'Cả bố và mẹ tôi đều làm việc trong bệnh viện.' },
+    ],
+    commonMistakes: [
+      "Chia động từ số nhiều sau 'each/every' (sai: 'Each student have', đúng: 'Each student has').",
+      "Chia động từ số nhiều sau 'everyone/everybody/somebody/nobody' (những từ này luôn số ít).",
+      "Nhầm 'both of + số nhiều' (động từ số nhiều) với 'each of + số nhiều' (động từ số ít).",
+    ],
+  },
+  {
+    id: 'NP-31',
+    group: 'grammar',
+    title: 'Cặp từ dễ nhầm lẫn (commonly confused words)',
+    lesson:
+      'Một số cặp từ tiếng Anh dễ gây nhầm lẫn: "say" (nói gì, không cần tân ngữ chỉ người ngay sau) và "tell" (kể cho ai, cần tân ngữ chỉ người); "make" (tạo ra) và "do" (thực hiện việc gì); "borrow" (mượn của ai) và "lend" (cho ai mượn).',
+    examples: [
+      { en: 'She said that she was tired.', vi: 'Cô ấy nói rằng cô ấy mệt.' },
+      { en: 'He told me an interesting story.', vi: 'Anh ấy kể cho tôi một câu chuyện thú vị.' },
+      { en: 'I always do my homework before dinner.', vi: 'Tôi luôn làm bài tập trước bữa tối.' },
+      { en: 'My mother makes a cake every weekend.', vi: 'Mẹ tôi làm bánh mỗi cuối tuần.' },
+      { en: 'Can I borrow your pen? I will lend you mine tomorrow.', vi: 'Mình mượn bút của bạn nhé? Ngày mai mình sẽ cho bạn mượn bút của mình.' },
+    ],
+    commonMistakes: [
+      "Dùng 'say' với tân ngữ chỉ người mà không có 'to' (nên dùng 'tell me' thay vì 'say me').",
+      "Nhầm 'make homework' với 'do homework' (phải dùng 'do homework').",
+      "Nhầm hướng của 'borrow' (mượn vào) và 'lend' (cho mượn ra).",
+    ],
+  },
 ]

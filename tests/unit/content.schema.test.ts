@@ -5,25 +5,15 @@ import { topics } from '../../src/content/topics'
 import { vocabCards } from '../../src/content/vocab'
 import { writingPrompts } from '../../src/content/writing-prompts'
 
-const GROUP_B_TENSE_TOPIC_IDS = ['NP-11', 'NP-12', 'NP-13', 'NP-14', 'NP-15', 'NP-16']
+// Mục 4.1 URD: đủ 31 chủ điểm ngữ pháp NP-01..31.
+const ALL_LESSON_TOPIC_IDS = Array.from({ length: 31 }, (_, i) =>
+  `NP-${String(i + 1).padStart(2, '0')}`,
+)
 
-const ALL_LESSON_TOPIC_IDS = [
-  ...GROUP_B_TENSE_TOPIC_IDS,
-  'NP-01',
-  'NP-03',
-  'NP-06',
-  'NP-07',
-  'NP-08',
-  'NP-20',
-  'NP-21',
-  'NP-22',
-  'NP-23',
-  'NP-25',
-  'NP-26',
-  'NP-28',
-]
-
-const VOCAB_TOPIC_IDS = ['TV-01', 'TV-02', 'TV-04', 'TV-05', 'TV-07', 'TV-09']
+// Mục 4.2 URD: đủ 14 chủ đề từ vựng TV-01..14.
+const VOCAB_TOPIC_IDS = Array.from({ length: 14 }, (_, i) =>
+  `TV-${String(i + 1).padStart(2, '0')}`,
+)
 
 const VALID_SKILL_IDS = new Set([
   'KN-01',
@@ -37,8 +27,8 @@ const VALID_SKILL_IDS = new Set([
 ])
 
 describe('Ngân hàng câu hỏi (Question)', () => {
-  it('có đúng 131 câu hỏi (Giai đoạn 1+3+6)', () => {
-    expect(questions).toHaveLength(131)
+  it('có đúng 170 câu hỏi (Giai đoạn 1+3+6+7)', () => {
+    expect(questions).toHaveLength(170)
   })
 
   it('có đủ câu hỏi mỗi dạng bài để sinh đề thi thử "Giống Cầu Giấy" (docs/adr/0002)', () => {
@@ -99,8 +89,8 @@ describe('Ngân hàng câu hỏi (Question)', () => {
 })
 
 describe('Bài học lý thuyết (Topic)', () => {
-  it('có 18 bài học (Nhóm B đầy đủ + 12 chủ điểm bổ sung Giai đoạn 6), mỗi bài đủ giải thích, 3–5 ví dụ, và lỗi thường gặp', () => {
-    expect(topics).toHaveLength(18)
+  it('có đủ 31/31 bài học ngữ pháp (Mục 4.1), mỗi bài đủ giải thích, 3–5 ví dụ, và lỗi thường gặp', () => {
+    expect(topics).toHaveLength(31)
     const topicIds = topics.map((t) => t.id)
     for (const requiredId of ALL_LESSON_TOPIC_IDS) {
       expect(topicIds).toContain(requiredId)
@@ -129,8 +119,8 @@ describe('Bài học lý thuyết (Topic)', () => {
 })
 
 describe('Flashcard từ vựng (VocabCard)', () => {
-  it('có 84 flashcard trải đều 6 chủ đề (14 thẻ/chủ đề), mỗi thẻ đủ từ, nghĩa, và câu ví dụ', () => {
-    expect(vocabCards).toHaveLength(84)
+  it('có đủ 196 flashcard trải đều 14/14 chủ đề (Mục 4.2, 14 thẻ/chủ đề), mỗi thẻ đủ từ, nghĩa, và câu ví dụ', () => {
+    expect(vocabCards).toHaveLength(196)
     for (const topicId of VOCAB_TOPIC_IDS) {
       const cards = vocabCards.filter((c) => c.topicId === topicId)
       expect(cards).toHaveLength(14)
