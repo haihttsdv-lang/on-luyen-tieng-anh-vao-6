@@ -2096,6 +2096,176 @@ const lessonQuiz3: Question[] = [
   },
 ]
 
+// ---- Quiz nhanh cho 5 chủ điểm đối chiếu giáo trình các trung tâm luyện
+// thi (Casalink, MyPas, các bộ tổng hợp ngữ pháp phổ biến) — NP-32..36 ----
+const lessonQuiz4: Question[] = [
+  // NP-32: There is/There are
+  {
+    id: 'LQ4-NP32-01',
+    prompt: '_____ a book on the table.',
+    options: ['There is', 'There are', 'It is', 'They are'],
+    answerIndex: 0,
+    explain: '"Book" là danh từ số ít, dùng "There is".',
+    topicIds: ['NP-32'],
+    skillId: 'KN-03',
+  },
+  {
+    id: 'LQ4-NP32-02',
+    prompt: 'Which sentence is correct?',
+    options: [
+      'There are much water in the bottle.',
+      'There is much water in the bottle.',
+      'There is many water in the bottle.',
+      'There are many water in the bottle.',
+    ],
+    answerIndex: 1,
+    explain: '"Water" là danh từ không đếm được, dùng "There is much water".',
+    topicIds: ['NP-32'],
+    skillId: 'KN-06',
+  },
+  {
+    id: 'LQ4-NP32-03',
+    prompt: '_____ any pandas in Vietnam?',
+    options: ['Is there', 'Are there', 'There is', 'There are'],
+    answerIndex: 1,
+    explain: '"Pandas" số nhiều, câu hỏi đảo động từ: "Are there".',
+    topicIds: ['NP-32'],
+    skillId: 'KN-03',
+  },
+  // NP-33: too...to / enough...to
+  {
+    id: 'LQ4-NP33-01',
+    prompt: 'The music was _____ loud for the baby to sleep.',
+    options: ['too', 'enough', 'very', 'so'],
+    answerIndex: 0,
+    explain: '"Too + adj + for sb + to V" diễn tả mức độ quá cao gây cản trở.',
+    topicIds: ['NP-33'],
+    skillId: 'KN-03',
+  },
+  {
+    id: 'LQ4-NP33-02',
+    prompt: 'Which sentence is correct?',
+    options: [
+      'She is enough old to go to school.',
+      'She is old enough to go to school.',
+      'She is enough to old go to school.',
+      'She old enough is to go to school.',
+    ],
+    answerIndex: 1,
+    explain: '"Enough" đứng sau tính từ: "old enough".',
+    topicIds: ['NP-33'],
+    skillId: 'KN-06',
+  },
+  {
+    id: 'LQ4-NP33-03',
+    prompt: 'This tea is _____ hot to drink right now.',
+    options: ['too', 'enough', 'so', 'very'],
+    answerIndex: 0,
+    explain: '"Too + adj + to V" diễn tả không thể làm gì vì mức độ quá cao.',
+    topicIds: ['NP-33'],
+    skillId: 'KN-03',
+  },
+  // NP-34: Word form
+  {
+    id: 'LQ4-NP34-01',
+    prompt: "Education is very important for children's _____ (develop).",
+    options: ['develop', 'developing', 'development', 'developed'],
+    answerIndex: 2,
+    explain: 'Sau tính từ sở hữu cần danh từ: "development".',
+    topicIds: ['NP-34'],
+    skillId: 'KN-03',
+  },
+  {
+    id: 'LQ4-NP34-02',
+    prompt: 'Which sentence is correct?',
+    options: [
+      'He speaks English fluent.',
+      'He speaks English fluently.',
+      'He speaks English fluency.',
+      'He speaks English fluentness.',
+    ],
+    answerIndex: 1,
+    explain: 'Bổ nghĩa cho động từ "speaks" cần trạng từ: "fluently".',
+    topicIds: ['NP-34'],
+    skillId: 'KN-06',
+  },
+  {
+    id: 'LQ4-NP34-03',
+    prompt: 'She felt very _____ (happy) when she received the gift.',
+    options: ['happy', 'happily', 'happiness', 'happier'],
+    answerIndex: 0,
+    explain: 'Sau động từ liên kết "felt" cần tính từ: "happy".',
+    topicIds: ['NP-34'],
+    skillId: 'KN-03',
+  },
+  // NP-35: one/ones, another/other(s)
+  {
+    id: 'LQ4-NP35-01',
+    prompt: 'I lost my pen, so I need to buy a new _____.',
+    options: ['one', 'ones', 'other', 'another'],
+    answerIndex: 0,
+    explain: 'Thay cho "pen" (số ít) dùng "one".',
+    topicIds: ['NP-35'],
+    skillId: 'KN-03',
+  },
+  {
+    id: 'LQ4-NP35-02',
+    prompt: 'Which sentence is correct?',
+    options: [
+      'Some people like tea, other like coffee.',
+      'Some people like tea, others like coffee.',
+      'Some people like tea, another like coffee.',
+      'Some people like tea, the other likes coffee.',
+    ],
+    answerIndex: 1,
+    explain: '"Others" đứng một mình (không có danh từ theo sau).',
+    topicIds: ['NP-35'],
+    skillId: 'KN-06',
+  },
+  {
+    id: 'LQ4-NP35-03',
+    prompt: 'This shirt is too small. Can you show me _____?',
+    options: ['another one', 'other', 'others', 'the others'],
+    answerIndex: 0,
+    explain: '"Another one" nghĩa là "một cái khác" (số ít).',
+    topicIds: ['NP-35'],
+    skillId: 'KN-03',
+  },
+  // NP-36: make/let/have + O + V
+  {
+    id: 'LQ4-NP36-01',
+    prompt: 'My teacher _____ (make) us practice speaking every day.',
+    options: ['make', 'makes', 'making', 'made'],
+    answerIndex: 1,
+    explain: 'Chủ ngữ số ít "my teacher" chia động từ thêm "-s": "makes".',
+    topicIds: ['NP-36'],
+    skillId: 'KN-03',
+  },
+  {
+    id: 'LQ4-NP36-02',
+    prompt: 'Which sentence is correct?',
+    options: [
+      'She let me to use her computer.',
+      'She let me use her computer.',
+      'She let me using her computer.',
+      'She let I use her computer.',
+    ],
+    answerIndex: 1,
+    explain: '"Let sb V" không có "to" trước động từ.',
+    topicIds: ['NP-36'],
+    skillId: 'KN-06',
+  },
+  {
+    id: 'LQ4-NP36-03',
+    prompt: 'The manager had the staff _____ (clean) the office before leaving.',
+    options: ['clean', 'to clean', 'cleaning', 'cleaned'],
+    answerIndex: 0,
+    explain: '"Have sb V" không có "to" trước động từ.',
+    topicIds: ['NP-36'],
+    skillId: 'KN-03',
+  },
+]
+
 export const questions: Question[] = [
   ...kn01,
   ...kn02,
@@ -2107,4 +2277,5 @@ export const questions: Question[] = [
   ...lessonQuiz,
   ...lessonQuiz2,
   ...lessonQuiz3,
+  ...lessonQuiz4,
 ]

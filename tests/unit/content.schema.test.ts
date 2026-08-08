@@ -5,10 +5,16 @@ import { topics } from '../../src/content/topics'
 import { vocabCards } from '../../src/content/vocab'
 import { writingPrompts } from '../../src/content/writing-prompts'
 
-// Mục 4.1 URD: đủ 31 chủ điểm ngữ pháp NP-01..31.
-const ALL_LESSON_TOPIC_IDS = Array.from({ length: 31 }, (_, i) =>
-  `NP-${String(i + 1).padStart(2, '0')}`,
-)
+// Mục 4.1 URD: 31 chủ điểm ngữ pháp gốc NP-01..31, cộng thêm NP-32..36 đối
+// chiếu bổ sung từ giáo trình các trung tâm luyện thi (xem docs/adr/0003).
+const ALL_LESSON_TOPIC_IDS = [
+  ...Array.from({ length: 31 }, (_, i) => `NP-${String(i + 1).padStart(2, '0')}`),
+  'NP-32',
+  'NP-33',
+  'NP-34',
+  'NP-35',
+  'NP-36',
+]
 
 // Mục 4.2 URD: đủ 14 chủ đề từ vựng TV-01..14.
 const VOCAB_TOPIC_IDS = Array.from({ length: 14 }, (_, i) =>
@@ -27,8 +33,8 @@ const VALID_SKILL_IDS = new Set([
 ])
 
 describe('Ngân hàng câu hỏi (Question)', () => {
-  it('có đúng 170 câu hỏi (Giai đoạn 1+3+6+7)', () => {
-    expect(questions).toHaveLength(170)
+  it('có đúng 185 câu hỏi (Giai đoạn 1+3+6+7+8)', () => {
+    expect(questions).toHaveLength(185)
   })
 
   it('có đủ câu hỏi mỗi dạng bài để sinh đề thi thử "Giống Cầu Giấy" (docs/adr/0002)', () => {
@@ -89,8 +95,8 @@ describe('Ngân hàng câu hỏi (Question)', () => {
 })
 
 describe('Bài học lý thuyết (Topic)', () => {
-  it('có đủ 31/31 bài học ngữ pháp (Mục 4.1), mỗi bài đủ giải thích, 3–5 ví dụ, và lỗi thường gặp', () => {
-    expect(topics).toHaveLength(31)
+  it('có đủ 36 bài học ngữ pháp (31/31 Mục 4.1 + 5 bổ sung đối chiếu giáo trình), mỗi bài đủ giải thích, 3–5 ví dụ, và lỗi thường gặp', () => {
+    expect(topics).toHaveLength(36)
     const topicIds = topics.map((t) => t.id)
     for (const requiredId of ALL_LESSON_TOPIC_IDS) {
       expect(topicIds).toContain(requiredId)

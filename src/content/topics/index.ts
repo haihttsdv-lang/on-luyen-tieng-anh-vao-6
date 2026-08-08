@@ -600,4 +600,104 @@ export const topics: Topic[] = [
       "Nhầm hướng của 'borrow' (mượn vào) và 'lend' (cho mượn ra).",
     ],
   },
+
+  // Đối chiếu giáo trình các trung tâm luyện thi uy tín (Casalink, MyPas,
+  // các bộ tổng hợp ngữ pháp luyện thi vào 6 phổ biến — xem ghi chú nguồn ở
+  // docs/adr/0003) cho thấy 5 chủ điểm sau thường xuất hiện trong đề nhưng
+  // chưa có trong Mục 4.1 URD gốc — bổ sung thêm mã NP-32..36.
+  {
+    id: 'NP-32',
+    group: 'grammar',
+    title: 'Câu tồn tại: There is/There are',
+    lesson:
+      'Cấu trúc "There is/There are" dùng để nói về sự tồn tại của người/vật ở một nơi nào đó. "There is" + danh từ số ít/không đếm được. "There are" + danh từ số nhiều. Dạng phủ định thêm "not", dạng nghi vấn đảo "is/are" lên trước "there".',
+    examples: [
+      { en: 'There is a cat under the table.', vi: 'Có một con mèo ở dưới gầm bàn.' },
+      { en: 'There are twenty students in my class.', vi: 'Có hai mươi học sinh trong lớp tôi.' },
+      { en: "There isn't any milk in the fridge.", vi: 'Không có sữa nào trong tủ lạnh.' },
+      { en: 'Is there a park near your house?', vi: 'Có công viên nào gần nhà bạn không?' },
+      { en: 'There were many people at the festival yesterday.', vi: 'Đã có rất nhiều người ở lễ hội hôm qua.' },
+    ],
+    commonMistakes: [
+      "Nhầm 'there is/are' (giới thiệu sự tồn tại) với 'it is' (nói về vật đã xác định).",
+      "Chia sai số ít/số nhiều theo danh từ theo sau 'there is/are'.",
+      "Quên đảo động từ 'to be' lên trước 'there' trong câu hỏi.",
+    ],
+  },
+  {
+    id: 'NP-33',
+    group: 'grammar',
+    title: 'too...to / adj + enough + to V',
+    lesson:
+      '"Too + tính từ/trạng từ + to V" diễn tả mức độ quá cao khiến không thể làm gì. "Tính từ/trạng từ + enough + to V" diễn tả mức độ đủ để làm gì. Cả hai cấu trúc đều có thể thêm "for + ai đó" trước "to V" để chỉ rõ ai thực hiện hành động.',
+    examples: [
+      { en: 'This box is too heavy for me to lift.', vi: 'Cái hộp này quá nặng nên tôi không thể nhấc lên được.' },
+      { en: 'She is tall enough to reach the shelf.', vi: 'Cô ấy đủ cao để với tới cái kệ.' },
+      { en: 'He speaks too fast for us to understand.', vi: 'Anh ấy nói quá nhanh nên chúng tôi không hiểu được.' },
+      { en: 'I am not old enough to drive a car.', vi: 'Tôi chưa đủ tuổi để lái ô tô.' },
+      { en: 'The soup is too hot to eat now.', vi: 'Món súp quá nóng để ăn ngay bây giờ.' },
+    ],
+    commonMistakes: [
+      "Đặt sai vị trí 'enough' (phải đứng sau tính từ: 'tall enough', không phải 'enough tall').",
+      "Nhầm nghĩa 'too' (quá, tiêu cực) với 'very' (rất, trung tính).",
+      "Quên 'to V' sau 'too + adj' hoặc 'adj + enough'.",
+    ],
+  },
+  {
+    id: 'NP-34',
+    group: 'grammar',
+    title: 'Biến đổi từ loại (word form)',
+    lesson:
+      'Nhiều từ tiếng Anh có thể biến đổi giữa các loại từ (danh từ, động từ, tính từ, trạng từ) bằng cách thêm tiền tố/hậu tố. Khi làm bài, cần xác định từ cần điền đóng vai trò gì trong câu (chủ ngữ/tân ngữ cần danh từ, bổ nghĩa cho danh từ cần tính từ, bổ nghĩa cho động từ cần trạng từ) để chọn đúng dạng.',
+    examples: [
+      { en: 'Her happiness made everyone smile.', vi: 'Niềm hạnh phúc của cô ấy khiến mọi người mỉm cười.' },
+      { en: 'She looked very happy at the party.', vi: 'Cô ấy trông rất hạnh phúc ở bữa tiệc.' },
+      { en: 'He answered the question happily.', vi: 'Cậu ấy trả lời câu hỏi một cách vui vẻ.' },
+      { en: 'Education is important for children.', vi: 'Giáo dục rất quan trọng đối với trẻ em.' },
+      { en: 'My teacher educates us with a lot of care.', vi: 'Giáo viên của tôi giáo dục chúng tôi với rất nhiều sự quan tâm.' },
+    ],
+    commonMistakes: [
+      'Điền danh từ vào vị trí cần tính từ hoặc ngược lại.',
+      "Quên đuôi trạng từ '-ly' khi từ cần bổ nghĩa cho động từ.",
+      "Nhầm hậu tố tạo danh từ (-tion, -ness, -ment) với hậu tố tạo tính từ (-ful, -less, -ous).",
+    ],
+  },
+  {
+    id: 'NP-35',
+    group: 'grammar',
+    title: 'Đại từ thay thế: one/ones, another/other(s)',
+    lesson:
+      '"One/ones" thay cho danh từ đã nhắc để tránh lặp lại (one cho số ít, ones cho số nhiều). "Another" nghĩa là "một cái khác" (trong số nhiều lựa chọn). "Other/others" nghĩa là "những cái khác" — "other" đứng trước danh từ, "others" đứng một mình.',
+    examples: [
+      { en: "I don't like this shirt. Can you show me another one?", vi: 'Tôi không thích cái áo này. Bạn có thể cho tôi xem cái khác không?' },
+      { en: 'These shoes are too small. Do you have bigger ones?', vi: 'Đôi giày này quá nhỏ. Bạn có đôi to hơn không?' },
+      { en: 'Some students like Math, others like English.', vi: 'Một số học sinh thích Toán, số khác thích tiếng Anh.' },
+      { en: 'I have two pens; one is blue, the other is black.', vi: 'Tôi có hai cây bút; một cây màu xanh, cây kia màu đen.' },
+      { en: 'There are other ways to solve this problem.', vi: 'Có những cách khác để giải quyết vấn đề này.' },
+    ],
+    commonMistakes: [
+      "Dùng 'other' đứng một mình thay vì 'others' khi không có danh từ theo sau.",
+      "Nhầm 'another' (một cái khác, số ít) với 'other' (cần danh từ số nhiều theo sau).",
+      "Quên thêm 's' vào 'one' khi thay thế cho danh từ số nhiều.",
+    ],
+  },
+  {
+    id: 'NP-36',
+    group: 'grammar',
+    title: 'Câu cầu khiến/sai khiến: make/let/have + O + V',
+    lesson:
+      '"Make somebody do something" (bắt buộc ai làm gì), "let somebody do something" (cho phép ai làm gì), "have somebody do something" (nhờ/sai ai làm gì) — cả ba đều theo sau bởi động từ nguyên thể không "to".',
+    examples: [
+      { en: 'My mother makes me clean my room every weekend.', vi: 'Mẹ tôi bắt tôi dọn phòng mỗi cuối tuần.' },
+      { en: 'Please let me help you with your bags.', vi: 'Hãy để tôi giúp bạn xách túi.' },
+      { en: 'The teacher had the students write a short paragraph.', vi: 'Giáo viên yêu cầu học sinh viết một đoạn văn ngắn.' },
+      { en: "My father won't let me stay up late.", vi: 'Bố tôi sẽ không cho tôi thức khuya.' },
+      { en: 'She made her brother apologize to her.', vi: 'Cô ấy bắt em trai xin lỗi mình.' },
+    ],
+    commonMistakes: [
+      "Thêm 'to' sau make/let/have + tân ngữ (sai: 'make me to clean', đúng: 'make me clean').",
+      "Nhầm 'make' (bắt buộc) với 'let' (cho phép) — hai từ mang nghĩa trái ngược.",
+      "Nhầm dạng bị động 'be made to V' (có 'to') với chủ động 'make sb V' (không 'to').",
+    ],
+  },
 ]

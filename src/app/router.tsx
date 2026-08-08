@@ -4,6 +4,7 @@ import { FlashcardsPage } from '../modules/lessons/FlashcardsPage'
 import { LessonDetailPage } from '../modules/lessons/LessonDetailPage'
 import { LessonListPage } from '../modules/lessons/LessonListPage'
 import { LessonQuizPage } from '../modules/lessons/LessonQuizPage'
+import { MindmapPage } from '../modules/lessons/MindmapPage'
 import { DiagnosticTestPage } from '../modules/mastery/DiagnosticTestPage'
 import { MasteryPage } from '../modules/mastery/MasteryPage'
 import { ParentOverviewPage } from '../modules/mastery/ParentOverviewPage'
@@ -25,6 +26,7 @@ const routes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: 'hoc-ly-thuyet', element: <LessonListPage /> },
+      { path: 'hoc-ly-thuyet/so-do-tu-duy', element: <MindmapPage /> },
       { path: 'hoc-ly-thuyet/tu-vung/:topicId', element: <FlashcardsPage /> },
       { path: 'hoc-ly-thuyet/:topicId', element: <LessonDetailPage /> },
       { path: 'hoc-ly-thuyet/:topicId/quiz', element: <LessonQuizPage /> },

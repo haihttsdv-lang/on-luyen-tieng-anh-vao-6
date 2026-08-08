@@ -67,13 +67,13 @@ Xem Mục 10 của URD. Trạng thái hiện tại — đã đổi thứ tự M�
   - `Topic.commonMistakes` — FR-L02 yêu cầu "lỗi thường gặp" nhưng bảng gốc Mục 9 không liệt kê trường này.
   - `VocabCard` **không** có `boxLevel` tĩnh — hộp Leitner là tiến độ riêng của học sinh, lưu qua `ProgressStore.getVocabBoxLevel/setVocabBoxLevel`, không phải nội dung tĩnh.
 - `src/data-access/` — interface `ProgressStore`/`ContentStore`, implementation `local/` (localStorage), và `index.ts` là điểm import duy nhất cho UI.
-- `src/content/` — dữ liệu nội dung, biên soạn mới (không sao chép đề thi thật — Mục 14). Đã rà soát đủ **31/31 chủ điểm ngữ pháp + 14/14 chủ đề từ vựng** (Mục 4.1, 4.2):
-  - `questions/` — 170 câu hỏi trắc nghiệm, phủ KN-01–06 và KN-08 (Ngữ âm, xem [ADR 0002](./docs/adr/0002-ngu-am-va-cau-truc-de-thi-thu.md)), mỗi chủ điểm có bài học đều có ≥3 câu để làm quiz nhanh.
+- `src/content/` — dữ liệu nội dung, biên soạn mới (không sao chép đề thi thật — Mục 14). Đã rà soát đủ **31/31 chủ điểm ngữ pháp + 14/14 chủ đề từ vựng** (Mục 4.1, 4.2), và đối chiếu thêm với giáo trình các trung tâm luyện thi (Casalink, MyPas, TAK12...) để bổ sung **5 chủ điểm NP-32..36** còn thiếu — xem [ADR 0003](./docs/adr/0003-doi-chieu-giao-trinh-va-mindmap.md):
+  - `questions/` — 185 câu hỏi trắc nghiệm, phủ KN-01–06 và KN-08 (Ngữ âm, xem [ADR 0002](./docs/adr/0002-ngu-am-va-cau-truc-de-thi-thu.md)), mỗi chủ điểm có bài học đều có ≥3 câu để làm quiz nhanh.
   - `reading-passages/` — 8 bài đọc hiểu dài (KN-02), mỗi bài 5 câu hỏi liên kết qua `passageId`.
   - `writing-prompts/` — 5 đề viết đoạn văn (KN-07).
-  - `topics/` — 31 bài học ngữ pháp (Nhóm A–E), đủ toàn bộ Mục 4.1.
+  - `topics/` — 36 bài học ngữ pháp (Nhóm A–E theo Mục 4.1 + Nhóm F bổ sung), nhóm theo [`topic-groups.ts`](./src/content/topic-groups.ts) dùng chung cho danh sách bài học và sơ đồ tư duy.
   - `vocab/` — 196 flashcard, đủ 14/14 chủ đề từ vựng Mục 4.2 (14 thẻ/chủ đề).
-- `src/modules/lessons/` — module Học lý thuyết hoạt động đầy đủ (FR-L01–L06): danh sách chủ điểm có trạng thái, trang bài học, quiz nhanh (ngưỡng 80% để "Đã nắm"), flashcard với spaced repetition kiểu Leitner (5 hộp).
+- `src/modules/lessons/` — module Học lý thuyết hoạt động đầy đủ (FR-L01–L06): danh sách chủ điểm có trạng thái (nhóm theo Nhóm A–F), trang bài học, quiz nhanh (ngưỡng 80% để "Đã nắm"), flashcard với spaced repetition kiểu Leitner (5 hộp). `MindmapPage.tsx` — **"Sơ đồ tư duy"** (bổ sung theo yêu cầu người dùng): tổng hợp toàn bộ 36 chủ điểm ngữ pháp + 14 chủ đề từ vựng trên một trang, nhóm theo màu, bấm vào từng ô để đi thẳng tới bài học/flashcard — phục vụ tra cứu nhanh.
 - `src/modules/practice/` — module Luyện tập hoạt động đầy đủ (FR-P01–P03, P07):
   - `QuestionRunner.tsx` — component dùng chung cho mọi phiên luyện (chuẩn/tốc độ/sinh tồn), phản hồi đúng/sai tức thì kèm giải thích ngay sau mỗi câu (FR-P01).
   - Luyện theo dạng bài (KN-01–06) và theo chủ điểm chọn nhiều (FR-P03, lọc trên toàn bộ ngân hàng qua `topic-labels.ts`).

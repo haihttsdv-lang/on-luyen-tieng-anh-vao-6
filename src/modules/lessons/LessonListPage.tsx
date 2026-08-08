@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getTopicLabel } from '../../content/topic-labels'
+import { GRAMMAR_GROUPS, groupLabelFor } from '../../content/topic-groups'
 import { contentStore, progressStore } from '../../data-access'
 import type { Topic, TopicStatus, VocabCard } from '../../types/domain'
 
@@ -12,23 +13,6 @@ const STATUS_LABEL: Record<TopicStatus, string> = {
 const STATUS_CLASS: Record<TopicStatus, string> = {
   in_progress: 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400',
   mastered: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400',
-}
-
-// Nhóm chủ điểm ngữ pháp theo Mục 4.1 URD, dùng để gom bài học cho dễ theo dõi.
-const GRAMMAR_GROUPS: { label: string; range: [number, number] }[] = [
-  { label: 'Nhóm A — Từ loại & cụm từ cơ bản', range: [1, 10] },
-  { label: 'Nhóm B — Thì động từ', range: [11, 16] },
-  { label: 'Nhóm C — Cấu trúc câu & mệnh đề', range: [17, 22] },
-  { label: 'Nhóm D — Động từ khuyết thiếu & dạng động từ', range: [23, 25] },
-  { label: 'Nhóm E — Cấu trúc nâng cao thường gặp trong đề', range: [26, 31] },
-]
-
-function groupLabelFor(topicId: string): string {
-  const num = Number(topicId.split('-')[1])
-  return (
-    GRAMMAR_GROUPS.find((g) => num >= g.range[0] && num <= g.range[1])?.label ??
-    'Khác'
-  )
 }
 
 export function LessonListPage() {
@@ -70,9 +54,17 @@ export function LessonListPage() {
 
   return (
     <section className="mx-auto max-w-2xl px-4 py-12">
-      <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
-        📘 Học lý thuyết
-      </h1>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
+          📘 Học lý thuyết
+        </h1>
+        <Link
+          to="/hoc-ly-thuyet/so-do-tu-duy"
+          className="rounded-full bg-linear-to-r from-fuchsia-500 to-purple-500 px-4 py-2 text-sm font-bold text-white shadow-md shadow-purple-500/30 transition-transform hover:scale-105"
+        >
+          🧠 Sơ đồ tư duy
+        </Link>
+      </div>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
         Học từng bài, làm quiz nhanh để mở khóa "Đã nắm".
       </p>
