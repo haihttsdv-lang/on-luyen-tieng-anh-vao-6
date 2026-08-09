@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { SKILL_LABELS } from '../../content/skill-labels'
 import { getTopicLabel } from '../../content/topic-labels'
@@ -7,11 +7,15 @@ import type {
   Attempt,
   BoxLevel,
   DiagnosticStatus,
+  MockTestResult,
   Question,
   SkillId,
   Topic,
   VocabCard,
 } from '../../types/domain'
+import { BadgeShelf } from '../curriculum/BadgeShelf'
+import { computeEarnedBadges } from '../curriculum/badges'
+import { useCurriculumSchedule } from '../curriculum/useCurriculumSchedule'
 import { BackupSection } from './BackupSection'
 import { CloudSyncSection } from './CloudSyncSection'
 import { SoundSettingsSection } from './SoundSettingsSection'
@@ -57,16 +61,46 @@ export function MasteryPage() {
   const [vocabCards, setVocabCards] = useState<VocabCard[]>([])
   const [vocabBoxLevels, setVocabBoxLevels] = useState<Record<string, number>>({})
   const [diagnosticStatus, setDiagnosticStatus] = useState<DiagnosticStatus | undefined>()
+  const [mockTestResults, setMockTestResults] = useState<MockTestResult[]>([])
+
+  // HA-05: huy hiệu mốc thành tích — tái dùng đúng logic đã có ở Lộ trình
+  // học (`computeEarnedBadges`), không tính lại theo cách khác ở đây.
+  const { schedule, outcomes } = useCurriculumSchedule()
+  const [homeworkDoneBySession, setHomeworkDoneBySession] = useState<Record<string, boolean>>({})
+  useEffect(() => {
+    if (!schedule) return
+    let cancelled = false
+    Promise.all(schedule.map((s) => progressStore.getHomeworkDone(s.id))).then((results) => {
+      if (cancelled) return
+      const map: Record<string, boolean> = {}
+      schedule.forEach((s, i) => {
+        map[s.id] = results[i]
+      })
+      setHomeworkDoneBySession(map)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [schedule])
+  const earnedBadges = useMemo(
+    () =>
+      schedule && outcomes
+        ? computeEarnedBadges(schedule, outcomes, homeworkDoneBySession, mockTestResults)
+        : [],
+    [schedule, outcomes, homeworkDoneBySession, mockTestResults],
+  )
 
   useEffect(() => {
     async function load() {
-      const [a, q, t, v, status] = await Promise.all([
+      const [a, q, t, v, status, mockTests] = await Promise.all([
         progressStore.getAttempts(),
         contentStore.getQuestions(),
         contentStore.getTopics(),
         contentStore.getVocabCards(),
         progressStore.getDiagnosticStatus(),
+        progressStore.getMockTestResults(),
       ])
+      setMockTestResults(mockTests)
       const boxLevels: Record<string, number> = {}
       await Promise.all(
         v.map(async (card) => {
@@ -142,6 +176,10 @@ export function MasteryPage() {
           👨‍👩‍👧 Xem dành cho phụ huynh
         </Link>
       </div>
+
+      {/* HA-05: dải huy hiệu — chi phí gần như bằng 0 (chỉ đọc lại dữ liệu
+          đã có), tác động động lực cao với lứa tuổi 10–11. */}
+      <BadgeShelf badges={earnedBadges} />
 
       {diagnosticStatus === undefined && (
         <div className="mt-4 rounded-2xl border-2 border-dashed border-emerald-300 bg-emerald-50 p-5 dark:border-emerald-800 dark:bg-emerald-500/10">

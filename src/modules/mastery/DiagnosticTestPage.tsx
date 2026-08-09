@@ -30,6 +30,12 @@ export function DiagnosticTestPage() {
     navigate('/ho-so')
   }
 
+  // LT-06: lưu điểm số (không chỉ trạng thái đã làm/chưa) để cá nhân hóa lộ
+  // trình theo trình độ ban đầu — xem src/modules/curriculum/personalize.ts.
+  async function handleQuizFinish(correctCount: number, total: number) {
+    if (total > 0) await progressStore.setDiagnosticScore({ correctCount, total })
+  }
+
   if (started) {
     return (
       <QuestionRunner
@@ -37,6 +43,7 @@ export function DiagnosticTestPage() {
         variant="standard"
         title="🧭 Bài kiểm tra đầu vào"
         onExit={handleFinish}
+        onFinish={handleQuizFinish}
       />
     )
   }

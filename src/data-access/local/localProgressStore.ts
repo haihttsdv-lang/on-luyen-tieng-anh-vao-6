@@ -1,6 +1,7 @@
 import type {
   Attempt,
   BoxLevel,
+  DiagnosticScore,
   DiagnosticStatus,
   LearnerProfile,
   MockTestResult,
@@ -21,6 +22,9 @@ const KEYS = {
   coins: 'ol6.progress.coins',
   mockTestResults: 'ol6.progress.mockTestResults',
   sessionOutcomes: 'ol6.progress.sessionOutcomes',
+  sessionBlockProgress: 'ol6.progress.sessionBlockProgress',
+  diagnosticScore: 'ol6.progress.diagnosticScore',
+  homeworkDone: 'ol6.progress.homeworkDone',
 } as const
 
 // Phát sự kiện DOM mỗi khi tiến độ cục bộ thay đổi. Hai nơi lắng nghe sự
@@ -96,6 +100,13 @@ export const localProgressStore: ProgressStore = {
     writeJson(KEYS.diagnosticStatus, status)
   },
 
+  async getDiagnosticScore() {
+    return readJson<DiagnosticScore | undefined>(KEYS.diagnosticScore, undefined)
+  },
+  async setDiagnosticScore(score) {
+    writeJson(KEYS.diagnosticScore, score)
+  },
+
   async getCoins() {
     return readJson<number>(KEYS.coins, 0)
   },
@@ -121,6 +132,28 @@ export const localProgressStore: ProgressStore = {
     if (outcome === undefined) delete outcomes[sessionId]
     else outcomes[sessionId] = { outcome, completedAt: new Date().toISOString() }
     writeJson(KEYS.sessionOutcomes, outcomes)
+  },
+
+  async getSessionBlockProgress(sessionId) {
+    const all = readJson<Record<string, number[]>>(KEYS.sessionBlockProgress, {})
+    return all[sessionId] ?? []
+  },
+  async setSessionBlockProgress(sessionId, doneBlockIndexes) {
+    const all = readJson<Record<string, number[]>>(KEYS.sessionBlockProgress, {})
+    if (doneBlockIndexes.length === 0) delete all[sessionId]
+    else all[sessionId] = doneBlockIndexes
+    writeJson(KEYS.sessionBlockProgress, all)
+  },
+
+  async getHomeworkDone(sessionId) {
+    const all = readJson<Record<string, boolean>>(KEYS.homeworkDone, {})
+    return all[sessionId] ?? false
+  },
+  async setHomeworkDone(sessionId, done) {
+    const all = readJson<Record<string, boolean>>(KEYS.homeworkDone, {})
+    if (done) all[sessionId] = true
+    else delete all[sessionId]
+    writeJson(KEYS.homeworkDone, all)
   },
 
   async exportAll() {

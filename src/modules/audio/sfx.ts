@@ -84,6 +84,19 @@ export function playWrong(): void {
   playTones([{ frequency: 200, at: 0, duration: 0.18 }])
 }
 
+// AT-03 (docs/RA-SOAT-LO-TRINH-HOC.md): Session Runner (PP-01) trước đây
+// không dùng bất kỳ hiệu ứng âm thanh nào — hết giờ 1 khối chỉ đổi màu chữ
+// đồng hồ, học sinh phải NHÌN màn hình liên tục mới biết. Chuông nhẹ đóng
+// đúng vai trò giáo viên nhắc "chuyển hoạt động", cố ý khác hẳn playCorrect/
+// playWrong (không phải phản hồi đúng/sai) để không gây hiểu nhầm.
+/** Hết giờ 1 khối trong buổi học — chuông nhẹ nhắc chuyển hoạt động. */
+export function playBlockTimeUp(): void {
+  playTones([
+    { frequency: 784, at: 0, duration: 0.12 },
+    { frequency: 784, at: 0.22, duration: 0.14 },
+  ])
+}
+
 /** Hoàn thành lượt chơi — hợp âm rải đi lên. */
 export function playFinish(): void {
   playTones([

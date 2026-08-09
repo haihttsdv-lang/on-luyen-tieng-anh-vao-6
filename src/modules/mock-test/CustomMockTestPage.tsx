@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore } from '../../data-access'
 import type { Question } from '../../types/domain'
@@ -12,14 +12,43 @@ const CAU_GIAY_DURATION_MINUTES = 45
 const RANDOM_TOPIC_MIN = 4
 const RANDOM_TOPIC_MAX = 8
 
+/**
+ * LT-02 · Đọc chủ điểm cần ôn từ URL (`?topics=NP-11,NP-12,TV-03`) để Lộ
+ * trình học có thể "sai" đúng thẳng vào một đề luyện tập đúng nội dung buổi
+ * đó/tuần đó/tháng đó, thay vì luôn dẫn sang trang chọn thủ công. Trước đây
+ * `buildPeriodicTests()` đã tính rất kỹ danh sách `topicIds` của mỗi bài
+ * kiểm tra tuần/tháng nhưng chỉ dùng để IN TÊN chủ điểm — link "Thi thử" lại
+ * trỏ vào đề ngẫu nhiên trên toàn bộ ngân hàng, nên bài kiểm tra có thể
+ * không chứa câu nào thuộc đúng tuần/tháng đó.
+ */
+function useTopicsFromQuery(): string[] {
+  const [params] = useSearchParams()
+  const raw = params.get('topics')
+  return useMemo(
+    () => (raw ? raw.split(',').map((s) => s.trim()).filter(Boolean) : []),
+    [raw],
+  )
+}
+
 export function CustomMockTestPage() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const topicsFromQuery = useTopicsFromQuery()
+  const [selected, setSelected] = useState<Set<string>>(new Set(topicsFromQuery))
   const [session, setSession] = useState<Question[] | null>(null)
+  const [autoStarted, setAutoStarted] = useState(false)
 
   useEffect(() => {
     contentStore.getQuestions().then(setAllQuestions)
   }, [])
+
+  // Tới từ Lộ trình học với sẵn chủ điểm trên URL → tạo đề luôn, không bắt
+  // học sinh phải bấm lại "Tạo đề" cho một danh sách đã chọn sẵn.
+  useEffect(() => {
+    if (autoStarted || topicsFromQuery.length === 0 || allQuestions.length === 0) return
+    setAutoStarted(true)
+    const blueprint = scaleBlueprint(CAU_GIAY_TOTAL)
+    setSession(generateMockTest(allQuestions, blueprint, topicsFromQuery))
+  }, [autoStarted, topicsFromQuery, allQuestions])
 
   const topicCounts = useMemo(() => {
     const counts = new Map<string, number>()
@@ -85,6 +114,12 @@ export function CustomMockTestPage() {
         nào không đủ câu theo chủ điểm đã chọn sẽ tự lấp đầy bằng câu khác
         cùng dạng bài để không thiếu câu.
       </p>
+
+      {topicsFromQuery.length > 0 && (
+        <p className="mt-3 rounded-xl bg-sky-50 px-4 py-2.5 text-sm font-bold text-sky-800 dark:bg-sky-500/10 dark:text-sky-300">
+          🗓️ Đã chọn sẵn {topicsFromQuery.length} chủ điểm từ Lộ trình học.
+        </p>
+      )}
 
       <button
         type="button"

@@ -19,6 +19,8 @@ interface SpeakButtonProps {
   rate?: number
   size?: Size
   className?: string
+  /** AT-04: 'vi-VN' khi đọc văn bản tiếng Việt (mục tiêu/tổng kết buổi học). */
+  lang?: 'en-US' | 'vi-VN'
 }
 
 const SIZE_CLASS: Record<Size, string> = {
@@ -38,6 +40,7 @@ export function SpeakButton({
   rate = NORMAL_RATE,
   size = 'md',
   className = '',
+  lang,
 }: SpeakButtonProps) {
   const [speaking, setSpeaking] = useState(false)
 
@@ -57,8 +60,8 @@ export function SpeakButton({
     }
     setSpeaking(true)
     const onEnd = () => setSpeaking(false)
-    if (Array.isArray(text)) speakSequence(text, { rate, onEnd })
-    else speak(text, { rate, onEnd })
+    if (Array.isArray(text)) speakSequence(text, { rate, onEnd, lang })
+    else speak(text, { rate, onEnd, lang })
   }
 
   const shape = children

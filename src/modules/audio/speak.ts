@@ -11,6 +11,10 @@ export interface SpeakOptions {
   onEnd?: () => void
   /** Gọi mỗi khi chuyển sang từ mới — dùng để tô sáng từ đang đọc (MM-03). */
   onBoundary?: (charIndex: number, charLength: number) => void
+  // AT-04: mặc định 'en-US' — hầu hết nội dung đọc to trong app là từ/câu
+  // tiếng Anh. Truyền 'vi-VN' khi đọc mục tiêu/tổng kết buổi học (tiếng
+  // Việt) — giọng đọc tiếng Anh đọc văn bản tiếng Việt nghe sai hoàn toàn.
+  lang?: 'en-US' | 'vi-VN'
 }
 
 export const NORMAL_RATE = 0.9
@@ -36,7 +40,7 @@ export function speak(text: string, options: SpeakOptions = {}): void {
   }
   window.speechSynthesis.cancel()
   const utterance = new SpeechSynthesisUtterance(text)
-  utterance.lang = 'en-US'
+  utterance.lang = options.lang ?? 'en-US'
   utterance.rate = options.rate ?? NORMAL_RATE
   if (options.onEnd) {
     utterance.onend = () => options.onEnd?.()
@@ -68,7 +72,7 @@ export function speakSequence(texts: string[], options: SpeakOptions = {}): void
   window.speechSynthesis.cancel()
   items.forEach((text, index) => {
     const utterance = new SpeechSynthesisUtterance(text)
-    utterance.lang = 'en-US'
+    utterance.lang = options.lang ?? 'en-US'
     utterance.rate = options.rate ?? NORMAL_RATE
     if (index === items.length - 1 && options.onEnd) {
       utterance.onend = () => options.onEnd?.()

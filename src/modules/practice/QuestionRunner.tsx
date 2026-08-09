@@ -15,6 +15,10 @@ interface QuestionRunnerProps {
   lives?: number
   title: string
   onExit: () => void
+  // LT-06: cho phép nơi gọi (ví dụ bài kiểm tra đầu vào) biết kết quả cuối
+  // cùng để cá nhân hóa lộ trình theo trình độ — tách khỏi `onExit` vì
+  // `onExit` còn được gọi khi thoát ngang chừng (chưa có kết quả).
+  onFinish?: (correctCount: number, total: number) => void
 }
 
 interface AnsweredEntry {
@@ -42,6 +46,7 @@ export function QuestionRunner({
   lives = 3,
   title,
   onExit,
+  onFinish,
 }: QuestionRunnerProps) {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
@@ -87,6 +92,15 @@ export function QuestionRunner({
   useEffect(() => {
     if (finished) playFinish()
   }, [finished])
+
+  const finishReported = useRef(false)
+  useEffect(() => {
+    if (finished && onFinish && !finishReported.current) {
+      finishReported.current = true
+      const correctCount = log.filter((e) => e.correct).length
+      onFinish(correctCount, log.length)
+    }
+  }, [finished, onFinish, log])
 
   const current = questions[index]
   const currentPassage = current?.passageId

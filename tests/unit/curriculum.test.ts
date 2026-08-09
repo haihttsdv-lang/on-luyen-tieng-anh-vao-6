@@ -17,10 +17,45 @@ import type {
 } from '../../src/types/domain'
 
 describe('Lộ trình học (CURRICULUM_PLAN)', () => {
-  it('mỗi buổi học có tổng thời lượng đúng 90 phút', () => {
+  it('mỗi buổi học có tổng thời lượng đúng 60 phút', () => {
     for (const session of CURRICULUM_PLAN) {
       const total = session.blocks.reduce((sum, b) => sum + b.minutes, 0)
-      expect(total).toBe(90)
+      expect(total).toBe(60)
+    }
+  })
+
+  it('PP-06: buổi "grammar"/"skill-lesson" có ít nhất 1 khối `optional` để chế độ "Học phiên rút gọn" có tác dụng thật', () => {
+    const sessionsWithShortMode = CURRICULUM_PLAN.filter(
+      (s) => s.focus === 'grammar' || s.focus === 'skill-lesson',
+    )
+    expect(sessionsWithShortMode.length).toBeGreaterThan(0)
+    for (const session of sessionsWithShortMode) {
+      expect(session.blocks.some((b) => b.optional)).toBe(true)
+    }
+    // Buổi kiểm tra/thi thử không được có khối optional — mọi nội dung đều
+    // là phần thi thật, không có "phần mở rộng" nào để bỏ qua.
+    const testSessions = CURRICULUM_PLAN.filter((s) =>
+      ['mock-test', 'final-exam', 'weekly-test', 'monthly-test'].includes(s.focus),
+    )
+    for (const session of testSessions) {
+      expect(session.blocks.some((b) => b.optional)).toBe(false)
+    }
+  })
+
+  it('PP-04: mỗi buổi học có 2–3 mục tiêu và ít nhất 1 tiêu chí đạt được đối chiếu bằng dữ liệu thật', () => {
+    for (const session of CURRICULUM_PLAN) {
+      expect(session.objectives.length).toBeGreaterThanOrEqual(2)
+      expect(session.objectives.length).toBeLessThanOrEqual(3)
+      expect(session.successCriteria.length).toBeGreaterThanOrEqual(1)
+      // Mọi buổi đều có tiêu chí "hoàn thành hết các khối" — tiêu chí cơ bản
+      // nhất, áp dụng được cho MỌI loại buổi (không phụ thuộc quiz/từ vựng).
+      expect(session.successCriteria.some((c) => c.check.type === 'blocksDone')).toBe(true)
+    }
+  })
+
+  it('PP-08: mỗi buổi học đều có ghi chú dành cho phụ huynh', () => {
+    for (const session of CURRICULUM_PLAN) {
+      expect(session.parentNote?.length ?? 0).toBeGreaterThan(0)
     }
   })
 
@@ -45,16 +80,65 @@ describe('Lộ trình học (CURRICULUM_PLAN)', () => {
     const countFocus = (focus: string) =>
       CURRICULUM_PLAN.filter((s) => s.focus === focus).length
     expect(countFocus('orientation')).toBe(1)
-    expect(countFocus('review')).toBe(2) // chốt Giai đoạn 1 + Giai đoạn 2
+    // LT-05: 2 buổi "Ôn tập tổng hợp" chốt Giai đoạn 1/2 + 3 buổi "Chốt tủ"
+    // xen giữa các vòng thi thử toàn diện ở Giai đoạn 4.
+    expect(countFocus('review')).toBe(5)
     expect(countFocus('mock-test')).toBe(5) // 2 chốt giai đoạn + 3 vòng tăng tốc
     expect(countFocus('skill-drill')).toBe(3) // 3 vòng luyện chuyên sâu ở Giai đoạn 3
-    expect(countFocus('final-exam')).toBe(3)
-    expect(CURRICULUM_PLAN).toHaveLength(50)
+    // LT-05: nâng từ 3 → 9 vòng thi thử toàn diện, dùng quỹ ~4 tuần lịch
+    // trước đây bỏ trống (lộ trình cũ kết thúc sớm 30 ngày trước hạn chót).
+    expect(countFocus('final-exam')).toBe(9)
+    // LT-01: 8 buổi dạy phương pháp làm dạng bài (Ngữ âm x2, Đọc hiểu x3,
+    // Tìm lỗi sai, Viết lại câu, Viết đoạn văn) — trước đây lộ trình bỏ
+    // trắng hoàn toàn 5/9 dạng bài của đề thật.
+    expect(countFocus('skill-lesson')).toBe(8)
+    expect(CURRICULUM_PLAN).toHaveLength(67)
+  })
+
+  it('LT-01: 8 buổi kỹ năng phủ đủ 5 dạng bài còn thiếu, mỗi buổi có skillId hợp lệ và không gắn topicIds', () => {
+    const skillLessons = CURRICULUM_PLAN.filter((s) => s.focus === 'skill-lesson')
+    const bySkill = new Map<string, number>()
+    for (const s of skillLessons) {
+      expect(s.topicIds).toEqual([])
+      expect(s.skillId).toBeDefined()
+      bySkill.set(s.skillId!, (bySkill.get(s.skillId!) ?? 0) + 1)
+    }
+    expect(bySkill.get('KN-08')).toBe(2) // Ngữ âm
+    expect(bySkill.get('KN-02')).toBe(3) // Đọc hiểu
+    expect(bySkill.get('KN-06')).toBe(1) // Tìm lỗi sai
+    expect(bySkill.get('KN-05')).toBe(1) // Viết lại câu
+    expect(bySkill.get('KN-07')).toBe(1) // Viết đoạn văn
   })
 
   it('mỗi buổi "grammar" đều có 1 chủ đề từ vựng đi kèm hợp lệ (TV-xx)', () => {
     for (const session of CURRICULUM_PLAN.filter((s) => s.focus === 'grammar')) {
       expect(session.vocabTopicId).toMatch(/^TV-\d{2}$/)
+    }
+  })
+
+  it('LT-04: chủ đề từ vựng khó (TV-12/13/14) được ôn nhiều hơn chủ đề dễ, và không dồn cục nhiều buổi liên tiếp', () => {
+    const grammarSessions = CURRICULUM_PLAN.filter((s) => s.focus === 'grammar')
+    const counts: Record<string, number> = {}
+    const gapsByTopic: Record<string, number[]> = {}
+    const lastIndexByTopic: Record<string, number> = {}
+    grammarSessions.forEach((s, i) => {
+      const id = s.vocabTopicId!
+      counts[id] = (counts[id] ?? 0) + 1
+      if (lastIndexByTopic[id] !== undefined) {
+        ;(gapsByTopic[id] ??= []).push(i - lastIndexByTopic[id])
+      }
+      lastIndexByTopic[id] = i
+    })
+
+    for (const hardId of ['TV-12', 'TV-13', 'TV-14']) {
+      expect(counts[hardId]).toBeGreaterThanOrEqual(4)
+    }
+    for (const easyId of ['TV-01', 'TV-02', 'TV-03', 'TV-04', 'TV-05', 'TV-06', 'TV-07', 'TV-08']) {
+      expect(counts[easyId]).toBe(2)
+    }
+    // Trải đều: không có 2 lần ôn liên tiếp của cùng 1 chủ đề (khoảng cách ≥ 2).
+    for (const gaps of Object.values(gapsByTopic)) {
+      for (const gap of gaps) expect(gap).toBeGreaterThanOrEqual(2)
     }
   })
 
@@ -76,6 +160,26 @@ describe('Lộ trình học (CURRICULUM_PLAN)', () => {
         lastLabel = session.phaseLabel
       }
     }
+  })
+
+  it('PP-07: 36 buổi ngữ pháp xoay đều 3 khuôn (Dẫn dắt/Khám phá/Trò chơi hóa), mỗi khuôn vẫn đúng 60 phút và 6 khối', () => {
+    const grammarSessions = CURRICULUM_PLAN.filter((s) => s.focus === 'grammar')
+    // Nhận diện khuôn qua nhãn khối đặc trưng — không export riêng biến
+    // variant ra khỏi content/curriculum, tránh rò rỉ chi tiết cài đặt.
+    const variantOf = (labels: string[]) => {
+      if (labels.includes('Thử sức trước')) return 'explore'
+      if (labels.includes('Chơi mà học')) return 'gamify'
+      return 'lead'
+    }
+    const counts = { lead: 0, explore: 0, gamify: 0 }
+    for (const session of grammarSessions) {
+      const labels = session.blocks.map((b) => b.label)
+      counts[variantOf(labels)]++
+      expect(session.blocks).toHaveLength(6)
+      expect(session.blocks.reduce((sum, b) => sum + b.minutes, 0)).toBe(60)
+    }
+    // 36 buổi / 3 khuôn = 12 buổi mỗi khuôn đúng (xoay vòng đều theo i % 3).
+    expect(counts).toEqual({ lead: 12, explore: 12, gamify: 12 })
   })
 })
 
@@ -164,8 +268,10 @@ function fakeSession(id: string, date: string): ScheduledSession {
     phaseLabel: '🧱 Giai đoạn 1 · Nền tảng',
     title: `Buổi ${id}`,
     topicIds: ['NP-01'],
-    blocks: [{ label: 'x', minutes: 90, description: 'x' }],
+    blocks: [{ label: 'x', minutes: 60, description: 'x' }],
     homework: '',
+    objectives: [],
+    successCriteria: [],
     date,
   }
 }
@@ -207,6 +313,15 @@ describe('Bài kiểm tra tuần/tháng (periodicTests.ts)', () => {
     }
     expect(tests.some((t) => t.focus === 'monthly-test')).toBe(true)
     expect(tests.some((t) => t.focus === 'weekly-test')).toBe(true)
+  })
+
+  it('LT-07: không sinh bài kiểm tra tuần vào đúng ngày buổi đầu tiên, kể cả khi buổi đó là Chủ nhật', () => {
+    // Mở app lần đầu vào Chủ nhật ("bắt đầu luôn từ hôm nay") ép buổi khai
+    // giảng = đúng hôm đó — trước khi sửa, Chủ nhật này còn bị sinh thêm 1
+    // bài kiểm tra tuần, dồn 135 phút vào ngày đầu tiên dù chưa học gì.
+    const main = [fakeSession('B01', '2026-08-09'), fakeSession('B02', '2026-08-20')]
+    const tests = buildPeriodicTests(main)
+    expect(tests.some((t) => t.date === '2026-08-09')).toBe(false)
   })
 
   it('không sinh bài kiểm tra nào ngoài khoảng ngày của lịch chính', () => {
@@ -266,8 +381,10 @@ function fakeTemplate(id: string, focus: SessionFocus = 'grammar'): CurriculumSe
     phaseLabel: '🧱 Giai đoạn 1 · Nền tảng',
     title: `Buổi ${id}`,
     topicIds: ['NP-01'],
-    blocks: [{ label: 'x', minutes: 90, description: 'x' }],
+    blocks: [{ label: 'x', minutes: 60, description: 'x' }],
     homework: '',
+    objectives: [],
+    successCriteria: [],
   }
 }
 

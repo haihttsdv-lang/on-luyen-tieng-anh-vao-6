@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CURRICULUM_PLAN } from '../../content/curriculum'
 import { progressStore } from '../../data-access'
 import type { ScheduledSession, SessionOutcomeRecord } from '../../types/domain'
-import { buildFullSchedule } from './periodicTests'
-import { CURRICULUM_DEADLINE, parseISODate, toISODate } from './schedule'
+import { parseISODate, toISODate } from './schedule'
+import { useCurriculumSchedule } from './useCurriculumSchedule'
 
 /**
  * UX-05 — Trang chủ phải trả lời được câu hỏi "Hôm nay học gì?".
@@ -46,15 +45,50 @@ const STATUS_TEXT: Record<TodaySession['status'], string> = {
   upcoming: 'Buổi học tiếp theo',
 }
 
+/**
+ * PP-05: buổi đã hoàn thành GẦN NHẤT theo thời điểm chấm thực tế
+ * (`completedAt`) — dùng để hỏi xem bài tập về nhà của buổi đó đã làm chưa.
+ * Không dùng `order`/`date` vì lịch tự đẩy (buildAdaptiveSchedule) khiến
+ * ngày hiển thị có thể không đúng thứ tự học thực tế.
+ */
+export function findMostRecentCompletedSession(
+  schedule: ScheduledSession[],
+  outcomes: Record<string, SessionOutcomeRecord>,
+): ScheduledSession | null {
+  let latest: ScheduledSession | null = null
+  let latestAt = ''
+  for (const s of schedule) {
+    const completedAt = outcomes[s.id]?.completedAt
+    if (completedAt && completedAt > latestAt) {
+      latest = s
+      latestAt = completedAt
+    }
+  }
+  return latest
+}
+
 export function TodaySessionCard() {
-  const [data, setData] = useState<TodaySession | null | undefined>(undefined)
+  const { schedule, outcomes } = useCurriculumSchedule()
+  const data = schedule && outcomes ? pickTodaySession(schedule, outcomes) : undefined
+  const previousSession = useMemo(
+    () => (schedule && outcomes ? findMostRecentCompletedSession(schedule, outcomes) : null),
+    [schedule, outcomes],
+  )
+  const [previousHomeworkDone, setPreviousHomeworkDone] = useState<boolean | null>(null)
 
   useEffect(() => {
-    progressStore.getSessionOutcomes().then((outcomes) => {
-      const schedule = buildFullSchedule(CURRICULUM_PLAN, outcomes, CURRICULUM_DEADLINE)
-      setData(pickTodaySession(schedule, outcomes))
+    if (!previousSession || !previousSession.homework) {
+      setPreviousHomeworkDone(null)
+      return
+    }
+    let cancelled = false
+    progressStore.getHomeworkDone(previousSession.id).then((done) => {
+      if (!cancelled) setPreviousHomeworkDone(done)
     })
-  }, [])
+    return () => {
+      cancelled = true
+    }
+  }, [previousSession])
 
   if (data === undefined) return null
 
@@ -112,8 +146,24 @@ export function TodaySessionCard() {
         Đã hoàn thành {completedCount}/{totalCount} buổi ({percent}%)
       </p>
 
+      {/* PP-05: nhắc bài tập buổi trước còn dang dở NGAY tại nơi học sinh mở
+          app đầu tiên — trước đây "homework" chỉ hiện ở buổi đó rồi biến
+          mất, không có gì nhắc lại nếu chưa làm. */}
+      {previousHomeworkDone === false && previousSession && (
+        <p className="mt-2 rounded-xl bg-white/20 px-3 py-2 text-xs font-bold text-white">
+          📌 Còn bài tập của buổi trước ("{previousSession.title}") chưa làm — xem lại ở buổi đó trong Lộ trình học.
+        </p>
+      )}
+
       <Link
-        to="/lo-trinh-hoc"
+        to={
+          // PP-01: đi thẳng vào phiên học có đồng hồ + theo dõi từng khối;
+          // bài kiểm tra định kỳ (weekly/monthly-test) không có Session
+          // Runner riêng (vào thẳng đề luôn), nên vẫn dẫn về trang Lộ trình.
+          session.focus === 'weekly-test' || session.focus === 'monthly-test'
+            ? '/lo-trinh-hoc'
+            : `/lo-trinh-hoc/${session.id}/hoc`
+        }
         className="mt-5 inline-block rounded-full bg-white px-5 py-2.5 font-bold text-emerald-700 shadow-md transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
       >
         ▶️ Bắt đầu buổi học

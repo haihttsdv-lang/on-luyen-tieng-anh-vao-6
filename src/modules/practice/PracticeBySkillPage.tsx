@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { contentStore } from '../../data-access'
 import type { Question, SkillId } from '../../types/domain'
 import { QuestionRunner } from './QuestionRunner'
@@ -13,14 +13,26 @@ const SKILLS: { id: SkillId; icon: string; title: string }[] = [
   { id: 'KN-05', icon: '🔄', title: 'Viết lại câu' },
   { id: 'KN-06', icon: '🔍', title: 'Tìm và sửa lỗi sai' },
   { id: 'KN-08', icon: '🔊', title: 'Ngữ âm: trọng âm & phát âm' },
+  { id: 'KN-09', icon: '↔️', title: 'Từ đồng nghĩa / trái nghĩa' },
 ]
 
 const SESSION_LENGTH = 15
 
+function isSkillId(value: string | null): value is SkillId {
+  return !!value && SKILLS.some((s) => s.id === value)
+}
+
 export function PracticeBySkillPage() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
-  const [selectedSkill, setSelectedSkill] = useState<SkillId | null>(null)
+  const [params] = useSearchParams()
+  // LT-02/PP-02: Lộ trình học có thể trỏ thẳng vào một dạng bài qua
+  // `?skill=KN-08` — dùng cho khối "Luyện dạng bài xen kẽ" trong mỗi buổi.
+  const skillFromQuery = isSkillId(params.get('skill')) ? params.get('skill') : null
+  const [selectedSkill, setSelectedSkill] = useState<SkillId | null>(
+    skillFromQuery as SkillId | null,
+  )
   const [sessionQuestions, setSessionQuestions] = useState<Question[]>([])
+  const [autoStarted, setAutoStarted] = useState(false)
 
   useEffect(() => {
     contentStore.getQuestions().then(setAllQuestions)
@@ -39,6 +51,14 @@ export function PracticeBySkillPage() {
     setSelectedSkill(skillId)
     setSessionQuestions(shuffle(pool).slice(0, SESSION_LENGTH))
   }
+
+  useEffect(() => {
+    if (autoStarted || !skillFromQuery || allQuestions.length === 0) return
+    setAutoStarted(true)
+    const pool = allQuestions.filter((q) => q.skillId === skillFromQuery)
+    setSelectedSkill(skillFromQuery as SkillId)
+    setSessionQuestions(shuffle(pool).slice(0, SESSION_LENGTH))
+  }, [autoStarted, skillFromQuery, allQuestions])
 
   if (selectedSkill) {
     const skill = SKILLS.find((s) => s.id === selectedSkill)

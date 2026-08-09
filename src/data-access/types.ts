@@ -9,6 +9,7 @@
 import type {
   Attempt,
   BoxLevel,
+  DiagnosticScore,
   DiagnosticStatus,
   LearnerProfile,
   MockTestResult,
@@ -47,6 +48,13 @@ export interface ProgressStore {
   getDiagnosticStatus(): Promise<DiagnosticStatus | undefined>
   setDiagnosticStatus(status: DiagnosticStatus): Promise<void>
 
+  // LT-06: điểm bài kiểm tra đầu vào — dùng để cá nhân hóa lộ trình theo
+  // trình độ ban đầu (xem src/modules/curriculum/personalize.ts). Tách khỏi
+  // `DiagnosticStatus` (chỉ có completed/skipped) vì URD Mục 9 gốc không có
+  // trường điểm số cho thực thể này.
+  getDiagnosticScore(): Promise<DiagnosticScore | undefined>
+  setDiagnosticScore(score: DiagnosticScore): Promise<void>
+
   // Phần thưởng cho các dạng trò chơi ở Module Luyện tập (không phải yêu cầu
   // gốc trong URD — bổ sung theo yêu cầu người dùng để tăng động lực học).
   getCoins(): Promise<number>
@@ -66,6 +74,23 @@ export interface ProgressStore {
   // ProgressStore chỉ lưu trạng thái.
   getSessionOutcomes(): Promise<Record<string, SessionOutcomeRecord>>
   setSessionOutcome(sessionId: string, outcome: SessionOutcome | undefined): Promise<void>
+
+  // PP-01: ghi nhận đã hoàn thành khối nào trong một buổi học — cho phép
+  // "Vào học" (Session Runner) chạy tuần tự từng khối, đóng app giữa chừng
+  // rồi mở lại vẫn tiếp tục đúng từ khối dở dang, thay vì buổi học chỉ là
+  // một danh sách chữ để đọc suông. Lưu dưới dạng mảng CHỈ SỐ khối đã xong
+  // (không phải boolean[] cố định độ dài, vì số khối mỗi buổi khác nhau).
+  getSessionBlockProgress(sessionId: string): Promise<number[]>
+  setSessionBlockProgress(sessionId: string, doneBlockIndexes: number[]): Promise<void>
+
+  // PP-05: theo dõi đã làm bài tập về nhà của buổi hay chưa — trước đây
+  // `homework` chỉ là dòng chữ hiển thị, không lưu trạng thái, nên trang chủ
+  // không thể nhắc "còn bài tập buổi trước chưa làm". Cố ý dùng 1 cờ boolean
+  // mỗi buổi (không chẻ nhỏ thành checklist từng ý) — đơn giản, đủ cho nhu
+  // cầu nhắc nhở, tránh phải viết lại toàn bộ 67 buổi thành dữ liệu có cấu
+  // trúc chỉ để phục vụ một danh sách tick nhỏ.
+  getHomeworkDone(sessionId: string): Promise<boolean>
+  setHomeworkDone(sessionId: string, done: boolean): Promise<void>
 
   // NFR-05 (độ bền dữ liệu): Phương án A chỉ lưu trong localStorage, dễ mất
   // khi xóa cache hoặc đổi thiết bị. Cho phép xuất/nhập toàn bộ tiến độ dưới

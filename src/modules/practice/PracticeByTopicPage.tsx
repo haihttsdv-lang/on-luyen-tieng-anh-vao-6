@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore } from '../../data-access'
 import type { Question } from '../../types/domain'
@@ -8,10 +8,24 @@ import { shuffle } from './shuffle'
 
 const SESSION_LENGTH = 15
 
+// LT-02/PP-02: cho phép Lộ trình học sai thẳng vào một phiên luyện tập đúng
+// chủ điểm buổi đó qua `?topics=NP-11,NP-12`, thay vì luôn bắt học sinh tự
+// tick lại từ đầu.
+function useTopicsFromQuery(): string[] {
+  const [params] = useSearchParams()
+  const raw = params.get('topics')
+  return useMemo(
+    () => (raw ? raw.split(',').map((s) => s.trim()).filter(Boolean) : []),
+    [raw],
+  )
+}
+
 export function PracticeByTopicPage() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
-  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const topicsFromQuery = useTopicsFromQuery()
+  const [selected, setSelected] = useState<Set<string>>(new Set(topicsFromQuery))
   const [sessionQuestions, setSessionQuestions] = useState<Question[] | null>(null)
+  const [autoStarted, setAutoStarted] = useState(false)
 
   useEffect(() => {
     contentStore.getQuestions().then(setAllQuestions)
@@ -42,6 +56,15 @@ export function PracticeByTopicPage() {
     )
     setSessionQuestions(shuffle(pool).slice(0, SESSION_LENGTH))
   }
+
+  useEffect(() => {
+    if (autoStarted || topicsFromQuery.length === 0 || allQuestions.length === 0) return
+    setAutoStarted(true)
+    const pool = allQuestions.filter((q) =>
+      q.topicIds.some((id) => topicsFromQuery.includes(id)),
+    )
+    setSessionQuestions(shuffle(pool).slice(0, SESSION_LENGTH))
+  }, [autoStarted, topicsFromQuery, allQuestions])
 
   if (sessionQuestions) {
     return (

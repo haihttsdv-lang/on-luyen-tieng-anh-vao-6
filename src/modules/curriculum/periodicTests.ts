@@ -4,6 +4,7 @@ import type {
   LessonPlanBlock,
   ScheduledSession,
   SessionOutcomeRecord,
+  SuccessCriterion,
 } from '../../types/domain'
 import { buildAdaptiveSchedule, parseISODate, toISODate } from './schedule'
 
@@ -47,16 +48,27 @@ function weeklyTestBlocks(topicTitles: string[]): LessonPlanBlock[] {
     {
       label: 'Phổ biến quy chế',
       minutes: 5,
-      description: 'Nhắc lại quy tắc làm bài và thời gian làm bài kiểm tra.',
+      description: 'Nhắc lại quy tắc làm bài (không tra cứu, làm liên tục) và thời gian làm bài kiểm tra.',
     },
-    { label: 'Làm bài kiểm tra tuần', minutes: 30, description: content },
+    { label: 'Làm bài kiểm tra tuần', minutes: 20, description: content },
     {
       label: 'Chấm điểm & thưởng xu',
-      minutes: 10,
-      description: 'Chấm điểm ngay, tự đánh giá kết quả để nhận xu thưởng.',
+      minutes: 5,
+      description: 'Chấm điểm ngay, tự đánh giá kết quả (tốt/ổn/cần cố gắng) để nhận xu thưởng và xem chủ điểm nào cần ôn thêm cuối tuần.',
     },
   ]
 }
+
+const WEEKLY_TEST_OBJECTIVES = [
+  'Tự kiểm tra lại toàn bộ kiến thức đã học trong tuần.',
+  'Biết ngay điểm yếu của tuần để ôn thêm trước khi sang tuần mới.',
+]
+const WEEKLY_TEST_SUCCESS_CRITERIA: SuccessCriterion[] = [
+  { label: 'Hoàn thành cả 3 khối của bài kiểm tra tuần', check: { type: 'blocksDone' } },
+  { label: 'Làm đủ số câu trong đề kiểm tra tuần', check: { type: 'minAttempts', count: 10 } },
+]
+const WEEKLY_TEST_PARENT_NOTE =
+  'Bài kiểm tra tuần — điểm số chỉ mang tính tham khảo nhanh, không nặng nề như bài kiểm tra tháng hay thi thử. Bố mẹ có thể hỏi con câu nào sai để cùng ôn lại cuối tuần.'
 
 function monthlyTestBlocks(topicTitles: string[]): LessonPlanBlock[] {
   const content =
@@ -66,22 +78,33 @@ function monthlyTestBlocks(topicTitles: string[]): LessonPlanBlock[] {
   return [
     {
       label: 'Khởi động & ôn nhanh',
-      minutes: 10,
-      description: 'Nhắc lại các chủ điểm trọng tâm đã học trong tháng.',
+      minutes: 5,
+      description: 'Nhắc lại các chủ điểm trọng tâm đã học trong tháng, xem lại điểm yếu từ các bài kiểm tra tuần trước đó.',
     },
-    { label: 'Làm bài kiểm tra tháng', minutes: 40, description: content },
+    { label: 'Làm bài kiểm tra tháng', minutes: 30, description: content },
     {
       label: 'Chữa bài chi tiết',
-      minutes: 15,
-      description: 'Chữa từng câu sai, phân tích điểm mạnh/yếu trong tháng.',
+      minutes: 10,
+      description: 'Chữa từng câu sai, phân tích điểm mạnh/yếu trong tháng theo chủ điểm và dạng bài.',
     },
     {
       label: 'Chấm điểm & thưởng xu',
-      minutes: 10,
-      description: 'Tổng kết điểm, tự đánh giá kết quả để nhận xu thưởng.',
+      minutes: 5,
+      description: 'Tổng kết điểm, tự đánh giá kết quả để nhận xu thưởng, ghi lại điểm yếu nhất vào sổ tay để ôn kỹ tháng sau.',
     },
   ]
 }
+
+const MONTHLY_TEST_OBJECTIVES = [
+  'Tự kiểm tra lại toàn bộ kiến thức đã học trong tháng.',
+  'Biết ngay điểm mạnh/yếu của cả tháng để điều chỉnh kịp thời trước tháng mới.',
+]
+const MONTHLY_TEST_SUCCESS_CRITERIA: SuccessCriterion[] = [
+  { label: 'Hoàn thành cả 4 khối của bài kiểm tra tháng', check: { type: 'blocksDone' } },
+  { label: 'Làm đủ số câu trong đề kiểm tra tháng', check: { type: 'minAttempts', count: 20 } },
+]
+const MONTHLY_TEST_PARENT_NOTE =
+  'Bài kiểm tra tháng — tổng hợp toàn bộ nội dung đã học, đáng tin cậy hơn hẳn 1 bài kiểm tra tuần để đánh giá tiến bộ thật sự. Bố mẹ nên xem cùng con phần nào còn yếu để ưu tiên ôn trong tháng tới.'
 
 /**
  * Sinh bài kiểm tra tuần/tháng cho mỗi Chủ nhật trong khoảng ngày của
@@ -102,6 +125,15 @@ export function buildPeriodicTests(
 
   const tests: ScheduledSession[] = []
   while (sunday.getTime() <= lastDate.getTime()) {
+    // LT-07: nếu buổi đầu tiên của cả lộ trình rơi đúng vào Chủ nhật (mở app
+    // lần đầu vào Chủ nhật, "bắt đầu luôn từ hôm nay" ép buổi 1 = hôm đó),
+    // thì Chủ nhật đó KHÔNG được sinh bài kiểm tra tuần — chưa học buổi nào
+    // thì không có gì để kiểm tra, và bài kiểm tra sẽ trùng ngày, dồn 135
+    // phút vào một hôm.
+    if (sunday.getTime() === firstDate.getTime()) {
+      sunday = addDays(sunday, 7)
+      continue
+    }
     const phaseAtDate =
       [...sortedByDate].reverse().find((s) => parseISODate(s.date).getTime() <= sunday.getTime()) ??
       sortedByDate[0]
@@ -127,6 +159,9 @@ export function buildPeriodicTests(
         topicIds: monthTopicIds,
         blocks: monthlyTestBlocks(monthTopicIds.map(topicTitle)),
         homework: 'Lập danh sách chủ điểm còn yếu trong tháng để ôn tập kỹ hơn trước khi sang tháng mới.',
+        objectives: MONTHLY_TEST_OBJECTIVES,
+        successCriteria: MONTHLY_TEST_SUCCESS_CRITERIA,
+        parentNote: MONTHLY_TEST_PARENT_NOTE,
         date: toISODate(sunday),
       })
     } else {
@@ -150,6 +185,9 @@ export function buildPeriodicTests(
         topicIds: weekTopicIds,
         blocks: weeklyTestBlocks(weekTopicIds.map(topicTitle)),
         homework: 'Ôn lại các câu làm sai trong bài kiểm tra tuần.',
+        objectives: WEEKLY_TEST_OBJECTIVES,
+        successCriteria: WEEKLY_TEST_SUCCESS_CRITERIA,
+        parentNote: WEEKLY_TEST_PARENT_NOTE,
         date: toISODate(sunday),
       })
     }

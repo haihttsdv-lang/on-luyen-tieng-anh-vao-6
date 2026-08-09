@@ -133,6 +133,16 @@ export interface MasterySnapshot {
 // FR-M01/M02: trạng thái bài kiểm tra đầu vào.
 export type DiagnosticStatus = 'completed' | 'skipped'
 
+// LT-06 (docs/RA-SOAT-LO-TRINH-HOC.md): điểm bài kiểm tra đầu vào — trước
+// đây chỉ lưu ĐÃ LÀM hay chưa (`DiagnosticStatus`), không lưu điểm số, nên
+// không có gì để cá nhân hóa lộ trình theo trình độ ban đầu. `total` không
+// cố định (phụ thuộc `selectDiagnosticQuestions`/ngân hàng câu hỏi hiện có
+// lúc làm bài), nên phải lưu kèm để tính đúng tỷ lệ %.
+export interface DiagnosticScore {
+  correctCount: number
+  total: number
+}
+
 export interface LearnerProfile {
   candidateAlias: string
   createdAt: string // ISO 8601
@@ -164,11 +174,42 @@ export type SessionFocus =
   | 'final-exam'
   | 'weekly-test' // bài kiểm tra kiến thức tuần, tự động sinh vào mỗi Chủ nhật
   | 'monthly-test' // bài kiểm tra kiến thức tháng, thay cho weekly-test vào Chủ nhật cuối tháng
+  // Buổi dạy PHƯƠNG PHÁP làm một dạng bài (Ngữ âm, Đọc hiểu, Tìm lỗi sai,
+  // Viết lại câu, Viết đoạn văn) — bổ sung theo LT-01 (docs/RA-SOAT-LO-TRINH-HOC.md):
+  // trước đây lộ trình chỉ dạy 36 chủ điểm ngữ pháp, bỏ trắng 5/9 dạng bài
+  // của đề thật (chiếm 55% số câu). Khác buổi 'grammar' ở chỗ không gắn
+  // NP-xx/TV-xx mà gắn `skillId` (KN-xx) — xem CurriculumSessionTemplate.
+  | 'skill-lesson'
 
 export interface LessonPlanBlock {
   label: string // tên hoạt động, ví dụ "Khởi động", "Bài mới"
   minutes: number
   description: string
+  // PP-06: khối thuộc "phần mở rộng" (không phải 1 trong 4 khối cốt lõi) —
+  // chế độ "Học phiên rút gọn" trong Session Runner tự động bỏ qua các khối
+  // này để buổi học nhanh hơn mà vẫn đủ nội dung chính, dồn thời gian cho
+  // luyện đề. KHÔNG dùng cho buổi kiểm tra/thi thử (nội dung nào cũng cần).
+  optional?: boolean
+  // PP-06: khối nên có người lớn cùng theo dõi (giảng bài, chữa đề, luyện
+  // phát âm) — hiển thị nhắc nhở cho phụ huynh biết lúc nào cần có mặt,
+  // KHÔNG chặn học sinh tự học nếu không có người lớn.
+  needsAdult?: boolean
+}
+
+// PP-04 (docs/RA-SOAT-LO-TRINH-HOC.md) — tiêu chí "coi như đã đạt" của buổi
+// học, đối chiếu lại bằng DỮ LIỆU THẬT ở màn hình tổng kết cuối buổi (không
+// phải tự học sinh tick tay). `check` giới hạn trong 4 loại vì đó là toàn bộ
+// dữ liệu thật đã có sẵn từ `computeSessionCompletion` (PP-03) — không phát
+// minh thêm nguồn dữ liệu mới chỉ để phục vụ hiển thị.
+export type SuccessCriterionCheck =
+  | { type: 'blocksDone' } // đã hoàn thành hết các khối trong buổi (không bấm "Bỏ qua")
+  | { type: 'quizMastered' } // Quiz nhanh chủ điểm buổi này đạt trạng thái "Đã nắm"
+  | { type: 'vocabProgress'; minRatio: number } // từ vựng ôn cùng buổi đạt tối thiểu minRatio (0–1, tỉ lệ hộp Leitner)
+  | { type: 'minAttempts'; count: number } // làm tối thiểu `count` câu luyện tập/luyện đề trong buổi
+
+export interface SuccessCriterion {
+  label: string
+  check: SuccessCriterionCheck
 }
 
 export interface CurriculumSessionTemplate {
@@ -179,8 +220,23 @@ export interface CurriculumSessionTemplate {
   title: string
   topicIds: string[] // chủ điểm ngữ pháp NP-xx trọng tâm buổi này (0 hoặc nhiều với buổi ôn tập/luyện đề/kiểm tra)
   vocabTopicId?: string // chủ đề từ vựng TV-xx ôn cùng buổi (học theo chu kỳ lặp lại — spaced repetition)
-  blocks: LessonPlanBlock[] // tổng minutes = 90 với buổi học thường; bài kiểm tra tuần/tháng ngắn hơn (45/75 phút)
+  // Dạng bài (KN-xx) trọng tâm của buổi 'skill-lesson' (LT-01) — ví dụ KN-08
+  // cho 2 buổi Ngữ âm, KN-02 cho 3 buổi Đọc hiểu. Buổi 'grammar' KHÔNG dùng
+  // trường này (dùng topicIds); tách riêng vì một buổi kỹ năng dạy PHƯƠNG
+  // PHÁP làm dạng bài, không gắn với 1 chủ điểm ngữ pháp/từ vựng cụ thể nào.
+  skillId?: SkillId
+  blocks: LessonPlanBlock[] // tổng minutes = 60 với buổi học thường; bài kiểm tra tuần/tháng ngắn hơn (30/50 phút)
   homework: string
+  // PP-04: "Sau buổi này, em có thể…" — 2–3 câu, hiển thị đầu buổi trong
+  // Session Runner để buổi học có mở đầu rõ ràng thay vì vào thẳng khối 1.
+  objectives: string[]
+  // PP-04: đối chiếu lại ở màn hình tổng kết cuối buổi, tick bằng dữ liệu
+  // luyện tập thật (xem SuccessCriterionCheck) — không phải tự đánh giá.
+  successCriteria: SuccessCriterion[]
+  // PP-08: 1–2 câu gợi ý cho phụ huynh biết buổi này con học gì và có thể
+  // hỏi/kiểm tra con thế nào — trước đây `ParentOverviewPage` chỉ có số liệu
+  // tổng hợp, không gắn được với buổi học cụ thể nào.
+  parentNote?: string
 }
 
 export interface ScheduledSession extends CurriculumSessionTemplate {

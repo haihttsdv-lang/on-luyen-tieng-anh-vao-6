@@ -1,5 +1,6 @@
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { RenderBold } from '../../components/RenderBold'
 import { SpeakButton } from '../../components/SpeakButton'
 import { VoiceRecorder } from '../../components/VoiceRecorder'
 import { LEARNING_SEQUENCE } from '../../content/topic-groups'
@@ -7,21 +8,6 @@ import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore, progressStore } from '../../data-access'
 import type { Topic } from '../../types/domain'
 import { GrammarVisual, hasGrammarVisual } from './GrammarVisual'
-
-// Parse cú pháp đơn giản **in đậm** trong nội dung bài học thành <strong>,
-// để làm nổi bật công thức/từ khóa quan trọng mà không cần thư viện markdown.
-function renderBold(text: string) {
-  const parts = text.split(/\*\*(.+?)\*\*/g)
-  return parts.map((part, i) =>
-    i % 2 === 1 ? (
-      <strong key={i} className="font-extrabold text-emerald-700 dark:text-emerald-400">
-        {part}
-      </strong>
-    ) : (
-      <Fragment key={i}>{part}</Fragment>
-    ),
-  )
-}
 
 export function LessonDetailPage() {
   const { topicId } = useParams<{ topicId: string }>()
@@ -83,7 +69,7 @@ export function LessonDetailPage() {
             key={i}
             className="rounded-xl border-2 border-emerald-100 bg-emerald-50/60 px-4 py-3 leading-relaxed text-slate-700 dark:border-emerald-900 dark:bg-emerald-500/5 dark:text-slate-300"
           >
-            {renderBold(point)}
+            <RenderBold text={point} />
           </li>
         ))}
       </ul>

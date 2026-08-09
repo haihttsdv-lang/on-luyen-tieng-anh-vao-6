@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore, progressStore } from '../../data-access'
+import { findMostRecentCompletedSession } from '../curriculum/TodaySessionCard'
+import { useCurriculumSchedule } from '../curriculum/useCurriculumSchedule'
 import type { Attempt, MockTestResult, Question } from '../../types/domain'
 import { computeAllTopicMastery } from './masteryCalc'
 
@@ -20,6 +22,12 @@ export function ParentOverviewPage() {
   const [activeDays, setActiveDays] = useState(0)
   const [latestMockTest, setLatestMockTest] = useState<MockTestResult | null>(null)
   const [weakestTopics, setWeakestTopics] = useState<string[]>([])
+  // PP-08: buổi gần nhất con vừa hoàn thành, kèm ghi chú dành riêng cho phụ
+  // huynh — tái dùng đúng logic "buổi gần nhất" đã có ở PP-05 (thẻ trang
+  // chủ), tránh viết lại 1 cách tính "gần nhất" khác ở đây.
+  const { schedule, outcomes } = useCurriculumSchedule()
+  const recentSession =
+    schedule && outcomes ? findMostRecentCompletedSession(schedule, outcomes) : null
 
   useEffect(() => {
     async function load() {
@@ -89,6 +97,18 @@ export function ParentOverviewPage() {
       <p className="hidden text-sm text-slate-500 print:block">
         Ngày in: {new Date().toLocaleDateString('vi-VN')}
       </p>
+
+      {/* PP-08: gắn ghi chú của buổi học GẦN NHẤT — trước đây trang này chỉ
+          có số liệu tổng hợp, không gắn được với 1 buổi cụ thể nào. Cũng in
+          được ra giấy cùng cả trang (UX-10). */}
+      {recentSession?.parentNote && (
+        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-5 dark:border-amber-800 dark:bg-amber-500/10">
+          <p className="text-sm font-bold text-amber-800 dark:text-amber-300">
+            👨‍👩‍👧 Buổi gần nhất: {recentSession.title}
+          </p>
+          <p className="mt-1 text-slate-700 dark:text-slate-300">{recentSession.parentNote}</p>
+        </div>
+      )}
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="rounded-2xl border border-slate-100 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
