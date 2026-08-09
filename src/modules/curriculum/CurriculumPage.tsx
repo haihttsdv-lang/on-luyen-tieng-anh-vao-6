@@ -2,7 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CURRICULUM_PLAN } from '../../content/curriculum'
 import { progressStore } from '../../data-access'
-import type { ScheduledSession, SessionFocus, SessionOutcome } from '../../types/domain'
+import type {
+  ScheduledSession,
+  SessionFocus,
+  SessionOutcome,
+  SessionOutcomeRecord,
+} from '../../types/domain'
 import { buildFullSchedule } from './periodicTests'
 import { OUTCOME_OPTIONS, coinsForOutcome } from './rewards'
 import { CURRICULUM_DEADLINE, parseISODate, toISODate } from './schedule'
@@ -90,38 +95,31 @@ function groupIntoSections(sessions: ScheduledSession[]): Section[] {
 }
 
 export function CurriculumPage() {
-  const [schedule, setSchedule] = useState<ScheduledSession[] | null>(null)
-  const [outcomes, setOutcomes] = useState<Record<string, SessionOutcome>>({})
+  const [outcomes, setOutcomes] = useState<Record<string, SessionOutcomeRecord> | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    async function load() {
-      let startIso = await progressStore.getCurriculumStartDate()
-      if (!startIso) {
-        startIso = toISODate(new Date())
-        await progressStore.setCurriculumStartDate(startIso)
-      }
-      const scheduled = buildFullSchedule(
-        CURRICULUM_PLAN,
-        parseISODate(startIso),
-        CURRICULUM_DEADLINE,
-      )
-      const loadedOutcomes = await progressStore.getSessionOutcomes()
-      if (!cancelled) {
-        setSchedule(scheduled)
-        setOutcomes(loadedOutcomes)
-      }
-    }
-    load()
+    progressStore.getSessionOutcomes().then((loaded) => {
+      if (!cancelled) setOutcomes(loaded)
+    })
     return () => {
       cancelled = true
     }
   }, [])
 
+  // Lịch tính lại mỗi khi outcomes đổi (không lưu "ngày bắt đầu" cố định
+  // nữa) — buổi đã hoàn thành hiển thị đúng ngày hoàn thành thực tế, buổi
+  // chưa hoàn thành tự động được xếp/đẩy lịch dựa trên tiến độ thực tế. Xem
+  // buildAdaptiveSchedule trong schedule.ts.
+  const schedule = useMemo(() => {
+    if (!outcomes) return null
+    return buildFullSchedule(CURRICULUM_PLAN, outcomes, CURRICULUM_DEADLINE)
+  }, [outcomes])
+
   const todayIso = toISODate(new Date())
 
   const nextSession = useMemo(() => {
-    if (!schedule) return undefined
+    if (!schedule || !outcomes) return undefined
     return (
       schedule.find((s) => outcomes[s.id] === undefined && s.date >= todayIso) ??
       schedule.find((s) => outcomes[s.id] === undefined)
@@ -134,22 +132,22 @@ export function CurriculumPage() {
   )
 
   async function selectOutcome(session: ScheduledSession, outcome: SessionOutcome) {
-    const previous = outcomes[session.id]
-    const isDeselecting = previous === outcome
-    const previousDelta = previous ? coinsForOutcome(session.focus, previous) : 0
+    const previous = outcomes?.[session.id]
+    const isDeselecting = previous?.outcome === outcome
+    const previousDelta = previous ? coinsForOutcome(session.focus, previous.outcome) : 0
     const newDelta = isDeselecting ? 0 : coinsForOutcome(session.focus, outcome)
 
     await progressStore.addCoins(newDelta - previousDelta)
     await progressStore.setSessionOutcome(session.id, isDeselecting ? undefined : outcome)
     setOutcomes((prev) => {
-      const next = { ...prev }
+      const next = { ...(prev ?? {}) }
       if (isDeselecting) delete next[session.id]
-      else next[session.id] = outcome
+      else next[session.id] = { outcome, completedAt: new Date().toISOString() }
       return next
     })
   }
 
-  if (!schedule) {
+  if (!schedule || !outcomes) {
     return (
       <section className="mx-auto max-w-2xl px-4 py-16 text-center text-slate-500">
         Đang tải...
@@ -162,7 +160,7 @@ export function CurriculumPage() {
   const onTrack = parseISODate(lastSession.date).getTime() <= CURRICULUM_DEADLINE.getTime()
 
   return (
-    <section className="mx-auto max-w-2xl px-4 py-12">
+    <section className="mx-auto max-w-2xl px-4 py-12 lg:max-w-4xl">
       <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
         🗓️ Lộ trình học
       </h1>
@@ -175,7 +173,10 @@ export function CurriculumPage() {
         Thiết kế theo 4 giai đoạn giống các trung tâm luyện thi: Nền tảng →
         Nâng cao → Luyện đề tăng tốc → Nước rút cuối cùng — không học tuần tự
         theo mã chủ điểm mà ưu tiên kiến thức dễ ăn điểm trước. Mỗi buổi tự
-        chấm kết quả để cộng/trừ xu — xem 🪙 ở góc trên bên phải.
+        chấm kết quả để cộng/trừ xu — xem 🪙 ở góc trên bên phải. Lịch các
+        buổi <strong>chưa học</strong> tự động điều chỉnh theo tiến độ thực
+        tế: học chậm hoặc bỏ buổi thì các buổi sau bị đẩy lùi, học nhanh hơn
+        dự kiến thì các buổi sau cũng được xếp sớm hơn.
       </p>
 
       <div className="mt-4 rounded-2xl border-2 border-slate-100 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
@@ -229,7 +230,7 @@ export function CurriculumPage() {
               </summary>
               <ul className="flex flex-col gap-3 border-t border-slate-100 p-4 dark:border-slate-800">
                 {section.sessions.map((session) => {
-                  const outcome = outcomes[session.id]
+                  const outcome = outcomes[session.id]?.outcome
                   const isNext = nextSession?.id === session.id
                   return (
                     <li

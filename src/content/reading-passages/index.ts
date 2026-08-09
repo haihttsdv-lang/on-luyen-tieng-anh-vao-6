@@ -1,9 +1,11 @@
 import type { ReadingPassage } from '../../types/domain'
+import { readingPassagesExtra } from './extra'
 
 // Bài đọc hiểu dài (KN-02) — Mục 4.4: mục tiêu 15–20 bài, mỗi bài 5 câu hỏi.
 // Giai đoạn 1: 2 bài khởi động. Giai đoạn 6: +6 bài (RP-03..08), biên soạn
-// mới, đa dạng chủ đề để giảm trùng lặp trong đề thi thử.
-export const readingPassages: ReadingPassage[] = [
+// mới, đa dạng chủ đề để giảm trùng lặp trong đề thi thử. ND-05: +7 bài
+// (RP-09..15, xem ./extra.ts) để đạt mục tiêu 15 bài và có 2 tầng độ khó.
+const readingPassagesBase: ReadingPassage[] = [
   {
     id: 'RP-01',
     title: 'The Football Match',
@@ -52,4 +54,9 @@ export const readingPassages: ReadingPassage[] = [
     text: `At a technology fair in Ha Noi, a group of students showed off something amazing: a team of small robots that could play football! The students, all around eleven years old, had spent six months building and programming the robots. Each robot could move, kick a small ball, and even avoid crashing into other robots. During the demonstration, the robot team played a short match against another school's robots. The crowd cheered as the robots moved quickly across the small field. One of the students explained that the hardest part was teaching the robots to find the ball by themselves. Many visitors were impressed and said that these students might become great engineers in the future. The team hopes to build an even smarter robot next year.`,
     topicIds: ['TV-12', 'NP-13'],
   },
+]
+
+export const readingPassages: ReadingPassage[] = [
+  ...readingPassagesBase,
+  ...readingPassagesExtra,
 ]

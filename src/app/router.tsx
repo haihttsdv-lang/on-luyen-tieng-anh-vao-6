@@ -48,8 +48,8 @@ const routes: RouteObject[] = [
   },
 ]
 
-// Bản "offline" (mở trực tiếp bằng file:// — xem `npm run build:offline`)
+// Bản đóng gói 1 file (mở trực tiếp bằng file:// — xem `npm run build:online`)
 // không có máy chủ để xử lý URL, nên phải dùng HashRouter (điều hướng qua
 // "#/...") thay vì BrowserRouter (dùng History API, cần máy chủ thật).
 export const router =
-  import.meta.env.MODE === 'offline' ? createHashRouter(routes) : createBrowserRouter(routes)
+  import.meta.env.MODE === 'online' ? createHashRouter(routes) : createBrowserRouter(routes)

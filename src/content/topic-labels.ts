@@ -33,6 +33,14 @@ export const TOPIC_LABELS: Record<string, string> = {
   'NP-29': 'Câu ước: wish, if only',
   'NP-30': 'Hòa hợp chủ ngữ – động từ',
   'NP-31': 'Cặp từ dễ nhầm lẫn',
+  // NP-32..36: bổ sung sau khi đối chiếu giáo trình các trung tâm luyện thi
+  // (docs/adr/0003). Thiếu nhãn ở đây thì các chỗ tra cứu theo mã (bộ chọn
+  // chủ điểm, điều hướng bài trước/sau — UX-06) hiển thị trơ mã "NP-32".
+  'NP-32': 'Câu tồn tại: There is/There are',
+  'NP-33': 'too...to / adj + enough + to V',
+  'NP-34': 'Biến đổi từ loại (word form)',
+  'NP-35': 'Đại từ thay thế: one/ones, another/other(s)',
+  'NP-36': 'Câu cầu khiến: make/let/have + O + V',
   'TV-01': 'Gia đình & bản thân',
   'TV-02': 'Trường học & môn học',
   'TV-03': 'Nhà cửa & đồ vật trong nhà',

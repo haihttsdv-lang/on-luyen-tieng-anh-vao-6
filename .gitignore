@@ -10,12 +10,16 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-dist-offline
+dist-online
 *.local
 
-# Bản offline 1-file xuất ra thư mục gốc để tiện gửi/tải (build artifact,
-# tái tạo bằng `npm run build:offline`)
-on-luyen-tieng-anh-vao-6-offline.html
+# Cấu hình Firebase cá nhân cho tính năng Đồng bộ nhiều thiết bị (xem
+# .env.example) — không commit vì mỗi người dùng có 1 project Firebase riêng.
+.env
+
+# Bản đóng gói 1 file xuất ra thư mục gốc để tiện gửi/tải (build artifact,
+# tái tạo bằng `npm run build:online`)
+on-luyen-tieng-anh-vao-6-online.html
 
 # Playwright
 /playwright-report

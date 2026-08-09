@@ -61,19 +61,33 @@ export function ParentOverviewPage() {
   }
 
   return (
-    <section className="mx-auto max-w-xl px-4 py-12">
-      <Link
-        to="/ho-so"
-        className="text-sm font-bold text-emerald-600 hover:underline dark:text-emerald-400"
-      >
-        ← Quay lại
-      </Link>
+    <section className="mx-auto max-w-xl px-4 py-12 print:max-w-none print:py-0">
+      {/* UX-10: phụ huynh và giáo viên kèm thường muốn bản giấy để trao đổi
+          hằng tuần — ẩn các phần điều hướng khi in. */}
+      <div className="flex items-center justify-between gap-3 print:hidden">
+        <Link
+          to="/ho-so"
+          className="text-sm font-bold text-emerald-600 hover:underline dark:text-emerald-400"
+        >
+          ← Quay lại
+        </Link>
+        <button
+          type="button"
+          onClick={() => window.print()}
+          className="rounded-full border-2 border-slate-200 px-4 py-1.5 text-sm font-bold text-slate-600 hover:border-emerald-300 hover:text-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-700 dark:text-slate-300"
+        >
+          🖨️ In báo cáo
+        </button>
+      </div>
 
       <h1 className="mt-4 text-2xl font-extrabold text-slate-900 dark:text-slate-100">
         👨‍👩‍👧 Tổng quan cho phụ huynh
       </h1>
       <p className="mt-2 text-slate-600 dark:text-slate-400">
         Thông tin ngắn gọn, không có dữ liệu định danh cá nhân của con.
+      </p>
+      <p className="hidden text-sm text-slate-500 print:block">
+        Ngày in: {new Date().toLocaleDateString('vi-VN')}
       </p>
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">

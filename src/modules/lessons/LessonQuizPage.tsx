@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { ReadAlongPassage } from '../../components/ReadAlongPassage'
+import { SpeakButton } from '../../components/SpeakButton'
 import { contentStore, progressStore } from '../../data-access'
+import { SLOW_RATE, toSpeakableWord } from '../audio/speak'
 import { shuffle } from '../practice/shuffle'
 import type { Question, ReadingPassage, Topic } from '../../types/domain'
+import { hasPassed, requiredCorrect } from './quizThreshold'
 
 const QUIZ_LENGTH = 5
-const PASS_RATIO = 0.8 // FR-L03: đạt từ 80% trở lên mới đánh dấu "Đã nắm"
 
 export function LessonQuizPage() {
   const { topicId } = useParams<{ topicId: string }>()
@@ -36,6 +39,7 @@ export function LessonQuizPage() {
     [quizQuestions, answers],
   )
   const scoreRatio = quizQuestions.length > 0 ? correctCount / quizQuestions.length : 0
+  const needed = requiredCorrect(quizQuestions.length)
   const allAnswered =
     quizQuestions.length > 0 &&
     quizQuestions.every((q) => answers[q.id] !== undefined)
@@ -51,7 +55,7 @@ export function LessonQuizPage() {
         timestamp: now,
       })
     }
-    const didPass = scoreRatio >= PASS_RATIO
+    const didPass = hasPassed(correctCount, quizQuestions.length)
     await progressStore.setTopicStatus(topicId, didPass ? 'mastered' : 'in_progress')
     setPassed(didPass)
     setSubmitted(true)
@@ -85,8 +89,8 @@ export function LessonQuizPage() {
         </h1>
         <p className="mt-2 text-slate-600 dark:text-slate-400">
           Bạn trả lời đúng {correctCount}/{quizQuestions.length} câu (
-          {Math.round(scoreRatio * 100)}%). Cần đạt từ 80% để được đánh dấu
-          "Đã nắm".
+          {Math.round(scoreRatio * 100)}%). Cần đúng ít nhất {needed}/
+          {quizQuestions.length} câu để được đánh dấu "Đã nắm".
         </p>
 
         <ul className="mt-6 flex flex-col gap-3 text-left">
@@ -137,6 +141,11 @@ export function LessonQuizPage() {
       <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
         🎯 Quiz nhanh: {topic.title}
       </h1>
+      {/* ND-01: nói rõ ngưỡng đạt ngay từ đầu thay vì để học sinh đoán. */}
+      <p className="mt-2 rounded-xl bg-emerald-50 px-4 py-2.5 text-sm font-bold text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-300">
+        Bài này có {quizQuestions.length} câu — cần đúng ít nhất {needed} câu để
+        được đánh dấu "Đã nắm".
+      </p>
 
       <ol className="mt-6 flex flex-col gap-6">
         {quizQuestions.map((q, index) => {
@@ -149,41 +158,59 @@ export function LessonQuizPage() {
           return (
           <li key={q.id}>
             {isFirstOfPassage && (
-              <div className="mb-3 rounded-xl border-2 border-sky-100 bg-sky-50 p-4 dark:border-sky-900 dark:bg-sky-500/10">
-                <p className="text-xs font-bold tracking-wide text-sky-600 uppercase dark:text-sky-400">
-                  📖 {passage.title}
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
-                  {passage.text}
-                </p>
+              <div className="mb-3">
+                <ReadAlongPassage passage={passage} />
               </div>
             )}
-            <p className="font-bold text-slate-900 dark:text-slate-100">
-              Câu {index + 1}. {q.prompt}
-            </p>
+            <div className="flex items-start gap-2">
+              <p className="font-bold text-slate-900 dark:text-slate-100">
+                Câu {index + 1}. {q.prompt}
+              </p>
+              {/* MM-01: Ngữ âm không thể dạy bằng chữ — cho nghe cả 4 phương án. */}
+              {q.skillId === 'KN-08' && (
+                <SpeakButton
+                  text={q.options.map(toSpeakableWord)}
+                  label={`Nghe lần lượt 4 phương án của câu ${index + 1}`}
+                  size="sm"
+                />
+              )}
+            </div>
             <div className="mt-3 flex flex-col gap-2">
               {q.options.map((option, optionIndex) => (
-                <label
+                // Nút nghe nằm NGOÀI <label>: bấm vào nút bên trong label sẽ
+                // kích hoạt luôn radio, khiến học sinh vô tình chọn đáp án
+                // chỉ vì muốn nghe thử từ đó.
+                <div
                   key={optionIndex}
-                  className={`flex cursor-pointer items-center gap-2 rounded-xl border-2 px-4 py-2.5 transition-colors ${
+                  className={`flex items-center gap-2 rounded-xl border-2 pr-2 transition-colors ${
                     answers[q.id] === optionIndex
                       ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-500/10'
                       : 'border-slate-100 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800'
                   }`}
                 >
-                  <input
-                    type="radio"
-                    name={q.id}
-                    className="accent-emerald-600"
-                    checked={answers[q.id] === optionIndex}
-                    onChange={() =>
-                      setAnswers((prev) => ({ ...prev, [q.id]: optionIndex }))
-                    }
-                  />
-                  <span className="text-slate-800 dark:text-slate-200">
-                    {option}
-                  </span>
-                </label>
+                  <label className="flex flex-1 cursor-pointer items-center gap-2 px-4 py-2.5">
+                    <input
+                      type="radio"
+                      name={q.id}
+                      className="accent-emerald-600"
+                      checked={answers[q.id] === optionIndex}
+                      onChange={() =>
+                        setAnswers((prev) => ({ ...prev, [q.id]: optionIndex }))
+                      }
+                    />
+                    <span className="flex-1 text-slate-800 dark:text-slate-200">
+                      {option}
+                    </span>
+                  </label>
+                  {q.skillId === 'KN-08' && (
+                    <SpeakButton
+                      text={toSpeakableWord(option)}
+                      label={`Nghe chậm từ ${toSpeakableWord(option)}`}
+                      rate={SLOW_RATE}
+                      size="sm"
+                    />
+                  )}
+                </div>
               ))}
             </div>
           </li>

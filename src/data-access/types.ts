@@ -15,6 +15,7 @@ import type {
   Question,
   ReadingPassage,
   SessionOutcome,
+  SessionOutcomeRecord,
   Topic,
   TopicStatus,
   VocabCard,
@@ -55,16 +56,15 @@ export interface ProgressStore {
   getMockTestResults(): Promise<MockTestResult[]>
 
   // Lộ trình học theo buổi (không có trong URD gốc — xem ghi chú tại
-  // CurriculumSessionTemplate trong types/domain.ts). Ngày bắt đầu được
-  // chốt lại lần đầu học sinh mở trang Lộ trình học, để lịch không bị dịch
-  // chuyển mỗi lần mở lại app.
-  getCurriculumStartDate(): Promise<string | undefined>
-  setCurriculumStartDate(isoDate: string): Promise<void>
-  // Kết quả tự đánh giá mỗi buổi học — 1 buổi được coi là "đã học" khi có
-  // outcome; xóa outcome (truyền undefined) tương đương "chưa học". Việc
-  // cộng/trừ xu theo outcome do module gọi tính toán (xem
-  // src/modules/curriculum/rewards.ts), ProgressStore chỉ lưu trạng thái.
-  getSessionOutcomes(): Promise<Record<string, SessionOutcome>>
+  // CurriculumSessionTemplate trong types/domain.ts). Kết quả tự đánh giá
+  // mỗi buổi học — 1 buổi được coi là "đã học" khi có outcome; xóa outcome
+  // (truyền undefined) tương đương "chưa học". `completedAt` do chính
+  // implementation gán bằng giờ hiện tại lúc gọi (không phải tham số) —
+  // dùng làm mốc neo để tự động đẩy lịch các buổi chưa học (xem
+  // src/modules/curriculum/schedule.ts). Việc cộng/trừ xu theo outcome do
+  // module gọi tính toán (xem src/modules/curriculum/rewards.ts),
+  // ProgressStore chỉ lưu trạng thái.
+  getSessionOutcomes(): Promise<Record<string, SessionOutcomeRecord>>
   setSessionOutcome(sessionId: string, outcome: SessionOutcome | undefined): Promise<void>
 
   // NFR-05 (độ bền dữ liệu): Phương án A chỉ lưu trong localStorage, dễ mất

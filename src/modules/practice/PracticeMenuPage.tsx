@@ -51,7 +51,7 @@ export function PracticeMenuPage() {
   }, [])
 
   return (
-    <section className="mx-auto max-w-4xl px-4 py-12">
+    <section className="mx-auto max-w-4xl px-4 py-12 lg:max-w-5xl">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
@@ -68,7 +68,7 @@ export function PracticeMenuPage() {
         )}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {PRACTICE_MODES.map((mode) => (
           <Link
             key={mode.to}
@@ -94,7 +94,7 @@ export function PracticeMenuPage() {
       <h2 className="mt-10 text-lg font-extrabold text-slate-900 dark:text-slate-100">
         🎮 Trò chơi có thưởng
       </h2>
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {GAME_MODES.map((mode) => (
           <Link
             key={mode.to}

@@ -1,4 +1,8 @@
 import type { Question } from '../../types/domain'
+import { grammarExtra } from './grammar-extra'
+import { readingExtra } from './reading-extra'
+import { kn05Extra } from './rewrite'
+import { kn09 } from './synonyms'
 
 // Ngân hàng câu hỏi, chia theo dạng bài KN-xx — Mục 4.3, 4.4 URD.
 // Giai đoạn 1: 55 câu khởi động, biên soạn mới (không sao chép đề thi thật),
@@ -2279,10 +2283,14 @@ export const questions: Question[] = [
   ...kn03,
   ...kn04,
   ...kn05,
+  ...kn05Extra,
   ...kn06,
   ...kn08,
+  ...kn09,
   ...lessonQuiz,
   ...lessonQuiz2,
   ...lessonQuiz3,
   ...lessonQuiz4,
+  ...grammarExtra,
+  ...readingExtra,
 ]

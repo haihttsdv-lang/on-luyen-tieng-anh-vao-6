@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:offline": "tsc -b && vite build --mode offline",
+    "build:online": "tsc -b && vite build --mode online",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
@@ -14,12 +14,13 @@
     "e2e": "playwright test"
   },
   "dependencies": {
+    "firebase": "^12.17.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.45.0",
+    "@playwright/test": "^1.55.1",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",

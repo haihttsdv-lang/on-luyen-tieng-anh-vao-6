@@ -1,4 +1,4 @@
-import type { Attempt, Question, SkillId } from '../../types/domain'
+import type { Attempt, BoxLevel, Question, SkillId, VocabCard } from '../../types/domain'
 
 /**
  * Công thức tính mức độ thành thạo (FR-M03, đã xác nhận với người dùng):
@@ -104,6 +104,56 @@ export function computeAllTopicMastery(
   const result: Record<string, MasteryResult> = {}
   for (const [topicId, topicAttempts] of Object.entries(byTopic)) {
     result[topicId] = computeWeightedMastery(topicAttempts)
+  }
+  return result
+}
+
+/**
+ * ND-07 · Mức thành thạo TỪ VỰNG tính theo hộp Leitner thay vì theo câu hỏi
+ * trắc nghiệm.
+ *
+ * Lý do: học sinh học từ vựng chủ yếu bằng flashcard, trong khi một số chủ
+ * đề TV chỉ có 1–2 câu hỏi gắn `topicId` — không bao giờ đủ
+ * MIN_ATTEMPTS_FOR_SCORE = 3 lượt, nên ô năng lực của chúng hiển thị "Chưa
+ * có dữ liệu" gần như vĩnh viễn dù học sinh đã ôn thẻ rất nhiều.
+ *
+ * Quy đổi: hộp 1 (mới/chưa thuộc) = 0 điểm ... hộp 5 (thuộc chắc) = 1 điểm,
+ * lấy trung bình trên TOÀN BỘ thẻ của chủ đề — thẻ chưa ôn lần nào tính như
+ * hộp 1, nên điểm chỉ lên khi học sinh thật sự ôn hết bộ thẻ. Cần ôn ít nhất
+ * `MIN_CARDS_REVIEWED` thẻ mới hiện điểm, tránh chấm vội khi mới lật 1 thẻ.
+ */
+export const MIN_CARDS_REVIEWED = 3
+
+export function computeVocabMasteryFromBoxes(
+  cards: VocabCard[],
+  boxLevels: Record<string, BoxLevel>,
+): Record<string, MasteryResult> {
+  const byTopic: Record<string, VocabCard[]> = {}
+  for (const card of cards) (byTopic[card.topicId] ??= []).push(card)
+
+  const result: Record<string, MasteryResult> = {}
+  for (const [topicId, topicCards] of Object.entries(byTopic)) {
+    const reviewed = topicCards.filter((c) => boxLevels[c.id] !== undefined)
+    if (reviewed.length < MIN_CARDS_REVIEWED) {
+      result[topicId] = {
+        score: null,
+        attemptsUsed: 0,
+        totalAttempts: reviewed.length,
+        level: 'no-data',
+      }
+      continue
+    }
+    const total = topicCards.reduce(
+      (sum, card) => sum + ((boxLevels[card.id] ?? 1) - 1) / 4,
+      0,
+    )
+    const score = total / topicCards.length
+    result[topicId] = {
+      score,
+      attemptsUsed: reviewed.length,
+      totalAttempts: reviewed.length,
+      level: classifyLevel(score),
+    }
   }
   return result
 }

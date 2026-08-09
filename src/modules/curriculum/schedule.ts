@@ -1,4 +1,8 @@
-import type { CurriculumSessionTemplate, ScheduledSession } from '../../types/domain'
+import type {
+  CurriculumSessionTemplate,
+  ScheduledSession,
+  SessionOutcomeRecord,
+} from '../../types/domain'
 
 // Hạn hoàn thành lộ trình theo yêu cầu người dùng: "hoàn thành trước ngày
 // 31/12/2026". Lịch học lý tưởng là 3 buổi/tuần vào Thứ Ba/Năm/Bảy, nhưng
@@ -47,20 +51,36 @@ function generateWeekdayDates(
 }
 
 /**
- * Tính ngày cho `count` buổi học. Buổi đầu tiên LUÔN là `startDate` (yêu
- * cầu người dùng: "bắt đầu luôn từ hôm nay"), bất kể hôm đó có rơi vào lịch
- * cố định hay không. Các buổi còn lại ưu tiên đúng lịch 3 buổi/tuần
- * (`weekdays`), tính từ ngày kế tiếp `startDate`. Nếu không đủ chỗ trước
- * `deadline`, giãn đều các buổi còn lại trên khoảng thời gian còn lại để
- * vẫn hoàn thành đúng hạn.
+ * Tính ngày cho `count` buổi học theo đúng lịch 3 buổi/tuần (`weekdays`),
+ * tính từ `startDate` trở đi. Nếu không đủ chỗ trước `deadline`, giãn đều
+ * để vẫn hoàn thành đúng hạn.
+ *
+ * `forceFirstDate` (mặc định `true`): buổi đầu tiên LUÔN là `startDate`
+ * (yêu cầu người dùng: "bắt đầu luôn từ hôm nay"), bất kể hôm đó có rơi vào
+ * lịch cố định hay không — dùng cho lần khai giảng đầu tiên của cả lộ
+ * trình. Khi tính lại lịch SAU MỘT LẦN hoàn thành buổi học (xem
+ * `buildAdaptiveSchedule`), truyền `false` để buổi tiếp theo luôn rơi đúng
+ * Thứ Ba/Năm/Bảy — không ép lên ngày `startDate` (vốn chỉ là "hôm sau ngày
+ * hoàn thành", có thể rơi vào bất kỳ thứ nào) làm lệch hẳn lịch cố định.
  */
 export function computeScheduleDates(
   startDate: Date,
   deadline: Date,
   count: number,
   weekdays: readonly number[] = DEFAULT_SESSION_WEEKDAYS,
+  forceFirstDate: boolean = true,
 ): Date[] {
   if (count <= 0) return []
+
+  if (!forceFirstDate) {
+    const ideal = generateWeekdayDates(startDate, deadline, weekdays)
+    if (ideal.length >= count) return ideal.slice(0, count)
+    const startMs = atMidnight(startDate).getTime()
+    const endMs = Math.max(atMidnight(deadline).getTime(), startMs)
+    const span = endMs - startMs
+    const step = count > 1 ? span / (count - 1) : 0
+    return Array.from({ length: count }, (_, i) => new Date(startMs + step * i))
+  }
 
   const first = atMidnight(startDate)
   if (count === 1) return [first]
@@ -82,14 +102,64 @@ export function computeScheduleDates(
   return [first, ...rest]
 }
 
-export function buildSchedule(
+/**
+ * Lịch thích ứng — bổ sung theo yêu cầu người dùng: "tại mỗi buổi học ghi
+ * nhận việc đã hoàn thành và tự động điều chỉnh đẩy thời gian học cho buổi
+ * tiếp theo cho phù hợp". Khác `computeScheduleDates` thuần túy tính từ 1
+ * ngày bắt đầu cố định, hàm này còn xét tới `outcomes` (đã hoàn thành hay
+ * chưa, hoàn thành lúc nào):
+ *
+ *   - Buổi ĐÃ hoàn thành: hiển thị đúng ngày hoàn thành thực tế
+ *     (`completedAt`) — làm nhật ký lịch sử, không tính lại.
+ *   - Buổi CHƯA hoàn thành: xếp lịch (theo `computeScheduleDates`, vẫn giữ
+ *     lịch 3 buổi/tuần và không vượt `deadline`) bắt đầu từ điểm neo = ngày
+ *     kế tiếp buổi hoàn thành gần nhất TRONG THỨ TỰ lộ trình, hoặc `now`
+ *     nếu mốc đó đã ở quá khứ hoặc chưa hoàn thành buổi nào.
+ *
+ * Hệ quả tự nhiên: học chậm hoặc bỏ buổi → điểm neo trễ hơn → các buổi sau
+ * tự động bị đẩy lùi. Học nhanh hơn dự kiến → điểm neo sớm hơn → các buổi
+ * sau cũng được xếp sớm hơn tương ứng. Không cần lưu "ngày bắt đầu lộ
+ * trình" cố định nữa — luôn tính lại từ tiến độ thực tế mỗi lần gọi.
+ */
+export function buildAdaptiveSchedule(
   templates: CurriculumSessionTemplate[],
-  startDate: Date,
+  outcomes: Record<string, Pick<SessionOutcomeRecord, 'completedAt'>>,
   deadline: Date = CURRICULUM_DEADLINE,
+  now: Date = new Date(),
+  weekdays: readonly number[] = DEFAULT_SESSION_WEEKDAYS,
 ): ScheduledSession[] {
-  const dates = computeScheduleDates(startDate, deadline, templates.length)
-  return templates.map((template, i) => ({
-    ...template,
-    date: toISODate(dates[i]),
-  }))
+  const today = atMidnight(now)
+
+  let anchor = today
+  let hasAnyCompletion = false
+  for (const template of templates) {
+    const record = outcomes[template.id]
+    if (!record) continue
+    hasAnyCompletion = true
+    const dayAfterCompletion = addDays(atMidnight(new Date(record.completedAt)), 1)
+    anchor = dayAfterCompletion.getTime() > today.getTime() ? dayAfterCompletion : today
+  }
+
+  const pendingTemplates = templates.filter((t) => !outcomes[t.id])
+  // Ép buổi tiếp theo đúng bằng điểm neo CHỈ khi chưa hoàn thành buổi nào
+  // (khai giảng lần đầu, "bắt đầu luôn từ hôm nay") — một khi đã có buổi
+  // hoàn thành, điểm neo chỉ là "hôm sau ngày hoàn thành" và có thể rơi vào
+  // bất kỳ thứ nào, nên để buổi tiếp theo tự tìm đúng Thứ Ba/Năm/Bảy gần
+  // nhất từ điểm neo trở đi, giữ đúng lịch 3 buổi/tuần.
+  const pendingDates = computeScheduleDates(
+    anchor,
+    deadline,
+    pendingTemplates.length,
+    weekdays,
+    !hasAnyCompletion,
+  )
+
+  let pendingIndex = 0
+  return templates.map((template, i) => {
+    const record = outcomes[template.id]
+    const date = record
+      ? toISODate(new Date(record.completedAt))
+      : toISODate(pendingDates[pendingIndex++])
+    return { ...template, order: i + 1, date }
+  })
 }

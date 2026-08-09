@@ -11,10 +11,16 @@ export interface MockTestOption {
 // Quy đổi 4 phần thật của đề THCS Cầu Giấy sang các mã KN-xx sẵn có của URD —
 // xem docs/adr/0002 để biết lý do quy đổi và giới hạn của cách quy đổi này.
 // Tỷ lệ theo đúng số câu từng phần thật: Phonetics 4, Vocab&Grammar 18
-// (KN-03 8 + KN-04 2 + KN-06 8), Reading 14 (KN-01 4 + KN-02 10), Writing 4.
+// (KN-03 4 + KN-09 4 + KN-04 2 + KN-06 8), Reading 14 (KN-01 4 + KN-02 10),
+// Writing 4.
+//
+// Cập nhật ND-03: đề thật có 4 câu đồng/trái nghĩa, trước đây bị gộp vào
+// KN-03 nên đề sinh ra có thể KHÔNG có câu nào thuộc dạng này. Tách 4 câu từ
+// KN-03 sang mã mới KN-09, giữ nguyên tổng phần Vocab & Grammar = 18.
 const CAU_GIAY_BLUEPRINT: Partial<Record<SkillId, number>> = {
   'KN-08': 4,
-  'KN-03': 8,
+  'KN-03': 4,
+  'KN-09': 4,
   'KN-04': 2,
   'KN-06': 8,
   'KN-01': 4,

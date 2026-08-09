@@ -5,12 +5,16 @@ import { buildFullSchedule, buildPeriodicTests, mergeSchedule } from '../../src/
 import { coinsForOutcome } from '../../src/modules/curriculum/rewards'
 import {
   CURRICULUM_DEADLINE,
-  buildSchedule,
+  buildAdaptiveSchedule,
   computeScheduleDates,
   parseISODate,
   toISODate,
 } from '../../src/modules/curriculum/schedule'
-import type { ScheduledSession, SessionFocus } from '../../src/types/domain'
+import type {
+  CurriculumSessionTemplate,
+  ScheduledSession,
+  SessionFocus,
+} from '../../src/types/domain'
 
 describe('Lộ trình học (CURRICULUM_PLAN)', () => {
   it('mỗi buổi học có tổng thời lượng đúng 90 phút', () => {
@@ -124,13 +128,13 @@ describe('Lập lịch buổi học (schedule.ts)', () => {
     expect(dates[0].getTime()).toBe(atMidnightMs(start))
   })
 
-  it('buildSchedule luôn hoàn thành trước hoặc đúng hạn 31/12/2026 dù bắt đầu từ ngày nào, và buổi 1 luôn là ngày bắt đầu', () => {
-    for (const start of [new Date(2026, 7, 8), new Date(2026, 9, 1), new Date(2026, 11, 15)]) {
-      const scheduled = buildSchedule(CURRICULUM_PLAN, start, CURRICULUM_DEADLINE)
+  it('buildAdaptiveSchedule (không có buổi nào hoàn thành) luôn xong trước hoặc đúng hạn 31/12/2026 dù "hôm nay" là ngày nào, và buổi 1 luôn là "hôm nay"', () => {
+    for (const now of [new Date(2026, 7, 8), new Date(2026, 9, 1), new Date(2026, 11, 15)]) {
+      const scheduled = buildAdaptiveSchedule(CURRICULUM_PLAN, {}, CURRICULUM_DEADLINE, now)
       const lastDate = parseISODate(scheduled[scheduled.length - 1].date)
       expect(lastDate.getTime()).toBeLessThanOrEqual(CURRICULUM_DEADLINE.getTime())
       expect(scheduled).toHaveLength(CURRICULUM_PLAN.length)
-      expect(scheduled[0].date).toBe(toISODate(start))
+      expect(scheduled[0].date).toBe(toISODate(now))
     }
   })
 
@@ -144,6 +148,12 @@ function atMidnightMs(date: Date): number {
   const copy = new Date(date)
   copy.setHours(0, 0, 0, 0)
   return copy.getTime()
+}
+
+function addDaysForTest(date: Date, days: number): Date {
+  const copy = new Date(date)
+  copy.setDate(copy.getDate() + days)
+  return copy
 }
 
 function fakeSession(id: string, date: string): ScheduledSession {
@@ -230,9 +240,9 @@ describe('Bài kiểm tra tuần/tháng (periodicTests.ts)', () => {
   })
 
   it('buildFullSchedule = buổi học chính + đúng số bài kiểm tra Chủ nhật, không trùng id', () => {
-    const start = new Date(2026, 7, 8)
-    const scheduled = buildFullSchedule(CURRICULUM_PLAN, start, CURRICULUM_DEADLINE)
-    const mainOnly = buildSchedule(CURRICULUM_PLAN, start, CURRICULUM_DEADLINE)
+    const now = new Date(2026, 7, 8)
+    const scheduled = buildFullSchedule(CURRICULUM_PLAN, {}, CURRICULUM_DEADLINE, now)
+    const mainOnly = buildAdaptiveSchedule(CURRICULUM_PLAN, {}, CURRICULUM_DEADLINE, now)
     const expectedTestCount = countSundays(
       parseISODate(mainOnly[0].date),
       parseISODate(mainOnly[mainOnly.length - 1].date),
@@ -244,6 +254,121 @@ describe('Bài kiểm tra tuần/tháng (periodicTests.ts)', () => {
     for (let i = 1; i < scheduled.length; i++) {
       expect(scheduled[i].date >= scheduled[i - 1].date).toBe(true)
       expect(scheduled[i].order).toBe(i + 1)
+    }
+  })
+})
+
+function fakeTemplate(id: string, focus: SessionFocus = 'grammar'): CurriculumSessionTemplate {
+  return {
+    id,
+    order: 0,
+    focus,
+    phaseLabel: '🧱 Giai đoạn 1 · Nền tảng',
+    title: `Buổi ${id}`,
+    topicIds: ['NP-01'],
+    blocks: [{ label: 'x', minutes: 90, description: 'x' }],
+    homework: '',
+  }
+}
+
+describe('Đẩy lịch tự động theo tiến độ hoàn thành thực tế (buildAdaptiveSchedule)', () => {
+  const deadline = new Date(2026, 11, 31)
+  const templates = [fakeTemplate('B01'), fakeTemplate('B02'), fakeTemplate('B03'), fakeTemplate('B04')]
+
+  it('buổi đã hoàn thành hiển thị đúng ngày hoàn thành thực tế, không tính lại theo lịch', () => {
+    const now = new Date(2026, 7, 20)
+    const scheduled = buildAdaptiveSchedule(
+      templates,
+      { B01: { completedAt: new Date(2026, 7, 11, 9, 0).toISOString() } },
+      deadline,
+      now,
+    )
+    expect(scheduled.find((s) => s.id === 'B01')!.date).toBe('2026-08-11')
+  })
+
+  it('buổi chưa hoàn thành được xếp từ ngày SAU buổi hoàn thành gần nhất (không phải từ hôm nay) nếu mốc đó ở tương lai, và vẫn đúng lịch Thứ Ba/Năm/Bảy', () => {
+    // Hoàn thành B01 "hôm nay" (20/08, Thứ Năm) → điểm neo cho B02 là hôm
+    // sau (21/08, Thứ Sáu — KHÔNG thuộc lịch cố định). B02 phải rơi vào
+    // Thứ Ba/Năm/Bảy gần nhất từ điểm neo trở đi, tức 22/08 (Thứ Bảy) —
+    // không bị ép đúng bằng 21/08 như buổi khai giảng đầu tiên.
+    const now = new Date(2026, 7, 20)
+    const scheduled = buildAdaptiveSchedule(
+      templates,
+      { B01: { completedAt: now.toISOString() } },
+      deadline,
+      now,
+    )
+    const b02 = scheduled.find((s) => s.id === 'B02')!
+    expect(b02.date).toBe('2026-08-22')
+    expect(parseISODate(b02.date).getDay()).toBe(6) // Thứ Bảy
+  })
+
+  it('nếu buổi hoàn thành gần nhất đã lâu trong quá khứ, buổi tiếp theo được xếp từ hôm nay (không bị kẹt ở quá khứ) — mô phỏng "học chậm/bỏ buổi thì bị đẩy lùi"', () => {
+    const now = new Date(2026, 8, 1) // hôm nay 01/09, xa ngày hoàn thành B01
+    const scheduled = buildAdaptiveSchedule(
+      templates,
+      { B01: { completedAt: new Date(2026, 7, 11).toISOString() } }, // hoàn thành từ 11/08
+      deadline,
+      now,
+    )
+    const b02 = scheduled.find((s) => s.id === 'B02')!
+    expect(parseISODate(b02.date).getTime()).toBe(now.getTime())
+  })
+
+  it('mốc neo dựa trên buổi hoàn thành gần nhất THEO THỨ TỰ lộ trình, không phải theo thời gian hoàn thành thực tế', () => {
+    // Hoàn thành B03 trước (ví dụ học nhảy cóc) rồi hoàn thành B01 sau, muộn
+    // hơn về mặt đồng hồ — nhưng B03 đứng sau B01 trong lộ trình nên vẫn là
+    // mốc neo cho các buổi CHƯA hoàn thành (B02 nếu chưa học, B04...).
+    const now = new Date(2026, 7, 25)
+    const scheduled = buildAdaptiveSchedule(
+      templates,
+      {
+        B01: { completedAt: new Date(2026, 7, 20).toISOString() }, // hoàn thành sau B03 về mặt đồng hồ
+        B03: { completedAt: new Date(2026, 7, 15).toISOString() },
+      },
+      deadline,
+      now,
+    )
+    // B02 là buổi CHƯA hoàn thành đầu tiên trong danh sách còn lại — luôn
+    // nhận đúng ngày neo. Neo phải theo B03 (buổi cuối cùng ĐÃ hoàn thành
+    // trong thứ tự lộ trình B01→B02→B03→B04), không phải theo B01 dù B01
+    // hoàn thành muộn hơn. B03 hoàn thành 15/08 (quá khứ so với now=25/08)
+    // nên neo = now.
+    const b02 = scheduled.find((s) => s.id === 'B02')!
+    expect(parseISODate(b02.date).getTime()).toBe(now.getTime())
+  })
+
+  it('mọi buổi CHƯA hoàn thành luôn rơi đúng lịch cố định Thứ Ba/Năm/Bảy, kể cả khi điểm neo rơi vào ngày khác trong tuần', () => {
+    // Với nhiều "hôm nay" khác nhau (đủ 7 thứ trong tuần) và có 1 buổi vừa
+    // hoàn thành, điểm neo (hôm sau) có thể rơi vào bất kỳ thứ nào — nhưng
+    // mọi buổi CHƯA hoàn thành vẫn phải rơi đúng Thứ Ba/Năm/Bảy, không được
+    // "ăn theo" thứ lệch của điểm neo (bug đã phát hiện qua kiểm tra trực
+    // quan: buổi tiếp theo từng bị xếp vào Chủ nhật).
+    for (let offset = 0; offset < 7; offset++) {
+      const now = addDaysForTest(new Date(2026, 7, 8), offset)
+      const scheduled = buildAdaptiveSchedule(
+        templates,
+        { B01: { completedAt: now.toISOString() } },
+        deadline,
+        now,
+      )
+      for (const s of scheduled) {
+        if (s.id === 'B01') continue // đã hoàn thành, giữ ngày lịch sử
+        expect([2, 4, 6]).toContain(parseISODate(s.date).getDay())
+      }
+    }
+  })
+
+  it('không bao giờ vượt quá deadline dù có nhiều buổi hoàn thành rải rác', () => {
+    const now = new Date(2026, 11, 20)
+    const scheduled = buildAdaptiveSchedule(
+      templates,
+      { B01: { completedAt: new Date(2026, 11, 19).toISOString() } },
+      deadline,
+      now,
+    )
+    for (const s of scheduled) {
+      expect(parseISODate(s.date).getTime()).toBeLessThanOrEqual(deadline.getTime())
     }
   })
 })

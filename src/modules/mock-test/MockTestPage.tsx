@@ -35,7 +35,7 @@ export function MockTestPage() {
   }
 
   return (
-    <section className="mx-auto max-w-2xl px-4 py-12">
+    <section className="mx-auto max-w-2xl px-4 py-12 lg:max-w-5xl">
       <h1 className="text-2xl font-extrabold text-slate-900 dark:text-slate-100">
         ⏱️ Thi thử
       </h1>
@@ -43,14 +43,15 @@ export function MockTestPage() {
         Đề sinh ngẫu nhiên, tính giờ. Chọn độ dài phù hợp với thời gian em có.
       </p>
 
-      <ul className="mt-6 flex flex-col gap-3">
+      {/* UX-02: 3 lựa chọn đề xếp ngang trên màn hình rộng. */}
+      <ul className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-3">
         {MOCK_TEST_OPTIONS.map((option) => (
-          <li key={option.id}>
+          <li key={option.id} className="h-full">
             <button
               type="button"
               disabled={loadingId !== null}
               onClick={() => handleStart(option.id)}
-              className="flex w-full flex-col gap-1 rounded-2xl border-2 border-slate-100 bg-white px-5 py-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-wait disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800 dark:bg-slate-900"
+              className="flex h-full w-full flex-col gap-1 rounded-2xl border-2 border-slate-100 bg-white px-5 py-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg disabled:cursor-wait disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800 dark:bg-slate-900"
             >
               <span className="font-bold text-slate-900 dark:text-slate-100">
                 {option.label}

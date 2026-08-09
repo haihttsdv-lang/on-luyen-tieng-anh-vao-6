@@ -49,3 +49,15 @@ Buổi khai giảng (1 buổi, có kiểm tra đầu vào) giữ nguyên ở đ�
 - TAK12 — Lộ trình ôn luyện tiếng Anh vào lớp 6 tối ưu: https://tak12.com/news/n/1322/lo-trinh-on-luyen-tieng-anh-vao-lop-6-toi-uu-cho-2k9
 - MyPas — Khóa luyện viết: https://mypas.edu.vn/?p=1874
 - Trung tâm Anh ngữ UP: https://www.anhnguup.com/ , https://eduspace.vn/trung-tam-tieng-anh/ha-noi/cau-giay/trung-tam-tieng-anh-up
+
+## Cập nhật 2026-08-08 — lịch tự động đẩy theo tiến độ hoàn thành thực tế
+
+Trước bản cập nhật này, ngày của các buổi học được tính 1 lần từ 1 "ngày bắt đầu lộ trình" cố định (`ProgressStore.getCurriculumStartDate`, chốt lại lúc mở trang lần đầu) — nếu học chậm hơn dự kiến hoặc bỏ buổi, các buổi sau vẫn giữ nguyên ngày đã tính, không phản ánh đúng tiến độ thực tế. Người dùng yêu cầu: "tại mỗi buổi học ghi nhận việc đã hoàn thành và tự động điều chỉnh đẩy thời gian học cho buổi tiếp theo cho phù hợp".
+
+**Thiết kế:**
+
+- `SessionOutcomeRecord` (xem `types/domain.ts`) — kết quả tự đánh giá mỗi buổi nay đi kèm `completedAt` (ISO datetime), do `ProgressStore.setSessionOutcome` tự gán bằng giờ hiện tại lúc gọi.
+- `buildAdaptiveSchedule` (mới, thay `buildSchedule` trong `schedule.ts`): buổi **đã hoàn thành** hiển thị đúng `completedAt` (nhật ký lịch sử, không tính lại); buổi **chưa hoàn thành** được xếp lịch bắt đầu từ điểm neo = ngày kế tiếp buổi hoàn thành gần nhất **theo thứ tự lộ trình** (không phải theo thời điểm hoàn thành thực — tránh trường hợp học nhảy cóc làm sai mốc neo), hoặc hôm nay nếu mốc đó đã ở quá khứ hoặc chưa hoàn thành buổi nào.
+- Hệ quả tự nhiên: học chậm/bỏ buổi → mốc neo trễ hơn → các buổi sau tự động bị đẩy lùi (nhưng không bao giờ vượt hạn 31/12/2026, nhờ `computeScheduleDates` đã có cơ chế nén lịch). Học nhanh hơn dự kiến → mốc neo sớm hơn → các buổi sau cũng được xếp sớm hơn tương ứng.
+- **Không cần lưu "ngày bắt đầu" nữa** — bỏ hẳn `ProgressStore.getCurriculumStartDate`/`setCurriculumStartDate`; `CurriculumPage.tsx` tính lại lịch bằng `useMemo` mỗi khi `outcomes` đổi (thay vì fetch 1 lần lúc mount), nên vừa chấm kết quả 1 buổi là các buổi sau cập nhật ngay trên màn hình.
+- Áp dụng nhất quán cho cả bài kiểm tra tuần/tháng (`periodicTests.ts`): nếu đã hoàn thành cũng hiển thị đúng `completedAt` thay vì ngày Chủ nhật được sinh tự động.

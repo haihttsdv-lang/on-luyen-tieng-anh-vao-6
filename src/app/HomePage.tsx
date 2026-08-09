@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { contentStore, progressStore } from '../data-access'
+import { TodaySessionCard } from '../modules/curriculum/TodaySessionCard'
 import { getSuggestions, type Suggestion } from '../modules/mastery/getSuggestions'
 import type { BoxLevel } from '../types/domain'
 
@@ -68,19 +69,9 @@ export function HomePage() {
   }, [])
 
   return (
-    <section className="mx-auto max-w-4xl px-4 py-16">
-      <div className="rounded-3xl bg-linear-to-br from-emerald-500 via-lime-500 to-amber-400 px-6 py-10 text-white shadow-lg shadow-emerald-500/20 sm:px-10">
-        <p className="text-sm font-bold tracking-wide uppercase opacity-90">
-          Chào mừng trở lại!
-        </p>
-        <h1 className="mt-2 text-3xl font-extrabold sm:text-4xl">
-          Ôn luyện Tiếng Anh vào lớp 6
-        </h1>
-        <p className="mt-3 max-w-2xl text-white/90">
-          Học lý thuyết, luyện tập theo chủ điểm, và nhận gợi ý nhiệm vụ tiếp
-          theo dựa trên điểm mạnh–yếu thực tế của em.
-        </p>
-      </div>
+    <section className="mx-auto max-w-4xl px-4 py-10 sm:py-16">
+      {/* UX-05: thay hero tĩnh bằng buổi học cụ thể của hôm nay. */}
+      <TodaySessionCard />
 
       {suggestions !== null && suggestions.length > 0 && (
         <div className="mt-6">
@@ -109,7 +100,8 @@ export function HomePage() {
         </div>
       )}
 
-      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+      {/* UX-02: tận dụng chiều ngang màn hình lớn thay vì để trống ~50%. */}
+      <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {SECTIONS.map((section) => (
           <Link
             key={section.to}

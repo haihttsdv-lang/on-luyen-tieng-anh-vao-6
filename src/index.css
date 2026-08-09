@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+/* UX-10 — bản in báo cáo cho phụ huynh: bỏ thanh điều hướng trên/dưới và
+   nền màu để trang giấy chỉ còn nội dung báo cáo. */
+@media print {
+  header,
+  nav {
+    display: none !important;
+  }
+  main {
+    padding-bottom: 0 !important;
+  }
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

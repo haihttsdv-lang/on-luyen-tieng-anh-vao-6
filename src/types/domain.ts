@@ -32,6 +32,10 @@ export type SkillId =
   | 'KN-06'
   | 'KN-07'
   | 'KN-08'
+  // Đề Cầu Giấy có 4 câu đồng/trái nghĩa (ADR 0002) nhưng trước đây bị gộp
+  // lẫn vào KN-03/KN-04 nên đề thi thử có thể sinh ra 0 câu dạng này — tách
+  // riêng mã kỹ năng để blueprint đặt đúng tỷ trọng (ND-03).
+  | 'KN-09'
 
 export interface Question {
   id: string
@@ -42,6 +46,12 @@ export interface Question {
   topicIds: string[] // bắt buộc >= 1, dùng để lọc luyện theo chủ điểm (FR-P03) và tính mastery (FR-M03)
   skillId: SkillId
   passageId?: string // liên kết tới ReadingPassage khi câu hỏi thuộc một bài đọc dài (KN-02)
+  // Gợi ý cấu trúc, chỉ hiện SAU khi trả lời sai — cách giáo viên thường
+  // chữa dạng viết lại câu (KN-05), xem ND-04.
+  hint?: string
+  // Đánh dấu câu ở mức vận dụng cao (bẫy quen thuộc trong đề CLC) để bộ đề
+  // luôn có đủ câu phân loại, không chỉ câu nhận biết công thức (ND-02).
+  challenging?: boolean
 }
 
 /**
@@ -54,6 +64,10 @@ export interface ReadingPassage {
   title: string
   text: string
   topicIds: string[]
+  // Đề CLC luôn có ít nhất 1 bài "khó" để phân loại: bài `advanced` dài
+  // 200–250 từ, có từ mới cần suy đoán theo ngữ cảnh (ND-05). Thiếu trường
+  // này thì coi như 'basic'.
+  level?: 'basic' | 'advanced'
 }
 
 // Hộp Leitner 1–5 dùng cho spaced repetition (FR-L06). Đây là TIẾN ĐỘ của
@@ -69,6 +83,10 @@ export interface VocabCard {
   meaning: string
   example: string
   topicId: string // TV-xx
+  // Hình minh họa bằng emoji — cách rẻ nhất để thẻ từ vựng có hình ảnh mà
+  // không thêm 1 byte tài nguyên nào (MM-05). Không phải từ nào cũng có
+  // emoji hợp lý, nên đây là trường tùy chọn.
+  emoji?: string
 }
 
 export interface WritingPrompt {
@@ -76,6 +94,11 @@ export interface WritingPrompt {
   title: string
   ideas: string[]
   vocab: string[]
+  // Bài mẫu 50–70 từ, CHỈ hiện sau khi học sinh bấm "Tôi đã viết xong" để
+  // tránh chép — bước chữa bài quan trọng nhất của kỹ năng viết (ND-06).
+  sampleAnswer?: string
+  // Tiêu chí để học sinh tự chấm bài viết của mình (ND-06).
+  checklist?: string[]
 }
 
 export interface Attempt {
@@ -172,3 +195,16 @@ export interface ScheduledSession extends CurriculumSessionTemplate {
 // outcome nằm ở src/modules/curriculum/rewards.ts (business logic, không
 // đặt trong domain type).
 export type SessionOutcome = 'great' | 'ok' | 'weak'
+
+// Ghi kèm thời điểm hoàn thành thực tế — bổ sung theo yêu cầu người dùng
+// "ghi nhận việc đã hoàn thành và tự động điều chỉnh đẩy thời gian học cho
+// buổi tiếp theo cho phù hợp". `completedAt` do ProgressStore tự gán bằng
+// giờ hiện tại lúc gọi setSessionOutcome (không phải tham số truyền vào),
+// dùng làm mốc neo lịch cho các buổi CHƯA hoàn thành trong
+// src/modules/curriculum/schedule.ts (buildAdaptiveSchedule) — học chậm/bỏ
+// buổi thì các buổi sau tự bị đẩy lùi; học nhanh hơn dự kiến thì các buổi
+// sau cũng được xếp sớm hơn tương ứng.
+export interface SessionOutcomeRecord {
+  outcome: SessionOutcome
+  completedAt: string // ISO 8601 datetime
+}

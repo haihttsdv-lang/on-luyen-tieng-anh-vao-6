@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { SpeakButton } from '../../components/SpeakButton'
+import { VoiceRecorder } from '../../components/VoiceRecorder'
 import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore, progressStore } from '../../data-access'
 import type { BoxLevel, VocabCard } from '../../types/domain'
@@ -9,17 +11,6 @@ const MAX_BOX: BoxLevel = 5
 interface QueueItem {
   card: VocabCard
   box: BoxLevel
-}
-
-// Phát âm giọng Anh-Mỹ bằng Web Speech API của trình duyệt — không cần file
-// âm thanh hay mạng, phù hợp cả với bản offline đóng gói 1 file HTML.
-function speakWord(word: string) {
-  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return
-  window.speechSynthesis.cancel()
-  const utterance = new SpeechSynthesisUtterance(word)
-  utterance.lang = 'en-US'
-  utterance.rate = 0.9
-  window.speechSynthesis.speak(utterance)
 }
 
 export function FlashcardsPage() {
@@ -134,6 +125,13 @@ export function FlashcardsPage() {
         >
           {!flipped ? (
             <>
+              {/* MM-05: hình minh họa bằng emoji — có hình ảnh mà không thêm
+                  tài nguyên nào; từ nào chưa gán emoji thì bỏ qua. */}
+              {card.emoji && (
+                <span className="text-5xl" aria-hidden="true">
+                  {card.emoji}
+                </span>
+              )}
               <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100">
                 {card.word}
               </span>
@@ -158,17 +156,30 @@ export function FlashcardsPage() {
             {flipped ? '(Bấm để xem lại mặt trước)' : '(Bấm để lật thẻ)'}
           </span>
         </button>
-        <button
-          type="button"
-          aria-label={`Phát âm từ ${card.word} giọng Anh-Mỹ`}
-          onClick={(e) => {
-            e.stopPropagation()
-            speakWord(card.word)
-          }}
-          className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-lg text-emerald-700 transition-transform hover:scale-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:bg-emerald-500/10 dark:text-emerald-400"
-        >
-          🔊
-        </button>
+        <SpeakButton
+          text={card.word}
+          label={`Phát âm từ ${card.word} giọng Anh-Mỹ`}
+          className="absolute top-3 right-3"
+        />
+        {/* Nghe cả câu ví dụ ở mặt sau — nghe ngữ điệu cả câu chứ không chỉ
+            từ đơn lẻ (MM-02). */}
+        {flipped && (
+          <SpeakButton
+            text={card.example}
+            label={`Nghe câu ví dụ của từ ${card.word}`}
+            size="sm"
+            className="absolute right-3 bottom-3"
+          />
+        )}
+      </div>
+
+      {/* MM-07: nghe mẫu → tự đọc lại → nghe lại chính mình. Bản ghi chỉ nằm
+          trong bộ nhớ tab, không lưu và không đồng bộ đi đâu. */}
+      <div className="mt-4">
+        <VoiceRecorder
+          label={`Ghi âm phát âm từ ${card.word}`}
+          resetKey={card.id}
+        />
       </div>
 
       {flipped && (

@@ -3,8 +3,9 @@ import type {
   CurriculumSessionTemplate,
   LessonPlanBlock,
   ScheduledSession,
+  SessionOutcomeRecord,
 } from '../../types/domain'
-import { buildSchedule, parseISODate, toISODate } from './schedule'
+import { buildAdaptiveSchedule, parseISODate, toISODate } from './schedule'
 
 // Bài kiểm tra định kỳ — không có trong URD gốc, bổ sung theo yêu cầu người
 // dùng: "bổ sung thêm bài kiểm tra kiến thức đã học trong từng tuần vào
@@ -167,13 +168,23 @@ export function mergeSchedule(...groups: ScheduledSession[][]): ScheduledSession
     .map((session, i) => ({ ...session, order: i + 1 }))
 }
 
-/** Lộ trình đầy đủ: buổi học chính (Thứ Ba/Năm/Bảy) + kiểm tra tuần/tháng (Chủ nhật). */
+/**
+ * Lộ trình đầy đủ: buổi học chính (Thứ Ba/Năm/Bảy, tự đẩy lịch theo tiến độ
+ * hoàn thành thực tế — xem `buildAdaptiveSchedule`) + kiểm tra tuần/tháng
+ * (Chủ nhật, sinh theo khoảng ngày của lịch chính đã tính). Bài kiểm tra đã
+ * hoàn thành cũng hiển thị đúng ngày hoàn thành thực tế, nhất quán với buổi
+ * học chính.
+ */
 export function buildFullSchedule(
   templates: CurriculumSessionTemplate[],
-  startDate: Date,
+  outcomes: Record<string, Pick<SessionOutcomeRecord, 'completedAt'>>,
   deadline: Date,
+  now: Date = new Date(),
 ): ScheduledSession[] {
-  const main = buildSchedule(templates, startDate, deadline)
-  const tests = buildPeriodicTests(main)
+  const main = buildAdaptiveSchedule(templates, outcomes, deadline, now)
+  const tests = buildPeriodicTests(main).map((test) => {
+    const record = outcomes[test.id]
+    return record ? { ...test, date: toISODate(new Date(record.completedAt)) } : test
+  })
   return mergeSchedule(main, tests)
 }

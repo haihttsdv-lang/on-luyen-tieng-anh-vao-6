@@ -30,17 +30,37 @@ const VALID_SKILL_IDS = new Set([
   'KN-06',
   'KN-07',
   'KN-08',
+  'KN-09',
 ])
 
 describe('Ngân hàng câu hỏi (Question)', () => {
-  it('có đúng 185 câu hỏi (Giai đoạn 1+3+6+7+8)', () => {
-    expect(questions).toHaveLength(185)
+  // Mục tiêu URD 4.4: 8–10 câu/chủ điểm ngữ pháp. Sau đợt bổ sung ND-02/03/
+  // 04/05, ngân hàng đạt 477 câu và MỌI chủ điểm NP đều có ≥ 8 câu (xem test
+  // riêng bên dưới) — con số tổng chỉ chốt để phát hiện mất dữ liệu ngoài ý
+  // muốn, không phải mục tiêu tự thân.
+  it('có đúng 477 câu hỏi', () => {
+    expect(questions).toHaveLength(477)
+  })
+
+  it('mỗi chủ điểm ngữ pháp có ít nhất 8 câu hỏi (Mục 4.4 URD, ND-02)', () => {
+    const countByTopic: Record<string, number> = {}
+    for (const q of questions) {
+      for (const topicId of q.topicIds) {
+        if (topicId.startsWith('NP-')) {
+          countByTopic[topicId] = (countByTopic[topicId] ?? 0) + 1
+        }
+      }
+    }
+    for (const topicId of ALL_LESSON_TOPIC_IDS) {
+      expect(countByTopic[topicId] ?? 0).toBeGreaterThanOrEqual(8)
+    }
   })
 
   it('có đủ câu hỏi mỗi dạng bài để sinh đề thi thử "Giống Cầu Giấy" (docs/adr/0002)', () => {
     const required: Record<string, number> = {
       'KN-08': 4,
-      'KN-03': 8,
+      'KN-03': 4,
+      'KN-09': 4,
       'KN-04': 2,
       'KN-06': 8,
       'KN-01': 4,
@@ -151,8 +171,8 @@ describe('Flashcard từ vựng (VocabCard)', () => {
 })
 
 describe('Bài đọc hiểu dài (ReadingPassage)', () => {
-  it('có 8 bài đọc, mỗi bài có tiêu đề, nội dung, và chủ điểm', () => {
-    expect(readingPassages).toHaveLength(8)
+  it('có 15 bài đọc, mỗi bài có tiêu đề, nội dung, và chủ điểm', () => {
+    expect(readingPassages).toHaveLength(15)
     for (const passage of readingPassages) {
       expect(passage.title.length).toBeGreaterThan(0)
       expect(passage.text.length).toBeGreaterThan(0)
@@ -162,8 +182,8 @@ describe('Bài đọc hiểu dài (ReadingPassage)', () => {
 })
 
 describe('Đề viết đoạn văn (WritingPrompt)', () => {
-  it('có 5 đề viết khởi động, mỗi đề có gợi ý ý tưởng và từ vựng', () => {
-    expect(writingPrompts).toHaveLength(5)
+  it('có đủ 15 đề viết (Mục 4.4 URD), mỗi đề có gợi ý ý tưởng và từ vựng', () => {
+    expect(writingPrompts).toHaveLength(15)
     for (const prompt of writingPrompts) {
       expect(prompt.title.length).toBeGreaterThan(0)
       expect(prompt.ideas.length).toBeGreaterThan(0)

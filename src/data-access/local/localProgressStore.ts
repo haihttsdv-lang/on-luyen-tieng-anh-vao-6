@@ -4,7 +4,7 @@ import type {
   DiagnosticStatus,
   LearnerProfile,
   MockTestResult,
-  SessionOutcome,
+  SessionOutcomeRecord,
   TopicStatus,
 } from '../../types/domain'
 import type { ProgressStore } from '../types'
@@ -20,18 +20,18 @@ const KEYS = {
   diagnosticStatus: 'ol6.progress.diagnosticStatus',
   coins: 'ol6.progress.coins',
   mockTestResults: 'ol6.progress.mockTestResults',
-  curriculumStartDate: 'ol6.progress.curriculumStartDate',
   sessionOutcomes: 'ol6.progress.sessionOutcomes',
 } as const
 
-// Phát sự kiện DOM khi số xu thay đổi, để Layout (thanh điều hướng) cập
-// nhật số xu hiển thị ngay lập tức mà không cần đổi route — trước đây
-// Layout chỉ đọc lại xu khi location.pathname đổi, nên các hành động cộng/
-// trừ xu ngay trên cùng 1 trang (ví dụ chấm kết quả buổi học) sẽ không cập
-// nhật header cho tới khi điều hướng sang trang khác.
-function notifyCoinsChanged(): void {
+// Phát sự kiện DOM mỗi khi tiến độ cục bộ thay đổi. Hai nơi lắng nghe sự
+// kiện này: (1) Layout (thanh điều hướng) cập nhật số xu hiển thị ngay lập
+// tức mà không cần đổi route — trước đây Layout chỉ đọc lại xu khi
+// location.pathname đổi; (2) module đồng bộ cloud (data-access/cloud/
+// firebaseSync.ts) dùng sự kiện này để biết khi nào cần đẩy dữ liệu lên
+// Firestore, không phải sửa từng hàm ghi dữ liệu để gọi đồng bộ thủ công.
+function notifyProgressChanged(): void {
   if (typeof window !== 'undefined') {
-    window.dispatchEvent(new CustomEvent('ol6:coins-changed'))
+    window.dispatchEvent(new CustomEvent('ol6:progress-changed'))
   }
 }
 
@@ -47,6 +47,7 @@ function readJson<T>(key: string, fallback: T): T {
 
 function writeJson(key: string, value: unknown): void {
   localStorage.setItem(key, JSON.stringify(value))
+  notifyProgressChanged()
 }
 
 export const localProgressStore: ProgressStore = {
@@ -101,7 +102,6 @@ export const localProgressStore: ProgressStore = {
   async addCoins(amount) {
     const total = readJson<number>(KEYS.coins, 0)
     writeJson(KEYS.coins, Math.max(0, total + amount))
-    notifyCoinsChanged()
   },
 
   async addMockTestResult(result) {
@@ -113,20 +113,13 @@ export const localProgressStore: ProgressStore = {
     return readJson<MockTestResult[]>(KEYS.mockTestResults, [])
   },
 
-  async getCurriculumStartDate() {
-    return readJson<string | undefined>(KEYS.curriculumStartDate, undefined)
-  },
-  async setCurriculumStartDate(isoDate) {
-    writeJson(KEYS.curriculumStartDate, isoDate)
-  },
-
   async getSessionOutcomes() {
-    return readJson<Record<string, SessionOutcome>>(KEYS.sessionOutcomes, {})
+    return readJson<Record<string, SessionOutcomeRecord>>(KEYS.sessionOutcomes, {})
   },
   async setSessionOutcome(sessionId, outcome) {
-    const outcomes = readJson<Record<string, SessionOutcome>>(KEYS.sessionOutcomes, {})
+    const outcomes = readJson<Record<string, SessionOutcomeRecord>>(KEYS.sessionOutcomes, {})
     if (outcome === undefined) delete outcomes[sessionId]
-    else outcomes[sessionId] = outcome
+    else outcomes[sessionId] = { outcome, completedAt: new Date().toISOString() }
     writeJson(KEYS.sessionOutcomes, outcomes)
   },
 
@@ -158,5 +151,6 @@ export const localProgressStore: ProgressStore = {
         localStorage.setItem(key, JSON.stringify(value))
       }
     }
+    notifyProgressChanged()
   },
 }

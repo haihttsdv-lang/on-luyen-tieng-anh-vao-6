@@ -11,7 +11,7 @@ export function WritingPromptListPage() {
   }, [])
 
   return (
-    <section className="mx-auto max-w-2xl px-4 py-12">
+    <section className="mx-auto max-w-2xl px-4 py-12 lg:max-w-4xl">
       <Link
         to="/luyen-tap"
         className="text-sm font-bold text-emerald-600 hover:underline dark:text-emerald-400"
@@ -27,7 +27,8 @@ export function WritingPromptListPage() {
         động ở phiên bản này.
       </p>
 
-      <ul className="mt-6 flex flex-col gap-3">
+      {/* UX-02: tận dụng chiều ngang màn hình lớn thay vì bỏ trống ~50%. */}
+      <ul className="mt-6 grid grid-cols-1 gap-3 lg:grid-cols-2">
         {prompts.map((prompt) => (
           <li key={prompt.id}>
             <Link

@@ -13,10 +13,13 @@ import type {
   VocabCard,
 } from '../../types/domain'
 import { BackupSection } from './BackupSection'
+import { CloudSyncSection } from './CloudSyncSection'
+import { SoundSettingsSection } from './SoundSettingsSection'
 import { getSuggestions, type Suggestion } from './getSuggestions'
 import {
   computeAllSkillMastery,
   computeAllTopicMastery,
+  computeVocabMasteryFromBoxes,
   type MasteryResult,
 } from './masteryCalc'
 
@@ -98,13 +101,19 @@ export function MasteryPage() {
   const npIds = [...new Set(questions.flatMap((q) => q.topicIds))]
     .filter((id) => id.startsWith('NP-'))
     .sort()
-  const tvIds = [...new Set(questions.flatMap((q) => q.topicIds))]
-    .filter((id) => id.startsWith('TV-'))
-    .sort()
+  // ND-07: lấy chủ đề từ vựng từ BỘ THẺ chứ không từ câu hỏi — trước đây chủ
+  // đề nào không có câu hỏi nào gắn topicId thì biến mất khỏi bản đồ.
+  const tvIds = [...new Set(vocabCards.map((c) => c.topicId))].sort()
   const skillIds = [...new Set(questions.map((q) => q.skillId))].sort() as SkillId[]
 
   const topicMastery = computeAllTopicMastery(attempts, questions)
   const skillMastery = computeAllSkillMastery(attempts, questions)
+  // ND-07: chủ đề từ vựng chấm theo hộp Leitner (bản chất là học flashcard),
+  // chỉ lùi về cách tính theo câu trắc nghiệm khi chưa ôn đủ thẻ.
+  const vocabMastery = computeVocabMasteryFromBoxes(
+    vocabCards,
+    vocabBoxLevels as Record<string, BoxLevel>,
+  )
   const emptyResult: MasteryResult = {
     score: null,
     attemptsUsed: 0,
@@ -217,15 +226,21 @@ export function MasteryPage() {
       <h3 className="mt-6 text-sm font-bold tracking-wide text-slate-500 uppercase">
         Từ vựng
       </h3>
+      <p className="mt-1 text-xs text-slate-400">
+        Tính theo hộp Leitner của bộ thẻ (ôn càng nhiều thẻ lên hộp cao, điểm
+        càng cao).
+      </p>
       <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {tvIds.map((id) => (
-          <MasteryTile
-            key={id}
-            id={id}
-            label={getTopicLabel(id)}
-            result={topicMastery[id] ?? emptyResult}
-          />
-        ))}
+        {tvIds.map((id) => {
+          const fromBoxes = vocabMastery[id]
+          const result =
+            fromBoxes && fromBoxes.level !== 'no-data'
+              ? fromBoxes
+              : (topicMastery[id] ?? fromBoxes ?? emptyResult)
+          return (
+            <MasteryTile key={id} id={id} label={getTopicLabel(id)} result={result} />
+          )
+        })}
       </div>
 
       <h3 className="mt-6 text-sm font-bold tracking-wide text-slate-500 uppercase">
@@ -242,6 +257,8 @@ export function MasteryPage() {
         ))}
       </div>
 
+      <SoundSettingsSection />
+      <CloudSyncSection />
       <BackupSection />
     </section>
   )

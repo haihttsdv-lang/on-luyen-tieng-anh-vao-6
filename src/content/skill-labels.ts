@@ -9,4 +9,5 @@ export const SKILL_LABELS: Record<SkillId, string> = {
   'KN-06': 'Tìm và sửa lỗi sai',
   'KN-07': 'Viết đoạn văn',
   'KN-08': 'Ngữ âm',
+  'KN-09': 'Từ đồng nghĩa / trái nghĩa',
 }
