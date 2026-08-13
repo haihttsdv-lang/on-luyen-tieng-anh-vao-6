@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { contentStore } from '../../data-access'
+import { useSessionReturn } from '../curriculum/returnTo'
 import type { Question, SkillId } from '../../types/domain'
 import { QuestionRunner } from './QuestionRunner'
 import { shuffle } from './shuffle'
@@ -24,6 +25,7 @@ function isSkillId(value: string | null): value is SkillId {
 
 export function PracticeBySkillPage() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
+  const { returnTo } = useSessionReturn()
   const [params] = useSearchParams()
   // LT-02/PP-02: Lộ trình học có thể trỏ thẳng vào một dạng bài qua
   // `?skill=KN-08` — dùng cho khối "Luyện dạng bài xen kẽ" trong mỗi buổi.
@@ -68,6 +70,7 @@ export function PracticeBySkillPage() {
         variant="standard"
         title={`${skill?.icon} ${skill?.title}`}
         onExit={() => setSelectedSkill(null)}
+        returnTo={returnTo ?? undefined}
       />
     )
   }

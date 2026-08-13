@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore } from '../../data-access'
+import { useSessionReturn } from '../curriculum/returnTo'
 import type { Question } from '../../types/domain'
 import { QuestionRunner } from './QuestionRunner'
 import { shuffle } from './shuffle'
@@ -22,6 +23,7 @@ function useTopicsFromQuery(): string[] {
 
 export function PracticeByTopicPage() {
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
+  const { returnTo } = useSessionReturn()
   const topicsFromQuery = useTopicsFromQuery()
   const [selected, setSelected] = useState<Set<string>>(new Set(topicsFromQuery))
   const [sessionQuestions, setSessionQuestions] = useState<Question[] | null>(null)
@@ -73,6 +75,7 @@ export function PracticeByTopicPage() {
         variant="standard"
         title={`🧩 ${[...selected].join(', ')}`}
         onExit={() => setSessionQuestions(null)}
+        returnTo={returnTo ?? undefined}
       />
     )
   }

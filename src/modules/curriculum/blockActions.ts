@@ -1,4 +1,5 @@
 import type { LessonPlanBlock, ScheduledSession } from '../../types/domain'
+import { withSessionReturn } from './returnTo'
 
 /**
  * PP-02 · Nút hành động thật cho từng khối trong buổi học, thay cho mô tả
@@ -40,7 +41,21 @@ function skillPracticeAction(skillId: string): BlockAction {
   return { label: '🎯 Luyện đúng dạng bài này', to: `/luyen-tap/dang-bai?skill=${skillId}` }
 }
 
+// PP-01 UX fix: mọi trang đích (lý thuyết/luyện tập/quiz/flashcard...) cần
+// biết ĐANG Ở BUỔI NÀO để tự động quay lại đúng buổi đó sau khi hoàn thành
+// (xem `returnTo.ts`/`ReturnToSessionBanner`) — trước đây học sinh học xong
+// lý thuyết hay làm bài tập xong phải tự bấm về Lộ trình học rồi tự tìm lại
+// buổi, không có gì mang theo ngữ cảnh "đang học buổi nào" qua các trang đó.
 export function getBlockAction(
+  session: ScheduledSession,
+  block: LessonPlanBlock,
+  previousTopicId?: string,
+): BlockAction | undefined {
+  const action = computeAction(session, block, previousTopicId)
+  return action ? { ...action, to: withSessionReturn(action.to, session.id) } : undefined
+}
+
+function computeAction(
   session: ScheduledSession,
   block: LessonPlanBlock,
   previousTopicId?: string,

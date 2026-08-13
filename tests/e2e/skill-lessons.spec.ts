@@ -58,6 +58,8 @@ test('LT-01: buổi Viết đoạn văn (KN-07) đưa thẳng tới trang Viết
   // Nút "chốt" nằm ngoài phần cấu trúc buổi học (quickLinksFor), nhãn không
   // có chữ "ngay" — khác 2 nút hành động của khối bên trong (label "...ngay").
   await card.getByRole('link', { name: '✍️ Viết đoạn văn', exact: true }).click()
-  await expect(page).toHaveURL('/luyen-tap/viet')
+  // UX fix: nút hành động giờ mang theo `?from=<sessionId>` để trang đích tự
+  // quay lại đúng buổi học — chỉ kiểm tra đường dẫn, không khớp URL tuyệt đối.
+  await expect(page).toHaveURL(/\/luyen-tap\/viet(\?from=.*)?$/)
   await expect(page.getByRole('heading', { name: '✍️ Viết đoạn văn' })).toBeVisible()
 })

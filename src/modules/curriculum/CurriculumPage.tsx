@@ -9,6 +9,7 @@ import { computeEarnedBadges } from './badges'
 import { getBlockAction } from './blockActions'
 import { JourneyMap } from './JourneyMap'
 import { PhaseProgressRing } from './PhaseProgressRing'
+import { withSessionReturn } from './returnTo'
 import { SkillRadarChart } from './SkillRadarChart'
 import type {
   Attempt,
@@ -138,7 +139,9 @@ function quickLinksFor(session: ScheduledSession): { to: string; label: string }
         : { to: `/luyen-tap/dang-bai?skill=${session.skillId}`, label: '🎯 Luyện dạng bài này' },
     )
   }
-  return links
+  // Mang theo "đang học buổi nào" để trang đích tự động quay lại đúng buổi
+  // này sau khi hoàn thành — xem `returnTo.ts`.
+  return links.map((link) => ({ ...link, to: withSessionReturn(link.to, session.id) }))
 }
 
 interface Section {

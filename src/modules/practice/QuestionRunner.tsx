@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { ReadAlongPassage } from '../../components/ReadAlongPassage'
+import { ReturnToSessionBanner } from '../../components/ReturnToSessionBanner'
 import { SpeakButton } from '../../components/SpeakButton'
 import { contentStore, progressStore } from '../../data-access'
 import { playCorrect, playFinish, playWrong } from '../audio/sfx'
@@ -19,6 +20,11 @@ interface QuestionRunnerProps {
   // cùng để cá nhân hóa lộ trình theo trình độ — tách khỏi `onExit` vì
   // `onExit` còn được gọi khi thoát ngang chừng (chưa có kết quả).
   onFinish?: (correctCount: number, total: number) => void
+  // UX fix: khi phiên luyện tập này được mở TỪ Session Runner (`?from=`),
+  // hiện thêm `ReturnToSessionBanner` ở màn hình hoàn thành để TỰ ĐỘNG quay
+  // lại đúng buổi đó — độc lập với `onExit` (không thay thế), nên không ảnh
+  // hưởng side-effect nào của trang gọi (ví dụ lưu điểm kiểm tra đầu vào).
+  returnTo?: string
 }
 
 interface AnsweredEntry {
@@ -47,6 +53,7 @@ export function QuestionRunner({
   title,
   onExit,
   onFinish,
+  returnTo,
 }: QuestionRunnerProps) {
   const [index, setIndex] = useState(0)
   const [selected, setSelected] = useState<number | null>(null)
@@ -252,6 +259,10 @@ export function QuestionRunner({
         >
           Xong
         </button>
+
+        {/* UX fix: tới từ Session Runner thì tự động quay lại đúng buổi học
+            sau vài giây, không bắt học sinh tự tìm đường về. */}
+        {returnTo && <ReturnToSessionBanner returnTo={returnTo} />}
       </section>
     )
   }

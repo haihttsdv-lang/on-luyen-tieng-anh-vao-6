@@ -6,11 +6,13 @@ import { VoiceRecorder } from '../../components/VoiceRecorder'
 import { LEARNING_SEQUENCE } from '../../content/topic-groups'
 import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore, progressStore } from '../../data-access'
+import { useSessionReturn, withSessionReturn } from '../curriculum/returnTo'
 import type { Topic } from '../../types/domain'
 import { GrammarVisual, hasGrammarVisual } from './GrammarVisual'
 
 export function LessonDetailPage() {
   const { topicId } = useParams<{ topicId: string }>()
+  const { sessionId, returnTo } = useSessionReturn()
   const [topic, setTopic] = useState<Topic | null | undefined>(undefined)
 
   useEffect(() => {
@@ -50,10 +52,10 @@ export function LessonDetailPage() {
   return (
     <section className="mx-auto max-w-2xl px-4 py-12">
       <Link
-        to="/hoc-ly-thuyet"
+        to={returnTo ?? '/hoc-ly-thuyet'}
         className="text-sm font-bold text-emerald-600 hover:underline dark:text-emerald-400"
       >
-        ← Quay lại danh sách
+        {returnTo ? '← Quay lại buổi học' : '← Quay lại danh sách'}
       </Link>
 
       <p className="mt-4 text-xs font-bold text-slate-400">{topic.id}</p>
@@ -148,7 +150,11 @@ export function LessonDetailPage() {
       </ul>
 
       <Link
-        to={`/hoc-ly-thuyet/${topic.id}/quiz`}
+        to={
+          sessionId
+            ? withSessionReturn(`/hoc-ly-thuyet/${topic.id}/quiz`, sessionId)
+            : `/hoc-ly-thuyet/${topic.id}/quiz`
+        }
         className="mt-8 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-lime-500 px-6 py-3 font-bold text-white shadow-md shadow-emerald-500/30 transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
       >
         🎯 Làm quiz nhanh
@@ -160,7 +166,7 @@ export function LessonDetailPage() {
       >
         {prevId ? (
           <Link
-            to={`/hoc-ly-thuyet/${prevId}`}
+            to={sessionId ? withSessionReturn(`/hoc-ly-thuyet/${prevId}`, sessionId) : `/hoc-ly-thuyet/${prevId}`}
             className="flex max-w-[45%] flex-col rounded-xl border-2 border-slate-100 px-4 py-2.5 text-left hover:border-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800"
           >
             <span className="text-xs font-bold text-slate-400">← Bài trước</span>
@@ -176,7 +182,7 @@ export function LessonDetailPage() {
         </span>
         {nextId ? (
           <Link
-            to={`/hoc-ly-thuyet/${nextId}`}
+            to={sessionId ? withSessionReturn(`/hoc-ly-thuyet/${nextId}`, sessionId) : `/hoc-ly-thuyet/${nextId}`}
             className="flex max-w-[45%] flex-col rounded-xl border-2 border-slate-100 px-4 py-2.5 text-right hover:border-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500 dark:border-slate-800"
           >
             <span className="text-xs font-bold text-slate-400">Bài sau →</span>

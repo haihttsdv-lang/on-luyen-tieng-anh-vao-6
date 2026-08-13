@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { ReturnToSessionBanner } from '../../components/ReturnToSessionBanner'
 import { SpeakButton } from '../../components/SpeakButton'
 import { VoiceRecorder } from '../../components/VoiceRecorder'
 import { getTopicLabel } from '../../content/topic-labels'
 import { contentStore, progressStore } from '../../data-access'
+import { useSessionReturn } from '../curriculum/returnTo'
 import type { BoxLevel, VocabCard } from '../../types/domain'
 
 const MAX_BOX: BoxLevel = 5
@@ -15,6 +17,7 @@ interface QueueItem {
 
 export function FlashcardsPage() {
   const { topicId } = useParams<{ topicId: string }>()
+  const { returnTo } = useSessionReturn()
   const [queue, setQueue] = useState<QueueItem[] | null>(null)
   const [index, setIndex] = useState(0)
   const [flipped, setFlipped] = useState(false)
@@ -96,12 +99,16 @@ export function FlashcardsPage() {
             Ôn lại
           </button>
           <Link
-            to="/hoc-ly-thuyet"
+            to={returnTo ?? '/hoc-ly-thuyet'}
             className="rounded-full bg-linear-to-r from-emerald-500 to-lime-500 px-5 py-2.5 font-bold text-white shadow-md shadow-emerald-500/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
           >
-            Về danh sách bài học
+            {returnTo ? '▶️ Quay lại buổi học' : 'Về danh sách bài học'}
           </Link>
         </div>
+
+        {/* UX fix: tới từ Session Runner thì tự động quay lại đúng buổi học
+            sau vài giây, không bắt học sinh tự tìm đường về. */}
+        {returnTo && <ReturnToSessionBanner returnTo={returnTo} />}
       </section>
     )
   }

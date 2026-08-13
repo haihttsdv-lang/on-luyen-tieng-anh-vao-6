@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { contentStore, progressStore } from '../../data-access'
+import { useSessionReturn } from '../curriculum/returnTo'
 import { QuestionRunner } from '../practice/QuestionRunner'
 import { selectDiagnosticQuestions } from './selectDiagnosticQuestions'
 import type { Question } from '../../types/domain'
 
 export function DiagnosticTestPage() {
   const navigate = useNavigate()
+  const { returnTo } = useSessionReturn()
   const [allQuestions, setAllQuestions] = useState<Question[]>([])
   const [started, setStarted] = useState(false)
   const [questions, setQuestions] = useState<Question[]>([])
@@ -22,12 +24,12 @@ export function DiagnosticTestPage() {
 
   async function handleSkip() {
     await progressStore.setDiagnosticStatus('skipped')
-    navigate('/ho-so')
+    navigate(returnTo ?? '/ho-so')
   }
 
   async function handleFinish() {
     await progressStore.setDiagnosticStatus('completed')
-    navigate('/ho-so')
+    navigate(returnTo ?? '/ho-so')
   }
 
   // LT-06: lưu điểm số (không chỉ trạng thái đã làm/chưa) để cá nhân hóa lộ
@@ -44,6 +46,7 @@ export function DiagnosticTestPage() {
         title="🧭 Bài kiểm tra đầu vào"
         onExit={handleFinish}
         onFinish={handleQuizFinish}
+        returnTo={returnTo ?? undefined}
       />
     )
   }

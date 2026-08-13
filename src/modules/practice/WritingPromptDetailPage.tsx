@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
+import { ReturnToSessionBanner } from '../../components/ReturnToSessionBanner'
 import { SpeakButton } from '../../components/SpeakButton'
 import { contentStore } from '../../data-access'
+import { useSessionReturn } from '../curriculum/returnTo'
 import type { WritingPrompt } from '../../types/domain'
 
 // Tiêu chí áp dụng cho MỌI đề; mỗi đề còn có `checklist` riêng theo yêu cầu
@@ -20,6 +22,7 @@ function countWords(text: string): number {
 
 export function WritingPromptDetailPage() {
   const { promptId } = useParams<{ promptId: string }>()
+  const { returnTo } = useSessionReturn()
   const [prompt, setPrompt] = useState<WritingPrompt | null | undefined>(undefined)
   const [text, setText] = useState('')
   const [checked, setChecked] = useState<Set<number>>(new Set())
@@ -51,10 +54,10 @@ export function WritingPromptDetailPage() {
   return (
     <section className="mx-auto max-w-2xl px-4 py-12">
       <Link
-        to="/luyen-tap/viet"
+        to={returnTo ?? '/luyen-tap/viet'}
         className="text-sm font-bold text-emerald-600 hover:underline dark:text-emerald-400"
       >
-        ← Quay lại danh sách đề viết
+        {returnTo ? '← Quay lại buổi học' : '← Quay lại danh sách đề viết'}
       </Link>
 
       <h1 className="mt-4 text-2xl font-extrabold text-slate-900 dark:text-slate-100">
@@ -175,6 +178,10 @@ export function WritingPromptDetailPage() {
           )}
         </div>
       )}
+
+      {/* UX fix: mở bài mẫu = coi như đã viết xong — tới từ Session Runner
+          thì tự động quay lại đúng buổi học sau vài giây. */}
+      {showSample && returnTo && <ReturnToSessionBanner returnTo={returnTo} />}
     </section>
   )
 }

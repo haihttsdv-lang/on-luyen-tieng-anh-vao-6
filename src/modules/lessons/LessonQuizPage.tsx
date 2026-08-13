@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { ReadAlongPassage } from '../../components/ReadAlongPassage'
+import { ReturnToSessionBanner } from '../../components/ReturnToSessionBanner'
 import { SpeakButton } from '../../components/SpeakButton'
 import { contentStore, progressStore } from '../../data-access'
 import { SLOW_RATE, toSpeakableWord } from '../audio/speak'
+import { useSessionReturn } from '../curriculum/returnTo'
 import { shuffle } from '../practice/shuffle'
 import type { Question, ReadingPassage, Topic } from '../../types/domain'
 import { hasPassed, requiredCorrect } from './quizThreshold'
@@ -12,6 +14,7 @@ const QUIZ_LENGTH = 5
 
 export function LessonQuizPage() {
   const { topicId } = useParams<{ topicId: string }>()
+  const { returnTo } = useSessionReturn()
   const [topic, setTopic] = useState<Topic | null | undefined>(undefined)
   const [quizQuestions, setQuizQuestions] = useState<Question[]>([])
   const [passages, setPassages] = useState<ReadingPassage[]>([])
@@ -125,12 +128,16 @@ export function LessonQuizPage() {
             Làm lại
           </button>
           <Link
-            to="/hoc-ly-thuyet"
+            to={returnTo ?? '/hoc-ly-thuyet'}
             className="rounded-full bg-linear-to-r from-emerald-500 to-lime-500 px-5 py-2.5 font-bold text-white shadow-md shadow-emerald-500/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-500"
           >
-            Về danh sách bài học
+            {returnTo ? '▶️ Quay lại buổi học' : 'Về danh sách bài học'}
           </Link>
         </div>
+
+        {/* UX fix: tới từ Session Runner thì tự động quay lại đúng buổi học
+            sau vài giây, không bắt học sinh tự tìm đường về. */}
+        {returnTo && <ReturnToSessionBanner returnTo={returnTo} />}
       </section>
     )
   }
