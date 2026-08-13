@@ -482,10 +482,19 @@ export function CurriculumPage() {
                           {isTestFocus(session.focus) ? 'Bài kiểm tra' : 'Buổi học'} ·{' '}
                           {formatDate(session.date)}
                         </span>
+                        {/* Buổi đã có outcome (chấm kết quả) ưu tiên hiện
+                            "Đã hoàn thành" ở đúng vị trí nhãn loại buổi —
+                            trước đây luôn hiện nhãn LOẠI buổi (ví dụ "Bài
+                            mới") bất kể đã học xong hay chưa, gây hiểu nhầm
+                            là buổi chưa học dù thực ra đã hoàn thành. */}
                         <span
-                          className={`rounded-full px-2.5 py-1 text-xs font-bold ${FOCUS_CLASS[session.focus]}`}
+                          className={`rounded-full px-2.5 py-1 text-xs font-bold ${
+                            outcome
+                              ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
+                              : FOCUS_CLASS[session.focus]
+                          }`}
                         >
-                          {FOCUS_LABEL[session.focus]}
+                          {outcome ? '✅ Đã hoàn thành' : FOCUS_LABEL[session.focus]}
                         </span>
                       </div>
                       {/* HA-03: thanh 6 ô nhỏ thể hiện các khối trong buổi, tô
