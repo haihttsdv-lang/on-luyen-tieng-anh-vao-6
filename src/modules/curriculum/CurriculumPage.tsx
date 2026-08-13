@@ -440,7 +440,17 @@ export function CurriculumPage() {
                   const outcome = outcomes[session.id]?.outcome
                   const isNext = nextSession?.id === session.id
                   const completedAt = outcomes[session.id]?.completedAt
-                  const doneBlockIndexes = blockProgress[session.id] ?? []
+                  // HA-03: buổi đã có outcome (chấm kết quả) coi như ĐÃ XONG
+                  // toàn bộ khối, kể cả khi không có dữ liệu tiến độ TỪNG
+                  // khối (`getSessionBlockProgress`) — trước đây thanh 6 ô
+                  // hiện toàn màu xám cho buổi chấm trực tiếp từ danh sách
+                  // Lộ trình học (không qua Session Runner nên không có dữ
+                  // liệu khối), trông như buổi đó "mất" tiến độ dù thực ra đã
+                  // hoàn thành và được ghi nhận đầy đủ (outcome + xu + đồng
+                  // bộ) — chỉ thiếu mỗi phần hiển thị chi tiết từng khối.
+                  const doneBlockIndexes = outcome
+                    ? session.blocks.map((_, i) => i)
+                    : (blockProgress[session.id] ?? [])
                   return (
                     <li
                       key={session.id}
